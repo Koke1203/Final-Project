@@ -17,7 +17,7 @@ import java.util.Iterator;
 
 public class ControladorLogin extends HttpServlet {
 
-    String menu = "index_menu.html";
+    String menu = "index_menu.jsp";
     String login = "index.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -46,7 +46,7 @@ public class ControladorLogin extends HttpServlet {
 
         if (action.equalsIgnoreCase("Login")) {
             HttpSession session = request.getSession(true);
-            
+
             List<Usuario> list = Model.instance().listUsuarios();
             Iterator<Usuario> iter = list.iterator();
             Usuario per = null;
@@ -64,9 +64,9 @@ public class ControladorLogin extends HttpServlet {
                     es_falso = false;
                 }
             }
-            
+
             if (es_falso == false) {
-                //Por medio de Maps, setear errores a la vista 
+                //Por medio de Maps, setear errores a la vista
                 Map<String, String> errores = new HashMap<>();
                 request.setAttribute("errores", errores);
                 errores.put("email", "Correo o clave incorrectos");
