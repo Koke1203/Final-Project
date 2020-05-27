@@ -15,10 +15,10 @@ public class Usuario {
     String nombre;
     String apellido;
     String contrasenia;
-    String tipo;
+    int tipo;
     int telefono;
 
-    public Usuario(String correo, String nombre, String apellido, String contrasenia, String tipo, int telefono) {
+    public Usuario(String correo, String nombre, String apellido, String contrasenia, int tipo, int telefono) {
         this.correo = correo;
         this.nombre = nombre;
         this.apellido = apellido;
@@ -62,11 +62,11 @@ public class Usuario {
         this.contrasenia = contrasenia;
     }
 
-    public String getTipo() {
+    public int getTipo() {
         return tipo;
     }
 
-    public void setTipo(String tipo) {
+    public void setTipo(int tipo) {
         this.tipo = tipo;
     }
 
