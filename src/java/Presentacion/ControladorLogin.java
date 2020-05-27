@@ -17,7 +17,7 @@ import java.util.Iterator;
 
 public class ControladorLogin extends HttpServlet {
 
-    String menu = "index_menu.html";
+    String menu = "index_menu.jsp";
     String login = "index.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)

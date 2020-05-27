@@ -1,4 +1,3 @@
-<%@ include file="/presentacion/head.jsp" %>
 <header class="header">
     <nav class="navbar navbar-light navbar-top navbar-expand-md fixed-top">
         <div class="container">
