@@ -1,4 +1,4 @@
-.login{
+.login, .btn-registrarse{
     background-color: #F5710F;
     color: #f1eaea;
 }
@@ -9,6 +9,10 @@
     border-color: #605e5e;
 }
 
-.letra-forgot{
+.letra-forgot,.login-registro{
     color: #F5710F;
+}
+
+.titulo-registro{
+    text-align: center;
 }

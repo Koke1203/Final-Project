@@ -5,10 +5,10 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Login</title>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
-        <link rel="stylesheet" title="pink" type="text/css" href="css/estilo.css">
+        <%@ include file="/presentacion/head.jsp" %>
     </head>
     <body style="background-color:#E8E8E8;">
+        <%@include file="/presentacion/header.jsp"%><br><br><br><br>
         <% Map<String, String> errores = (Map<String, String>) request.getAttribute("errores"); %>
         <main role="main">
             <div id="page-wrapper">
@@ -20,7 +20,7 @@
                                     <h1 class="card-title h4 mb-4 font-weight-normal">
                                         Log In                    </h1>
 
-                                    <form action="ControladorLogin" accept-charset="UTF-8" role="form"><input name="_token" type="hidden" value="1HP6xMkxziqWZqopq2u6oWFkgK5s1r8GNfPwYxjn">
+                                    <form action="ControladorLogin" accept-charset="UTF-8" role="form">
                                         <div class="form-group">
                                             <div class="input-group">
                                                 <input type="text" name="email" id="email" class="<%=erroneo("user", errores)%> form-control input-lg" title="<%=title("email", errores)%>" placeholder="Email Address" autofocus="" required="">
@@ -58,11 +58,11 @@
                                     </form>
                                     <div class="row">
                                         <div class="col-sm-5">
-                                            <a class="registrarse btn btn-default" href="#">Register</a>
+                                            <a class="registrarse btn btn-default" href="ControladorLogin?accion=registro_show">Registrarse</a>
                                         </div>
                                         <div class="col-md-7">
                                             <a class="btn btn-link btn-lg" href="#">
-                                                <span class="letra-forgot small">Forgot password?</span>
+                                                <span class="letra-forgot small">Olvidó la contraseña?</span>
                                             </a>
                                         </div>
                                     </div>

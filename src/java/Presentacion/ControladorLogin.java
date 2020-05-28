@@ -1,5 +1,6 @@
 package Presentacion;
 
+import Logica.Categoria;
 import Logica.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,28 +14,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import Logica.Model;
+import com.google.gson.Gson;
+import java.io.BufferedReader;
 import java.util.Iterator;
+import javax.servlet.annotation.WebServlet;
 
 public class ControladorLogin extends HttpServlet {
 
     String menu = "index_menu.jsp";
     String login = "index.jsp";
+    String registro = "registrar_cliente.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ControladorLogin</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet ControladorLogin at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
     }
 
     @Override
@@ -46,7 +38,6 @@ public class ControladorLogin extends HttpServlet {
 
         if (action.equalsIgnoreCase("Login")) {
             HttpSession session = request.getSession(true);
-
             List<Usuario> list = Model.instance().listUsuarios();
             Iterator<Usuario> iter = list.iterator();
             Usuario per = null;
@@ -73,12 +64,16 @@ public class ControladorLogin extends HttpServlet {
                 errores.put("password", "Correo o clave incorrectos");
                 acceso = login;
             }
+        } else if (action.equalsIgnoreCase("registro_show")) {
+            acceso = registro;
+        } else if (action.equalsIgnoreCase("login_show")) {
+            acceso = login;
         }
 
         RequestDispatcher vista = request.getRequestDispatcher(acceso);
         vista.forward(request, response);
     }
-
+    
 //    void updateModel(HttpServletRequest request) {
 //        ModelLogin model = (ModelLogin) request.getAttribute("modelLogin");
 //        model.getCurrent().setCedula(request.getParameter("user"));

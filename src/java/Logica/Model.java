@@ -25,7 +25,7 @@ public class Model {
         usuarios.put("001", new Usuario("joan.corea08@gmail.com", "Joan", "Corea", "123", "administrador", 84289652));
         usuarios.put("002", new Usuario("roy.arias@gmail.com", "Roy", "Arias", "123", "administrador", 88774589));
         usuarios.put("003", new Usuario("jorge.canales@gmail.com", "Jorge", "Canales", "123", "administrador", 88541236));
-
+        
         categorias = new HashMap<>();
 
         categorias.put(1, new Categoria(1, "Plato Principal"));
@@ -39,7 +39,6 @@ public class Model {
         categorias.put(9, new Categoria(9, "Arroces"));
 
         platillos = new HashMap<>();
-
     }
 
     public List<Usuario> listUsuarios() {
@@ -49,5 +48,9 @@ public class Model {
     public List<Categoria> listarCategorias() {
         return new ArrayList(categorias.values());
     }
-
+    
+    public void agregarUsuario(Usuario new_user){
+        usuarios.put("004",new_user);
+    }
+    
 }

@@ -15,7 +15,7 @@
                         <a class="nav-link" href="#">Reservación</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Inciar Sesión</a>
+                        <a class="nav-link" href="#">Iniciar Sesión</a>
                     </li>
                 </ul>
             </div>
