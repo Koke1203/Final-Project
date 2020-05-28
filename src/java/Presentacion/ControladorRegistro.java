@@ -23,7 +23,7 @@ public class ControladorRegistro extends HttpServlet {
                 break;
         }
     }
-
+    //cambios
     private void agregarCliente(HttpServletRequest request, HttpServletResponse response) {
         try {
             BufferedReader reader = request.getReader();
