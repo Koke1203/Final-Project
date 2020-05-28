@@ -94,7 +94,7 @@
                     nombre: $("#nombre").val(),
                     apellido: $("#apellido").val(),
                     contrasenia: $("#password").val(),
-                    tipo: "1",
+                    tipo: 1,
                     telefono: $("#telefono").val()
                 };
                 $.ajax({type: "POST", url:"api/cliente/add",

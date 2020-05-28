@@ -22,9 +22,9 @@ public class Model {
     private Model() {
         //Tipos (codigo,descripcion)
         usuarios = new HashMap();
-        usuarios.put("001", new Usuario("joan.corea08@gmail.com", "Joan", "Corea", "123", "administrador", 84289652));
-        usuarios.put("002", new Usuario("roy.arias@gmail.com", "Roy", "Arias", "123", "administrador", 88774589));
-        usuarios.put("003", new Usuario("jorge.canales@gmail.com", "Jorge", "Canales", "123", "administrador", 88541236));
+        usuarios.put("001", new Usuario("joan.corea08@gmail.com", "Joan", "Corea", "123", 1, 84289652));
+        usuarios.put("002", new Usuario("roy.arias@gmail.com", "Roy", "Arias", "123", 1, 88774589));
+        usuarios.put("003", new Usuario("jorge.canales@gmail.com", "Jorge", "Canales", "123", 1, 88541236));
         
         categorias = new HashMap<>();
 
