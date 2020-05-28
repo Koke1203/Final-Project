@@ -22,7 +22,7 @@ import javax.servlet.annotation.WebServlet;
 public class ControladorLogin extends HttpServlet {
 
     String menu = "index_menu.jsp";
-    String login = "index.jsp";
+    String login = "login.jsp";
     String registro = "registrar_cliente.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -73,7 +73,7 @@ public class ControladorLogin extends HttpServlet {
         RequestDispatcher vista = request.getRequestDispatcher(acceso);
         vista.forward(request, response);
     }
-    
+
 //    void updateModel(HttpServletRequest request) {
 //        ModelLogin model = (ModelLogin) request.getAttribute("modelLogin");
 //        model.getCurrent().setCedula(request.getParameter("user"));

@@ -1,69 +1,74 @@
-<%@page import="java.util.Map"%>
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html> 
+<html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Login</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="generator" content="TastyIgniter">
+        <link rel="alternate" type="application/rss+xml" title="TastyIgniter » Feed" href="https://tastyigniter.com/feed">
+        <title>Demo of TastyIgniter - Restaurant Online Ordering System</title>
+        <link href="ht1tps://tastyigniter.com/assets/ui/css/global.css?v=20200522" rel="stylesheet">
         <%@ include file="/presentacion/head.jsp" %>
     </head>
-    <body style="background-color:#E8E8E8;">
-        <%@include file="/presentacion/header.jsp"%><br><br><br><br>
-        <% Map<String, String> errores = (Map<String, String>) request.getAttribute("errores"); %>
-        <main role="main">
-            <div id="page-wrapper">
+    <body class="layout-default page-site-demo ">
+        <nav id="site-navbar" class="site-navbar navbar navbar-expand-lg navbar-stick-dark navbar-dark"
+             data-navbar="static">
+            <div class="container">
+                <div class="navbar-left">
+                    <button class="navbar-toggler" type="button">☰</button>
+                    <a class="navbar-brand" href="https://tastyigniter.com">
+                        <i class="icon-logo icon-ti-text-logo text-primary logo-dark"></i>
+                        <i class="icon-logo icon-ti-text-logo text-white logo-light"></i>
+                    </a>
+                </div>
+
+            </div>
+        </nav>
+        <section id="site-content" class="site-content pt-6">
+            <div id="flash">
+            </div>
+            <div class="page-content ">
                 <div class="container">
-                    <div class="row">
-                        <div class="col-sm-4 mx-auto my-5">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h1 class="card-title h4 mb-4 font-weight-normal">
-                                        Log In                    </h1>
-
-                                    <form action="ControladorLogin" accept-charset="UTF-8" role="form">
-                                        <div class="form-group">
-                                            <div class="input-group">
-                                                <input type="text" name="email" id="email" class="<%=erroneo("user", errores)%> form-control input-lg" title="<%=title("email", errores)%>" placeholder="Email Address" autofocus="" required="">
-                                                <span class="input-group-addon">
-                                                    <span class="input-group-text">@</span>
-                                                </span>
-                                            </div>
+                    <div class="w-md-70 py-8">
+                        <h1 class="page-title h2">The ultimate TastyIgniter experience</h1>
+                        <p class="lead">Learn all that is there to using TastyIgniter and use this restaurant
+                            online ordering software to its full potential!</p>
+                    </div>
+                </div>
+                <div class="overflow-hidden bg-light text-center">
+                    <div class="container py-6">
+                        <div class="row no-gutters">
+                            <div class="col-sm-6">
+                                <div class="demo-box border-0">
+                                    <a class="box-overlay" href="" target="_blank">
+                                        <div class="inner">
+                                            <i class="fa fa-external-link opacity-70"></i>
+                                            <p class="fw-600 my-4">See what your website will look like</p>
                                         </div>
-
-                                        <div class="form-group">
-                                            <div class="input-group">
-                                                <input type="password" name="password" id="password" class="<%=erroneo("password", errores)%> form-control input-lg" title="<%=title("password", errores)%>" placeholder="Password" required="">
-                                                <span class="input-group-addon">
-                                                    <span class="input-group-text"><i class="fa fa-lock">&#128274;</i></span>
-                                                </span>
-                                            </div>
+                                    </a>
+                                    <h4 class="pt-5">Storefront</h4>
+                                    <div class="m-auto">
+                                        <div class="holder">
+                                            <img class="" data-aos="slide-right" data-aos-duration="1500"
+                                                 src="images/tastyigniter-storefront.png" />
                                         </div>
-
-                                        <div class="form-group">
-                                            <div class="custom-control custom-checkbox">
-                                                <input id="rememberLogin" type="checkbox" name="newsletter" value="1" class="custom-control-input">
-                                                <label class="custom-control-label" for="rememberLogin">
-                                                    Remember me            </label>
-                                            </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="demo-box border-0">
+                                    <a class="box-overlay" href="" target="_blank">
+                                        <div class="inner">
+                                            <i class="fa fa-external-link opacity-70"></i>
+                                            <p class="fw-600 my-4">See how you'll accept orders from your customers</p>
                                         </div>
-
-                                        <div class="form-group">
-                                            <div class="row">
-                                                <div class="col-12">
-                                                    <button type="submit" name="accion" value="Login" class="login btn btn btn-block btn-lg">Login</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-                                    </form>
-                                    <div class="row">
-                                        <div class="col-sm-5">
-                                            <a class="registrarse btn btn-default" href="ControladorLogin?accion=registro_show">Registrarse</a>
-                                        </div>
-                                        <div class="col-md-7">
-                                            <a class="btn btn-link btn-lg" href="#">
-                                                <span class="letra-forgot small">Olvidó la contraseña?</span>
-                                            </a>
+                                    </a>
+                                    <h4 class="pt-5">Administrator Panel</h4>
+                                    <div class="m-auto">
+                                        <div class="holder">
+                                            <img class="" data-aos="slide-left" data-aos-duration="1500"
+                                                 src="images/tastyigniter-admin.png" />
                                         </div>
                                     </div>
                                 </div>
@@ -72,40 +77,8 @@
                     </div>
                 </div>
             </div>
-        </main>
-        
-                                                
-                                                
-                                                
-         
-        <script>
-            //tengo que validar los campos con jquery
-            
-        </script>
+        </section>
+        <script src="js/global.js"></script>
+        <a href="ControladorLogin?accion=login_show">Redireccion</a>
     </body>
 </html>
-
-<%!
-    private String erroneo(String campo, Map<String, String> errores) {
-        if ((errores != null) && (errores.get(campo) != null)) {
-            return "is-invalid";
-        } else {
-            return "";
-        }
-    }
-
-    private String title(String campo, Map<String, String> errores) {
-        if ((errores != null) && (errores.get(campo) != null)) {
-            return errores.get(campo);
-        } else {
-            return "";
-        }
-    }
-    /*
-    private Map<String,String[]> getForm(ModelLogin model){
-       Map<String,String[]> values = new HashMap<>();
-       values.put("user", new String[]{model.getCurrent().getCedula()""});
-       values.put("password", new String[]{model.getCurrent().getClave()""});
-       return values;
-    }*/
-%>
