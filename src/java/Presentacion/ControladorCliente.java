@@ -2,7 +2,9 @@ package Presentacion;
 
 import Logica.Categoria;
 import Logica.Model;
+import Logica.Platillo;
 import com.google.gson.Gson;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -12,7 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet(name = "ControladorCliente", urlPatterns = {"/api/categorias/listar"})
+@WebServlet(name = "ControladorCliente", urlPatterns = {"/api/categorias/listar", "/api/platillos/listar"})
 public class ControladorCliente extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -21,9 +23,12 @@ public class ControladorCliente extends HttpServlet {
             case "/api/categorias/listar":
                 this.listarCategorias(request, response);
                 break;
+            case "/api/platillos/listar":
+                this.listarPlatillos(request, response);
+                break;
         }
     }
-    
+
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -62,6 +67,21 @@ public class ControladorCliente extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+    private void listarPlatillos(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            BufferedReader reader = request.getReader();
+            Gson gson = new Gson();
+            Categoria categoria = gson.fromJson(reader, Categoria.class);
+            PrintWriter out = response.getWriter();
+            List<Platillo> platillos = Model.instance().listarPlatillos(categoria.getCodigo());
+            response.setContentType("application/json; charset=UTF-8");
+            out.write(gson.toJson(platillos));
+            response.setStatus(200); // ok with content
+        } catch (Exception ex) {
+            response.setStatus(status(ex));
+        }
+    }
 
     private void listarCategorias(HttpServletRequest request, HttpServletResponse response) {
         try {

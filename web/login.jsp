@@ -5,7 +5,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Login</title>
-        <%@ include file="/presentacion/head.jsp" %>
+        <%@ include file="/presentacion/head.jsp"%>
     </head>
     <body style="background-color:#E8E8E8;">
         <%@include file="/presentacion/header.jsp"%><br><br><br><br>
@@ -19,11 +19,10 @@
                                 <div class="card-body">
                                     <h1 class="card-title h4 mb-4 font-weight-normal">
                                         Log In                    </h1>
-
                                     <form action="ControladorLogin" accept-charset="UTF-8" role="form">
                                         <div class="form-group">
                                             <div class="input-group">
-                                                <input type="text" name="email" id="email" class="<%=erroneo("user", errores)%> form-control input-lg" title="<%=title("email", errores)%>" placeholder="Email Address" autofocus="" required="">
+                                                <input type="text" name="email" id="email" class="<%=erroneo("user", errores)%> form-control input-lg" title="<%=title("email", errores)%>" placeholder="Email Address" required="">
                                                 <span class="input-group-addon">
                                                     <span class="input-group-text">@</span>
                                                 </span>
