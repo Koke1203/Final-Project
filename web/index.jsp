@@ -4,9 +4,6 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <meta name="generator" content="TastyIgniter">
-        <link rel="alternate" type="application/rss+xml" title="TastyIgniter » Feed" href="https://tastyigniter.com/feed">
         <title>Demo of TastyIgniter - Restaurant Online Ordering System</title>
         <link rel="stylesheet" title="pink" type="text/css" href="css/style.css">
         <%@ include file="/presentacion/head.jsp" %>
@@ -15,11 +12,11 @@
         <nav id="site-navbar" class="site-navbar navbar navbar-expand-lg navbar-stick-dark navbar-dark"
              data-navbar="static">
             <div class="container">
-                <div class="navbar-left" style="width:18%">
+                <div class="navbar-left" style="width:17%">
                     <img src="images/tastyigniter-horizontal-logo.png">
-            </div>
+                </div>
         </nav>
-        <section id="site-content" class="site-content pt-6">
+        <section id="site-content" class="site-content pt-2">
             <div id="flash">
             </div>
             <div class="page-content ">
@@ -44,7 +41,7 @@
                                     <h4 class="pt-5">Storefront</h4>
                                     <div class="m-auto">
                                         <div class="holder">
-                                            <img class="" data-aos="slide-right" data-aos-duration="1500"
+                                            <img class="" data-aos="slide-right" data-aos-duration="2000"
                                                  src="images/tastyigniter-storefront.png" />
                                         </div>
                                     </div>
@@ -61,7 +58,7 @@
                                     <h4 class="pt-5">Administrator Panel</h4>
                                     <div class="m-auto">
                                         <div class="holder">
-                                            <img class="" data-aos="slide-left" data-aos-duration="1500"
+                                            <img class="" data-aos="slide-left" data-aos-duration="2000"
                                                  src="images/tastyigniter-admin.png" />
                                         </div>
                                     </div>
