@@ -98,32 +98,32 @@
 
                                 <%--MENU REVIEWS INFO--%>
                                 <ul id="nav-tabs" class="nav-menus nav nav-tabs">
-                                    <a class="nav-item nav-link active" href="https://demo.tastyigniter.com/local/menus">Menu</a>
+                                    <%--<a class="nav-item nav-link active" href="https://demo.tastyigniter.com/local/menus">Menu</a>
                                     <a class="nav-item nav-link " href="https://demo.tastyigniter.com/local/reviews">Reviews</a>
-                                    <a class="nav-item nav-link " href="https://demo.tastyigniter.com/local/info">Info</a>
+                                    <a class="nav-item nav-link " href="https://demo.tastyigniter.com/local/info">Info</a>--%>
                                 </ul>
 
                                 <%--Platillos--%>
-                                <div class="panel"> 
+                                <div class="panel">
                                     <%--Platillos--%>
                                     <button>Categoria</button>
-                                    <ul>
-                                        <li>
-                                            <div>
-                                                <p>Nombre platillo</p>
+                                    <ul id="ul-itemsMenu">
+
+                                        <%--<li>
+                                            <div class="menu-item">
+                                                <h5>Platillo</h5>
                                                 <p>Descripcion</p>
                                                 <p>Precio</p>
-                                                <button id="sumar">Suma</button>
-                                                <%--$("#sumar").click(function(){alert("Escuchando")});--%>
-                                            </div>
-                                        </li>
-                                        <>
+                                                <button id="sumar">Suma</button>--%>
+                                        <%--$("#sumar").click(function(){alert("Escuchando")});--%>
+                                        <%--</div>
+                                     </li>--%>
                                     </ul>
-                                    
+
                                 </div>
 
                                 <%--FIN Categoria Platillo--%>
-                                
+
                                 <div class="d-flex flex-row">
                                     <%--Descripcion--%>
                                     <div class="menu-content flex-grow-1 mr-3">
@@ -151,62 +151,112 @@
             </div>
         </main>
         <script>
+
+            var A_categorias = new Array();
+            var A_platillos = new Array();
+            var menu = new Array();
+            var carrito = new Array();
+
             function loaded() {
-            listarCategorias();
+                listarCategorias();
             }
             $(loaded);
             function listarCategorias() {
                 $.ajax({type: "GET", url: "api/categorias/listar", contentType: "application/json"})
-                .then((categorias) = > {
-                    listCat(categorias);
-                    console.log(categorias);
-                }, (error) = > {
-                alert(errorMessage(error.status));
-                });
+                        .then((categorias) => {
+                            listCat(categorias);
+                            A_categorias = categorias;
+                            //console.log(A_categorias);
+                        }, (error) => {
+                            alert(errorMessage(error.status));
+                        });
             }
 
             function listCat(categorias) {
-            var listado = $("#ul-categorias");
-                    categorias.forEach((c) = > {
+                var listado = $("#ul-categorias");
+                categorias.forEach((c) => {
                     rowCategoria(listado, c);
-                    });
+                });
             }
 
             function rowCategoria(listado, categoria) {
-            var li = $("<li class='nav-item organge-link'>" + categoria.descripcion + "</li>");
-                    /*li.on("click",()=>{
-                     listarPlatillosXCategoria(categoria.codigo);
-                     });*/
-                        
-                    listado.append(li);
-            }
-            
-            
-            function listarPlatillos(codigo_categoria){
-                categoria{
-                    codigo : codigo_categoria;
-                }
-                $.ajax({type: "POST", data: JSON.stringify((categoria), url: "api/platillos/listar", contentType: "application/json"})
-                .then((platillos) = > {
-                    listPlatillo(platillos);
-                    console.log(platillos);
-                }, (error) = > {
-                    alert(errorMessage(error.status));
+                var li = $("<li class='nav-item organge-link'>" + categoria.descripcion + "</li>");
+                li.on("click", () => {
+                    listarPlatillosXCategoria(categoria.codigo);
                 });
+                listado.append(li);
             }
-            
+
+
+            function listarPlatillosXCategoria(codigo_categoria) {
+
+                categoria = {codigo: codigo_categoria};
+                //console.log(categoria.codigo);
+                $.ajax({type: "POST", data: JSON.stringify(categoria), url: "api/platillos/listar", contentType: "application/json"})
+                        .then((platillos) => {
+                            listarPlatillos(platillos);
+                            A_platillos = platillos;
+                            //console.log(platillos);
+                        }, (error) => {
+                            alert(errorMessage(error.status));
+                        });
+            }
+
+            function listarPlatillos(platillos) {
+                var platillo = platillos[0];
+                $.ajax({type: "POST", data: JSON.stringify(platillo), url: "api/categorias/getDescripcion", contentType: "application/json"})
+                        .then((categoria) => {
+                            var listado = $("#ul-itemsMenu");
+                            listado.html("");
+
+                            var h3 = $("<h3>" + categoria.descripcion + "</h3>");
+
+                            listado.append(h3);
+
+                            platillos.forEach((p) => {
+                                rowPlatillo(listado, p);
+                            });
+                        }, (error) => {
+                            alert(errorMessage(error.status));
+                        });
+
+
+
+
+
+
+
+            }
+
+            function rowPlatillo(listado, platillo) {
+                var li = $("<li />");
+
+
+
+
+                li.html("<div>" +
+                        "<h5>" + platillo.nombre + "</h5>" +
+                        "<p>" + platillo.descripcion + "</p>" +
+                        "<p>" + platillo.precio + "</p>" +
+                        "<input type='button' id='addBtn' value='Add'>" +
+                        "</div>");
+                /*li.find("addBtn").on("click",()=>{
+                 });*/
+                listado.append(li);
+            }
+
             function errorMessage(status) {
-            switch (status) {
-            case 404:
-                    return "Registro no encontrado";
+                switch (status) {
+                    case 404:
+                        return "Registro no encontrado";
                     case 403:
                     case 405:
-                    return "Usuario no autorizado";
+                        return "Usuario no autorizado";
                     case 406:
-                    return "Registro duplicado";
+                        return "Registro duplicado";
                     default:
-                    return "Error: " + status;
-            }
+                        return "Error: " + status;
+                }
             }
         </script>
     </body>

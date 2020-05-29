@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet(name = "ControladorCliente", urlPatterns = {"/api/categorias/listar", "/api/platillos/listar"})
+@WebServlet(name = "ControladorCliente", urlPatterns = {"/api/categorias/listar", "/api/platillos/listar", "/api/categorias/getDescripcion"})
 public class ControladorCliente extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -26,6 +26,10 @@ public class ControladorCliente extends HttpServlet {
             case "/api/platillos/listar":
                 this.listarPlatillos(request, response);
                 break;
+            case "/api/categorias/getDescripcion":
+                this.obtenerCategoria(request, response);
+                break;
+
         }
     }
 
@@ -91,6 +95,21 @@ public class ControladorCliente extends HttpServlet {
             response.setContentType("application/json; charet=UTF-8");
             out.write(gson.toJson(categorias));
             response.setStatus(200);//Ok with content
+        } catch (Exception ex) {
+            response.setStatus(status(ex));
+        }
+    }
+
+    private void obtenerCategoria(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            BufferedReader reader = request.getReader();
+            Gson gson = new Gson();
+            Platillo categoria_buscar = gson.fromJson(reader, Platillo.class);
+            PrintWriter out = response.getWriter();
+            Categoria categoria = Model.instance().obtenerCategoria(categoria_buscar.getCategoria() - 1);
+            response.setContentType("application/json; charset=UTF-8");
+            out.write(gson.toJson(categoria));
+            response.setStatus(200); // ok with content
         } catch (Exception ex) {
             response.setStatus(status(ex));
         }
