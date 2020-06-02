@@ -32,9 +32,9 @@ public class ControladorCliente extends HttpServlet {
             case "/api/platillos/listar":
                 this.listarPlatillos(request, response);
                 break;
-            case "/api/categorias/getDescripcion":
-                this.obtenerCategoria(request, response);
-                break;
+//            case "/api/categorias/getDescripcion":
+//                this.obtenerCategoria(request, response);
+//                break;
             case "/api/carrito/agregarPlatillo":
                 this.agregarPlatilloCarrito(request, response);
                 break;
@@ -111,20 +111,20 @@ public class ControladorCliente extends HttpServlet {
         }
     }
 
-    private void obtenerCategoria(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            BufferedReader reader = request.getReader();
-            Gson gson = new Gson();
-            Platillo categoria_buscar = gson.fromJson(reader, Platillo.class);
-            PrintWriter out = response.getWriter();
-            Categoria categoria = Model.instance().obtenerCategoria(categoria_buscar.getCategoria() - 1);
-            response.setContentType("application/json; charset=UTF-8");
-            out.write(gson.toJson(categoria));
-            response.setStatus(200); // ok with content
-        } catch (Exception ex) {
-            response.setStatus(status(ex));
-        }
-    }
+//    private void obtenerCategoria(HttpServletRequest request, HttpServletResponse response) {
+//        try {
+//            BufferedReader reader = request.getReader();
+//            Gson gson = new Gson();
+//            Platillo categoria_buscar = gson.fromJson(reader, Platillo.class);
+//            PrintWriter out = response.getWriter();
+//            Categoria categoria = Model.instance().obtenerCategoria(categoria_buscar.getCategoria() - 1);
+//            response.setContentType("application/json; charset=UTF-8");
+//            out.write(gson.toJson(categoria));
+//            response.setStatus(200); // ok with content
+//        } catch (Exception ex) {
+//            response.setStatus(status(ex));
+//        }
+//    }
 
     //agrego un platillo al carrito POST
     private void agregarPlatilloCarrito(HttpServletRequest request, HttpServletResponse response) {
