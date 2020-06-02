@@ -1,24 +1,22 @@
 package Logica;
 
 public class Platillo {
-    
+
     private int codigo;
     private String nombre;
     private double precio;
     private String descripcion;
-    private String categoria_descripcion;
-    private int fk_codigo_adicional;
+    private int codigo_categoria;
 
     public Platillo() {
     }
 
-    public Platillo(int codigo, String nombre, double precio, String descripcion, String categoria_descripcion, int fk_codigo_adicional) {
+    public Platillo(int codigo, String nombre, double precio, String descripcion, int codigo_categoria) {
         this.codigo = codigo;
         this.nombre = nombre;
         this.precio = precio;
         this.descripcion = descripcion;
-        this.categoria_descripcion = categoria_descripcion;
-        this.fk_codigo_adicional = fk_codigo_adicional;
+        this.codigo_categoria = codigo_categoria;
     }
 
     public int getCodigo() {
@@ -53,23 +51,16 @@ public class Platillo {
         this.descripcion = descripcion;
     }
 
-    public String getCategoria_descripcion() {
-        return categoria_descripcion;
+    public int getCodigo_categoria() {
+        return codigo_categoria;
     }
 
-    public void setCategoria_descripcion(String categoria_descripcion) {
-        this.categoria_descripcion = categoria_descripcion;
+    public void setCodigo_categoria(int codigo_categoria) {
+        this.codigo_categoria = codigo_categoria;
     }
 
-    public int getFk_codigo_adicional() {
-        return fk_codigo_adicional;
+    @Override
+    public String toString() {
+        return "Platillo{" + "codigo=" + codigo + ", nombre=" + nombre + ", precio=" + precio + ", descripcion=" + descripcion + ", codigo_categoria=" + codigo_categoria + '}';
     }
-
-    public void setFk_codigo_adicional(int fk_codigo_adicional) {
-        this.fk_codigo_adicional = fk_codigo_adicional;
-    }
-    
-    
-    
-    
 }

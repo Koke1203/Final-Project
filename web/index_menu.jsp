@@ -102,13 +102,15 @@
 
                                 <%--Platillos--%>
                                 <div class="panel">
-                                    <%--Platillos--%>
-                                    <ul id="ul-itemsMenu">
+                                    <ul class="ul-itemsMenu" id="ul-itemsMenu">
+                                        <%-- Aquí se muestran los platillos por categoria --%>
                                     </ul>
                                 </div>
+                                <%--FIN Platillos--%>
+
+
                             </div>
                         </div>
-                        <%--FIN Platillos--%>
 
                         <%--PEDIDO--%>
                         <div class="div-pedido col-sm-4">
@@ -147,30 +149,99 @@
                                 My Order:
                                 <span id="cart-total" class="font-weight-bold">£106.99</span>
                             </a>
-                        </div>                   
+                        </div>
                     </div>
                     <!--FIN PEDIDO-->
                 </div>
             </div>
         </main>
+
+
+
+        <div class="modal fade" id="opciones-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div id="header-modal-platillo">
+
+                        </div>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="opciones-menu" id="opciones-menu">
+
+                            <%--Detalles Adicionales--%>
+                            <%--<div class="option-details">
+                                <h5 class="mb-0">
+                                    Mode of cooking<span class="small pull-right text-muted">Required</span>
+                                </h5>
+                            </div>
+
+                            <div class="option-group">
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" id="menuOptionRadio118" class="custom-control-input" name="menu_options[1][option_values][]" value="118" data-option-price="10">
+                                    <label class="custom-control-label w-100" for="menuOptionRadio118">
+                                        Steamed            <span class="pull-right">£10.00</span>
+                                    </label>
+                                </div>
+
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" id="menuOptionRadio119" class="custom-control-input" name="menu_options[1][option_values][]" value="119" data-option-price="12" checked="checked">
+                                    <label class="custom-control-label w-100" for="menuOptionRadio119">
+                                        Boiled            <span class="pull-right">£12.00</span>
+                                    </label>
+                                </div>
+                            </div>--%>
+
+                            <%--Fin Adicionales--%>
+
+
+                        </div>
+                        <div>
+                            <textarea name="comment" class="form-control" rows="2" placeholder="Add Comment"></textarea>
+                        </div>
+                    </div>
+                    <%--BUTTONS - INPUT CANTIDAD--%>
+                    <div class="modal-footer">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <button id="btnDecrementar" type="button" class="btn btn-light"><i class='fa fa-minus'></i></button>
+                            </div>
+                            <input class="form-control text-center" id="cantidad-platillos" type="number" name="cantidad-platillosFld" min="0" value="1">
+                            <div class="input-group-append">
+                                <button id="btnIncrementar" type="button" class="btn btn-light"><i class='fa fa-plus'></i></button>
+                            </div>
+                            &nbsp;&nbsp;<button type="button" class="btn btn-primary">ADD TO ORDER</button>
+                        </div>
+                    </div>
+                    <%--FIN BUTTONS - INPUT CANTIDAD--%>
+                </div>
+            </div>
+        </div>
+
+
         <script>
-            var contador=0;
-            
+            var contador = 0;
+
             function loaded() {
+                AumentaDisminuye_Cantidad();
                 listarCategorias();
                 infoCarrito();
             }
             $(loaded);
-            
+
             function listarCategorias() {
                 $.ajax({type: "GET", url: "api/categorias/listar", contentType: "application/json"})
-                .then((categorias) => {
-                    listCat(categorias);
-                }, (error) => {
-                    alert(errorMessage(error.status));
-                });
+                        .then((categorias) => {
+                            //console.log(categorias);
+                            listCat(categorias);
+                        }, (error) => {
+                            alert(errorMessage(error.status));
+                        });
             }
-                    
+
             function listCat(categorias) {
                 var listado = $("#ul-categorias");
                 categorias.forEach((c) => {
@@ -181,106 +252,166 @@
             function rowCategoria(listado, categoria) {
                 var li = $("<li class='nav-item organge-link'><button class='btn'>" + categoria.descripcion + "</button></li>");
                 li.on("click", () => {
-                    listarPlatillosXCategoria(categoria.codigo);
+                    listarPlatillosXCategoria(categoria);
                 });
                 listado.append(li);
             }
-            
-            function listarPlatillosXCategoria(codigo_categoria) {
-                categoria = {codigo: codigo_categoria};
+
+            function listarPlatillosXCategoria(cat) {
+                categoria = {codigo: cat.codigo};
                 $.ajax({type: "POST", data: JSON.stringify(categoria), url: "api/platillos/listar", contentType: "application/json"})
-                .then((platillos) => {
-                    listarPlatillos(platillos);              
-                }, (error) => {
-                    alert(errorMessage(error.status));
-                });
+                        .then((platillos) => {
+                            listarPlatillos(platillos, cat);
+                            //console.log(platillos);
+                        }, (error) => {
+                            alert(errorMessage(error.status));
+                        });
             }
-            
-            function listarPlatillos(platillos) {
-                var platillo = platillos[0];
+
+            function listarPlatillos(platillos, cat) {
+                //console.log(platillos);
+                //console.log(cat);
                 var listado = $("#ul-itemsMenu");
                 listado.html("");
-                if(platillo!=null){
-                    $.ajax({type: "POST", data: JSON.stringify(platillo), url: "api/categorias/getDescripcion", contentType: "application/json"})
-                    .then((categoria) => {
-                        var h3 = $("<h3>" + categoria.descripcion + "</h3>");
-                        listado.append(h3);
-                        platillos.forEach((p) => {
-                            rowPlatillo(listado, p);
-                        });
-                    }, (error) => {
-                        alert(errorMessage(error.status));
-                    });
-                }
-            }
-            
-            function rowPlatillo(listado, platillo) {
-                var li = $("<li class='nav-item organge-link'/>");
-                    li.html("<div>" +
-                            "<h5>" + platillo.nombre + "</h5>" +
-                            "<p>" + platillo.descripcion + "</p>" +
-                            "<p>" + platillo.precio + "</p>" +
-                            "<input type='button' id='addPlatillo' value='Add'>" +
-                            "</div>");
-                    li.find("#addPlatillo").on("click", () => {agregarPlatilloCarrito(platillo)});
-                    listado.append(li);
-            }
-            
-            function agregarPlatilloCarrito(platillo){
-                $.ajax({type: "POST", data: JSON.stringify(platillo), url: "api/carrito/agregarPlatillo", contentType: "application/json"})
-                .then((carrito_platillos) => {
-                    listCarrito(carrito_platillos);
-                    contador++;
-                    infoCarrito(); //actualizo la info
-                }, (error) => {
-                    alert(errorMessage(error.status));
+                var h3 = $("<h3>" + cat.descripcion + "</h3>");
+                listado.append(h3);
+                platillos.forEach((p) => {
+                    rowPlatillo(listado, p);
                 });
             }
-            
-            function listCarrito(carrito_platillos){
+
+            function rowPlatillo(listado, platillo) {
+                var li = $("<li />");
+                li.addClass("list-item");
+                li.html("<div class='row'>" +
+                        "<div class='col-sm'>" +
+                        "<h6 class='modal-title'>" + platillo.nombre + "</h6>" +
+                        "</div>" +
+                        "<div class='col-md-3'>" +
+                        "<span><b>" + "£" + platillo.precio + "</b></span>" +
+                        "</div>" +
+                        "<div class='col-md-2'>" +
+                        "<button id='addMenuItemBtn' type='button' class='btn btn-light btn-sm' data-toggle='modal' data-target='#opciones-modal'>" +
+                        "<i class='fa fa-plus'></i>" +
+                        "</button>" +
+                        "</div>" +
+                        "</div>" +
+                        "<div class='row'>" +
+                        "<p class='text-muted col-sm'>" + platillo.descripcion + "</p>" +
+                        "</div>");
+                li.find("#addMenuItemBtn").on("click", () => {
+                    agregarHeaderModal(platillo);
+                    //agregarCuerpoModal(platillo);
+                });
+                listado.append(li);
+            }
+
+            function agregarHeaderModal(platillo) {
+
+                var modal_header = $("#header-modal-platillo");
+                modal_header.html("");
+                var div = $("<div />");
+                div.html(
+                        "<div class='row'>" +
+                        "<div class='col-sm'>" +
+                        "<h6>" + platillo.nombre + "</h6>" +
+                        "</div>" +
+                        "</div>" +
+                        "<div class='row'>" +
+                        "<p class='text-muted col-sm'>" + platillo.descripcion + "</p>" +
+                        "</div>"
+                        );
+                modal_header.append(div);
+            }
+
+
+            /*function rowPlatillo(listado, platillo) {
+             var li = $("<li class='nav-item organge-link'/>");
+             li.html("<div>" +
+             "<h5>" + platillo.nombre + "</h5>" +
+             "<p>" + platillo.descripcion + "</p>" +
+             "<p>" + platillo.precio + "</p>" +
+             "<input type='button' id='addPlatillo' value='Add'>" +
+             "</div>");
+             li.find("#addPlatillo").on("click", () => {
+             //agregarPlatilloCarrito(platillo)
+             });
+             listado.append(li);
+             }*/
+
+            function agregarPlatilloCarrito(platillo) {
+                $.ajax({type: "POST", data: JSON.stringify(platillo), url: "api/carrito/agregarPlatillo", contentType: "application/json"})
+                        .then((carrito_platillos) => {
+                            listCarrito(carrito_platillos);
+                            contador++;
+                            infoCarrito(); //actualizo la info
+                        }, (error) => {
+                            alert(errorMessage(error.status));
+                        });
+            }
+
+            function listCarrito(carrito_platillos) {
                 var lista_pedido = $("#ul-itemsPedido");
                 lista_pedido.html("");
-                carrito_platillos.forEach( (p)=>{rowCarrito(lista_pedido,p);});	
+                carrito_platillos.forEach((p) => {
+                    rowCarrito(lista_pedido, p);
+                });
                 //agrego los subtotales
                 var div_montos = $("#cart-totals");
-                var monto=0;
-                carrito_platillos.forEach( (p)=>{monto=monto+p.precio_total;});
-                div_montos.html("<p class='p-totales'>Sub Total: <span class='price pull-right'>£"+monto.toFixed(2)+"</span><p>"+
-                                "<p class='p-totales'>Delivery: <span class='price pull-right'>Free</span><p>"+
-                                "<p class='p-totales'>Order Total: <span class='price pull-right'>£"+monto.toFixed(2)+"</span><p>");
+                var monto = 0;
+                carrito_platillos.forEach((p) => {
+                    monto = monto + p.precio_total;
+                });
+                div_montos.html("<p class='p-totales'>Sub Total: <span class='price pull-right'>£" + monto.toFixed(2) + "</span><p>" +
+                        "<p class='p-totales'>Delivery: <span class='price pull-right'>Free</span><p>" +
+                        "<p class='p-totales'>Order Total: <span class='price pull-right'>£" + monto.toFixed(2) + "</span><p>");
             }
-            
-            function rowCarrito(lista_pedido,carrito){
+
+            function rowCarrito(lista_pedido, carrito) {
                 var li = $("<li class='li-pedido' />");
-                li.html("<p><button class='cart-btn btn btn-light btn-sm text-muted' id='quitar_platillo'>-</button>"+" <b>"+
-                        carrito.cantidad+" x </b>"+carrito.platillo.nombre+"<span class='price pull-right'> £"+carrito.precio_total+"</span></p>");
-                
-                li.find("#quitar_platillo").on("click",()=>{sacarPlatilloCarrito(carrito.platillo);});
+                li.html("<p><button class='cart-btn btn btn-light btn-sm text-muted' id='quitar_platillo'>-</button>" + " <b>" +
+                        carrito.cantidad + " x </b>" + carrito.platillo.nombre + "<span class='price pull-right'> £" + carrito.precio_total + "</span></p>");
+                li.find("#quitar_platillo").on("click", () => {
+                    sacarPlatilloCarrito(carrito.platillo);
+                });
                 lista_pedido.append(li);
             }
-            
-            function sacarPlatilloCarrito(platillo){
+
+            function sacarPlatilloCarrito(platillo) {
                 $.ajax({type: "POST", data: JSON.stringify(platillo), url: "api/carrito/sacarPlatillo", contentType: "application/json"})
-                .then((carrito_platillos) => {
-                    listCarrito(carrito_platillos);
-                    contador--;
-                    infoCarrito(); //actualizo la info
-                }, (error) => {
-                    alert(errorMessage(error.status));
-                });
+                        .then((carrito_platillos) => {
+                            listCarrito(carrito_platillos);
+                            contador--;
+                            infoCarrito(); //actualizo la info
+                        }, (error) => {
+                            alert(errorMessage(error.status));
+                        });
             }
-            
-            function infoCarrito(){
+
+            function infoCarrito() {
                 var div_info = $("#cart-items");
-                if(contador>0){
+                if (contador > 0) {
                     div_info.html("<div class='panel-body'><p class='text-center'>Your order</p");
-                }else{
+                } else {
                     div_info.html("<div class='panel-body'><p class='text-center'>Add menu items to your cart</p");
                     var div_total = $("#cart-totals");
                     div_total.html("");
                 }
             }
-            
+
+            //Botones para aumentar o disminuir cantidad (Modal)
+            function AumentaDisminuye_Cantidad() {
+                var contador = $("#cantidad-platillos").val();
+                $("#btnIncrementar").on("click", () => {
+                    contador++;
+                    $("#cantidad-platillos").val(contador);
+                });
+                $("#btnDecrementar").on("click", () => {
+                    contador - 1 >= 1 ? --contador : 1;
+                    $("#cantidad-platillos").val(contador);
+                });
+            }
+
             function errorMessage(status) {
                 switch (status) {
                     case 404:

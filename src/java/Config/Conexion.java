@@ -1,19 +1,23 @@
 package Config;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 
 public class Conexion {
+
     Connection con;
-    public Conexion(){
+
+    public Conexion() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            con=DriverManager.getConnection("jdbc:mysql://localhost/restaurante?user=root&password=1234&useSSL=false");  
+            con = DriverManager.getConnection("jdbc:mysql://localhost/restaurante?user=root&password=12345&useSSL=false");
             System.out.println("Conectado");
         } catch (Exception e) {
-            System.out.println("Error esta aquí"+e);
+            System.out.println("Error esta aquí" + e);
         }
     }
-    public Connection getConnection(){
+
+    public Connection getConnection() {
         return con;
     }
 }

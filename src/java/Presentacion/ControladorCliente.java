@@ -4,6 +4,8 @@ import Logica.Carrito;
 import Logica.Categoria;
 import Logica.Model;
 import Logica.Platillo;
+import ModelDAO.CategoriaDAO;
+import ModelDAO.PlatilloDAO;
 import com.google.gson.Gson;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -22,7 +24,7 @@ import javax.servlet.http.HttpSession;
 public class ControladorCliente extends HttpServlet {
 
     List<Carrito> carrito_general = new ArrayList<>();
-    
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         switch (request.getServletPath()) {
@@ -89,7 +91,8 @@ public class ControladorCliente extends HttpServlet {
             Gson gson = new Gson();
             Categoria categoria = gson.fromJson(reader, Categoria.class);
             PrintWriter out = response.getWriter();
-            List<Platillo> platillos = Model.instance().listarPlatillos(categoria.getCodigo());
+            PlatilloDAO daoPlatillo = new PlatilloDAO();
+            List<Platillo> platillos = daoPlatillo.listForCategoria(categoria.getCodigo());
             response.setContentType("application/json; charset=UTF-8");
             out.write(gson.toJson(platillos));
             response.setStatus(200); // ok with content
@@ -102,7 +105,8 @@ public class ControladorCliente extends HttpServlet {
         try {
             Gson gson = new Gson();
             PrintWriter out = response.getWriter();
-            List<Categoria> categorias = Model.instance().listarCategorias();
+            CategoriaDAO daoCategoria = new CategoriaDAO();
+            List<Categoria> categorias = daoCategoria.listarCategorias();
             response.setContentType("application/json; charet=UTF-8");
             out.write(gson.toJson(categorias));
             response.setStatus(200);//Ok with content
@@ -125,26 +129,25 @@ public class ControladorCliente extends HttpServlet {
 //            response.setStatus(status(ex));
 //        }
 //    }
-
     //agrego un platillo al carrito POST
     private void agregarPlatilloCarrito(HttpServletRequest request, HttpServletResponse response) {
         try {
             HttpSession session = request.getSession(true);
-            if((List<Carrito>) session.getAttribute("carrito")!=null){
-               carrito_general = (List<Carrito>) session.getAttribute("carrito"); 
+            if ((List<Carrito>) session.getAttribute("carrito") != null) {
+                carrito_general = (List<Carrito>) session.getAttribute("carrito");
             }
             BufferedReader reader = request.getReader();
             Gson gson = new Gson();
             Platillo platillo_parametro = gson.fromJson(reader, Platillo.class);
             PrintWriter out = response.getWriter();
-            
+
             //nuevo carrito, tengo que agregarlo a la lista
             Carrito nuevo_carrito = new Carrito(platillo_parametro, 1, platillo_parametro.getPrecio());
 
             boolean carrito_esta = false;
-            //recorro la lista para ver si esta repetido 
+            //recorro la lista para ver si esta repetido
             for (Carrito c : carrito_general) {
-                if (c.getPlatillo().getCodigo()==nuevo_carrito.getPlatillo().getCodigo()) {
+                if (c.getPlatillo().getCodigo() == nuevo_carrito.getPlatillo().getCodigo()) {
                     c.setCantidad(c.getCantidad() + 1);
                     //actualizamos el precio total
                     c.setPrecio_total((c.getPrecio_total() + nuevo_carrito.getPrecio_total()));
@@ -154,9 +157,9 @@ public class ControladorCliente extends HttpServlet {
             if (carrito_esta == false) {
                 carrito_general.add(nuevo_carrito);
             }
-            
+
             session.setAttribute("carrito", carrito_general);
-            
+
             response.setContentType("application/json; charset=UTF-8");
             out.write(gson.toJson(carrito_general));
             response.setStatus(200); // ok with content
@@ -164,12 +167,12 @@ public class ControladorCliente extends HttpServlet {
             response.setStatus(status(ex));
         }
     }
-    
+
     private void sacarPlatilloCarrito(HttpServletRequest request, HttpServletResponse response) {
         try {
             HttpSession session = request.getSession(true);
-            if((List<Carrito>) session.getAttribute("carrito")!=null){
-               carrito_general = (List<Carrito>) session.getAttribute("carrito"); 
+            if ((List<Carrito>) session.getAttribute("carrito") != null) {
+                carrito_general = (List<Carrito>) session.getAttribute("carrito");
             }
             BufferedReader reader = request.getReader();
             Gson gson = new Gson();
@@ -178,7 +181,7 @@ public class ControladorCliente extends HttpServlet {
             Carrito carrito_sacar = null;
             //sacamos al platillo del carrito
             for (Carrito c : carrito_general) {
-                if (c.getPlatillo().getCodigo()==platillo_sacar.getCodigo()) {
+                if (c.getPlatillo().getCodigo() == platillo_sacar.getCodigo()) {
                     if (c.getCantidad() > 1) {
                         c.setCantidad(c.getCantidad() - 1);
                         //actualizamos el precio total
@@ -188,13 +191,13 @@ public class ControladorCliente extends HttpServlet {
                     }
                 }
             }
-            
-            if(carrito_sacar!=null){
+
+            if (carrito_sacar != null) {
                 carrito_general.remove(carrito_sacar);
             }
-            
+
             session.setAttribute("carrito", carrito_general);
-            
+
             response.setContentType("application/json; charset=UTF-8");
             out.write(gson.toJson(carrito_general));
             response.setStatus(200); // ok with content
