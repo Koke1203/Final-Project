@@ -26,7 +26,11 @@ public class Usuario {
         this.tipo = tipo;
         this.telefono = telefono;
     }
-
+    
+    public Usuario(String nombre) {
+        this.nombre = nombre;
+    }
+    
     public Usuario() {
     }
 

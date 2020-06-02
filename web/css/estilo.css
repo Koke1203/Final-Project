@@ -1,3 +1,9 @@
+.body{
+    font-size: 0.875rem;
+    font-family: sans-serif;
+    background-color: #f3f2f2;
+}
+
 .login, .btn-registrarse{
     background-color: #F5710F;
     color: #f1eaea;
@@ -19,4 +25,34 @@
 
 .div_header{
     background-color: white;
+    width: 100%;
+}
+
+.checkout-btn{
+    color: white;
+    background-color: #F5710F;
+    text-align: center;
+}
+
+.div-pedido{
+    background-color: white;
+    border-left: 7px solid #f3f2f2;
+    margin-left: 15px; 
+    padding-left: 12px; 
+}
+
+.div-platillo{
+    margin-left: -15px;
+}
+
+.li-pedido{
+    list-style: none;
+}
+
+.price{
+    margin-left: 40%;
+}
+
+.p-totales{
+    margin-left: 45px;
 }

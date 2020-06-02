@@ -6,7 +6,7 @@
         <title>Inicio</title>
         <%@ include file="/presentacion/head.jsp" %>
     </head>
-    <body style="background-color:#dddddd">
+    <body>
         <%@include file="/presentacion/header.jsp"%>
         <main>
             <div id="page-wrapper">
@@ -25,7 +25,7 @@
                         <%--FIN Categorias--%>
 
                         <%--INICIO DIV SEARCH(ASAP,SCHEDULER)--%>
-                        <div class="col-sm-6" style="background-color: white;">
+                        <div class="div-platillo col-sm-6" style="background-color: white;">
                             <div class="content">
                                 <div id="local-box">
                                     <div class="panel local-search">
@@ -98,80 +98,79 @@
 
                                 <%--MENU REVIEWS INFO--%>
                                 <ul id="nav-tabs" class="nav-menus nav nav-tabs">
-                                    <%--<a class="nav-item nav-link active" href="https://demo.tastyigniter.com/local/menus">Menu</a>
-                                    <a class="nav-item nav-link " href="https://demo.tastyigniter.com/local/reviews">Reviews</a>
-                                    <a class="nav-item nav-link " href="https://demo.tastyigniter.com/local/info">Info</a>--%>
                                 </ul>
 
                                 <%--Platillos--%>
                                 <div class="panel">
                                     <%--Platillos--%>
-                                    <button>Categoria</button>
                                     <ul id="ul-itemsMenu">
-
-                                        <%--<li>
-                                            <div class="menu-item">
-                                                <h5>Platillo</h5>
-                                                <p>Descripcion</p>
-                                                <p>Precio</p>
-                                                <button id="sumar">Suma</button>--%>
-                                        <%--$("#sumar").click(function(){alert("Escuchando")});--%>
-                                        <%--</div>
-                                     </li>--%>
                                     </ul>
-
-                                </div>
-
-                                <%--FIN Categoria Platillo--%>
-
-                                <div class="d-flex flex-row">
-                                    <%--Descripcion--%>
-                                    <div class="menu-content flex-grow-1 mr-3">
-                                        <h6 class="menu-name">PUFF-PUFF</h6>
-                                        <p class="menu-desc text-muted mb-0">
-                                            Traditional Nigerian donut ball, rolled in sugar
-                                        </p>
-                                    </div>
-                                    <%--FIN Descripcion--%>
-                                    <%--Precio--%>
-                                    <div class="menu-detail align-self-start col-3 text-right p-0">
-                                        <span class="menu-price pr-sm-3">
-                                            <b>£4.99</b>
-                                        </span>
-                                    </div>
-                                    <%--FIN Precio--%>
                                 </div>
                             </div>
                         </div>
                         <%--FIN Platillos--%>
 
+                        <%--PEDIDO--%>
+                        <div class="div-pedido col-sm-4">
+                            <div class="affix-cart d-none d-sm-block affix-top" data-control="cart-box" data-load-item-handler="cartBox::onLoadItemPopup" data-update-item-handler="cartBox::onUpdateCart" data-apply-coupon-handler="cartBox::onApplyCoupon" data-change-order-type-handler="cartBox::onChangeOrderType" data-remove-item-handler="cartBox::onRemoveItem" data-remove-condition-handler="cartBox::onRemoveCondition" style="width: 350px;">
+                                <div id="cart-box" class="module-box">
+                                    <div class="panel panel-cart">
+                                        <div class="panel-body">
+                                            <div id="cart-control"><div class="btn-group btn-group-toggle w-100 text-center order-type" data-toggle="buttons">
+                                                    <label class="btn btn-light">
+                                                        <input type="radio" name="order_type" data-cart-toggle="order-type" value="delivery">&nbsp;&nbsp;
+                                                        <strong>Delivery</strong>
+                                                    </label>
+                                                    <label class="btn btn-light active">
+                                                        <input type="radio" name="order_type" data-cart-toggle="order-type" value="collection" checked="checked">&nbsp;&nbsp;
+                                                        <strong>Pick-up</strong>
+                                                    </label>
+                                                </div>
+                                            </div>
 
+                                            <div id="cart-items"></div>
+                                        </div>
+                                        <ul id="ul-itemsPedido"> </ul>
+                                        <div id="cart-coupon"></div>
+
+                                        <div id="cart-totals"></div>
+
+                                        <div id="cart-buttons" class="mt-3"><a href="ControladorCompra?accion=checkout" class="checkout-btn btn-block btn-lg">Checkout</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="cart-mobile-buttons" class="fixed-bottom d-block d-sm-none" style="">
+                            <a class="btn btn-primary btn-block btn-lg radius-none cart-toggle text-nowrap" href="https://demo.tastyigniter.com/cart">
+                                My Order:
+                                <span id="cart-total" class="font-weight-bold">£106.99</span>
+                            </a>
+                        </div>                   
                     </div>
+                    <!--FIN PEDIDO-->
                 </div>
             </div>
         </main>
         <script>
-
-            var A_categorias = new Array();
-            var A_platillos = new Array();
-            var menu = new Array();
-            var carrito = new Array();
-
+            var contador=0;
+            
             function loaded() {
                 listarCategorias();
+                infoCarrito();
             }
             $(loaded);
+            
             function listarCategorias() {
                 $.ajax({type: "GET", url: "api/categorias/listar", contentType: "application/json"})
-                        .then((categorias) => {
-                            listCat(categorias);
-                            A_categorias = categorias;
-                            //console.log(A_categorias);
-                        }, (error) => {
-                            alert(errorMessage(error.status));
-                        });
+                .then((categorias) => {
+                    listCat(categorias);
+                }, (error) => {
+                    alert(errorMessage(error.status));
+                });
             }
-
+                    
             function listCat(categorias) {
                 var listado = $("#ul-categorias");
                 categorias.forEach((c) => {
@@ -180,71 +179,108 @@
             }
 
             function rowCategoria(listado, categoria) {
-                var li = $("<li class='nav-item organge-link'>" + categoria.descripcion + "</li>");
+                var li = $("<li class='nav-item organge-link'><button class='btn'>" + categoria.descripcion + "</button></li>");
                 li.on("click", () => {
                     listarPlatillosXCategoria(categoria.codigo);
                 });
                 listado.append(li);
             }
-
-
+            
             function listarPlatillosXCategoria(codigo_categoria) {
-
                 categoria = {codigo: codigo_categoria};
-                //console.log(categoria.codigo);
                 $.ajax({type: "POST", data: JSON.stringify(categoria), url: "api/platillos/listar", contentType: "application/json"})
-                        .then((platillos) => {
-                            listarPlatillos(platillos);
-                            A_platillos = platillos;
-                            //console.log(platillos);
-                        }, (error) => {
-                            alert(errorMessage(error.status));
-                        });
+                .then((platillos) => {
+                    listarPlatillos(platillos);              
+                }, (error) => {
+                    alert(errorMessage(error.status));
+                });
             }
-
+            
             function listarPlatillos(platillos) {
                 var platillo = platillos[0];
-                $.ajax({type: "POST", data: JSON.stringify(platillo), url: "api/categorias/getDescripcion", contentType: "application/json"})
-                        .then((categoria) => {
-                            var listado = $("#ul-itemsMenu");
-                            listado.html("");
-
-                            var h3 = $("<h3>" + categoria.descripcion + "</h3>");
-
-                            listado.append(h3);
-
-                            platillos.forEach((p) => {
-                                rowPlatillo(listado, p);
-                            });
-                        }, (error) => {
-                            alert(errorMessage(error.status));
+                var listado = $("#ul-itemsMenu");
+                listado.html("");
+                if(platillo!=null){
+                    $.ajax({type: "POST", data: JSON.stringify(platillo), url: "api/categorias/getDescripcion", contentType: "application/json"})
+                    .then((categoria) => {
+                        var h3 = $("<h3>" + categoria.descripcion + "</h3>");
+                        listado.append(h3);
+                        platillos.forEach((p) => {
+                            rowPlatillo(listado, p);
                         });
-
-
-
-
-
-
-
+                    }, (error) => {
+                        alert(errorMessage(error.status));
+                    });
+                }
             }
-
+            
             function rowPlatillo(listado, platillo) {
-                var li = $("<li />");
-
-
-
-
-                li.html("<div>" +
-                        "<h5>" + platillo.nombre + "</h5>" +
-                        "<p>" + platillo.descripcion + "</p>" +
-                        "<p>" + platillo.precio + "</p>" +
-                        "<input type='button' id='addBtn' value='Add'>" +
-                        "</div>");
-                /*li.find("addBtn").on("click",()=>{
-                 });*/
-                listado.append(li);
+                var li = $("<li class='nav-item organge-link'/>");
+                    li.html("<div>" +
+                            "<h5>" + platillo.nombre + "</h5>" +
+                            "<p>" + platillo.descripcion + "</p>" +
+                            "<p>" + platillo.precio + "</p>" +
+                            "<input type='button' id='addPlatillo' value='Add'>" +
+                            "</div>");
+                    li.find("#addPlatillo").on("click", () => {agregarPlatilloCarrito(platillo)});
+                    listado.append(li);
             }
-
+            
+            function agregarPlatilloCarrito(platillo){
+                $.ajax({type: "POST", data: JSON.stringify(platillo), url: "api/carrito/agregarPlatillo", contentType: "application/json"})
+                .then((carrito_platillos) => {
+                    listCarrito(carrito_platillos);
+                    contador++;
+                    infoCarrito(); //actualizo la info
+                }, (error) => {
+                    alert(errorMessage(error.status));
+                });
+            }
+            
+            function listCarrito(carrito_platillos){
+                var lista_pedido = $("#ul-itemsPedido");
+                lista_pedido.html("");
+                carrito_platillos.forEach( (p)=>{rowCarrito(lista_pedido,p);});	
+                //agrego los subtotales
+                var div_montos = $("#cart-totals");
+                var monto=0;
+                carrito_platillos.forEach( (p)=>{monto=monto+p.precio_total;});
+                div_montos.html("<p class='p-totales'>Sub Total: <span class='price pull-right'>£"+monto.toFixed(2)+"</span><p>"+
+                                "<p class='p-totales'>Delivery: <span class='price pull-right'>Free</span><p>"+
+                                "<p class='p-totales'>Order Total: <span class='price pull-right'>£"+monto.toFixed(2)+"</span><p>");
+            }
+            
+            function rowCarrito(lista_pedido,carrito){
+                var li = $("<li class='li-pedido' />");
+                li.html("<p><button class='cart-btn btn btn-light btn-sm text-muted' id='quitar_platillo'>-</button>"+" <b>"+
+                        carrito.cantidad+" x </b>"+carrito.platillo.nombre+"<span class='price pull-right'> £"+carrito.precio_total+"</span></p>");
+                
+                li.find("#quitar_platillo").on("click",()=>{sacarPlatilloCarrito(carrito.platillo);});
+                lista_pedido.append(li);
+            }
+            
+            function sacarPlatilloCarrito(platillo){
+                $.ajax({type: "POST", data: JSON.stringify(platillo), url: "api/carrito/sacarPlatillo", contentType: "application/json"})
+                .then((carrito_platillos) => {
+                    listCarrito(carrito_platillos);
+                    contador--;
+                    infoCarrito(); //actualizo la info
+                }, (error) => {
+                    alert(errorMessage(error.status));
+                });
+            }
+            
+            function infoCarrito(){
+                var div_info = $("#cart-items");
+                if(contador>0){
+                    div_info.html("<div class='panel-body'><p class='text-center'>Your order</p");
+                }else{
+                    div_info.html("<div class='panel-body'><p class='text-center'>Add menu items to your cart</p");
+                    var div_total = $("#cart-totals");
+                    div_total.html("");
+                }
+            }
+            
             function errorMessage(status) {
                 switch (status) {
                     case 404:

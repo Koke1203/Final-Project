@@ -1,9 +1,7 @@
 package Presentacion;
 
-import Logica.Categoria;
 import Logica.Usuario;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,17 +12,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import Logica.Model;
-import com.google.gson.Gson;
-import java.io.BufferedReader;
 import java.util.Iterator;
-import javax.servlet.annotation.WebServlet;
 
 public class ControladorLogin extends HttpServlet {
-
+    
     String menu = "index_menu.jsp";
     String login = "login.jsp";
     String registro = "registrar_cliente.jsp";
-
+    String mi_cuenta = "presentacion/mi_cuenta.jsp";
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
     }
@@ -32,12 +28,12 @@ public class ControladorLogin extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        
         String acceso = "";
         String action = request.getParameter("accion");
-
+        HttpSession session = request.getSession(true);
+        
         if (action.equalsIgnoreCase("Login")) {
-            HttpSession session = request.getSession(true);
             List<Usuario> list = Model.instance().listUsuarios();
             Iterator<Usuario> iter = list.iterator();
             Usuario per = null;
@@ -68,17 +64,19 @@ public class ControladorLogin extends HttpServlet {
             acceso = registro;
         } else if (action.equalsIgnoreCase("login_show")) {
             acceso = login;
+        }else if(action.equalsIgnoreCase("logout")) {
+            session.removeAttribute("usuario");
+            acceso = login;
+        }else if(action.equalsIgnoreCase("menu")){
+            acceso = menu;
+        }else if(action.equalsIgnoreCase("mi_cuenta")){
+            acceso = mi_cuenta;
         }
-
+        
         RequestDispatcher vista = request.getRequestDispatcher(acceso);
         vista.forward(request, response);
     }
-
-//    void updateModel(HttpServletRequest request) {
-//        ModelLogin model = (ModelLogin) request.getAttribute("modelLogin");
-//        model.getCurrent().setCedula(request.getParameter("user"));
-//        model.getCurrent().setClave(request.getParameter("password"));
-//    }
+    
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

@@ -14,11 +14,11 @@ public class Model {
         }
         return uniqueInstance;
     }
-
+    
     HashMap<String, Usuario> usuarios;
     HashMap<Integer, Categoria> categorias;
     HashMap<Integer, Platillo> platillos;
-
+    
     private Model() {
         //Tipos (codigo,descripcion)
         usuarios = new HashMap();
@@ -49,13 +49,14 @@ public class Model {
         platillos.put(4, new Platillo(4, 4, "EBS", "Grated cassava", 11.99));
         //
         platillos.put(5, new Platillo(5, 5, "African Salad", "With baked beans, egg, tuna, onion, tomatoes , green peas and carrot with your choice of dressing.", 8.99));
+        platillos.put(6, new Platillo(6, 6, "Rice And Beans", "Traditional caribbean food", 5.01));
         //
     }
-
+    
     public List<Usuario> listUsuarios() {
         return new ArrayList(usuarios.values());
     }
-
+    
     public List<Categoria> listarCategorias() {
         return new ArrayList(categorias.values());
     }
@@ -63,7 +64,7 @@ public class Model {
     public void agregarUsuario(Usuario new_user) {
         usuarios.put("004", new_user);
     }
-
+    
     public List<Platillo> listarPlatillos(int codigo_categoria) {
         List<Platillo> platillos_retorno = new ArrayList<>();
         if (codigo_categoria == 1) {
@@ -76,6 +77,7 @@ public class Model {
             platillos_retorno.add(platillos.get(4));
         } else if (codigo_categoria == 5) {
             platillos_retorno.add(platillos.get(5));
+            platillos_retorno.add(platillos.get(6));
         }
         return platillos_retorno;
     }
@@ -83,5 +85,5 @@ public class Model {
     public Categoria obtenerCategoria(int codigo) {
         return categorias.get(codigo);
     }
-
+    
 }
