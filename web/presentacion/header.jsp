@@ -16,11 +16,11 @@
                 <ul class="nav navbar-nav">
                     <%if (user.getNombre() != " ") {%>
                         <li class="nav-item">
-                            <a class="nav-link" href="ControladorLogin?accion=menu">Ver Menú</a>
+                            <a class="nav-link" href="ControladorLogin?accion=menu">View Menu</a>
                         </li>
                         <!--Hacer un dropdown de My account-->
                         <li class="nav-item">
-                            <a class="nav-link" href="ControladorLogin?accion=mi_cuenta">Mi cuenta</a>
+                            <a class="nav-link" href="ControladorLogin?accion=mi_cuenta">My account</a>
                             <!--
                                 <ul class="nav navbar-nav">
                                     <li>
@@ -34,7 +34,7 @@
                         </li>
                     <%} else {%>
                         <li class="nav-item">
-                            <a class="nav-link" href="ControladorLogin?accion=login_show">Iniciar Sesión</a>
+                            <a class="nav-link" href="ControladorLogin?accion=login_show">Login</a>
                         </li>
                     <%}%>
                 </ul>

@@ -19,12 +19,13 @@ import java.util.List;
  * @author jorge
  */
 public class PlatilloDAO {
+
     Conexion cn = new Conexion();
     Connection con;
     PreparedStatement ps;
     ResultSet rs;
     Platillo p = new Platillo();
-    
+
     public List listarPlatillos() {
         ArrayList<Platillo> list = new ArrayList<>();
         String sql = "select * from platillo";
@@ -33,20 +34,20 @@ public class PlatilloDAO {
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
             while (rs.next()) {
-                Platillo per = new Platillo();
-                per.setCodigo(rs.getInt("codigo_platillo"));
-                per.setNombre(rs.getString("nombre"));
-                per.setPrecio(rs.getDouble("precio"));
-                per.setDescripcion(rs.getString("descripcion"));
-                per.setCodigo_categoria(rs.getInt("fk_categoria"));
-                list.add(per);
+                Platillo platillo = new Platillo();
+                platillo.setCodigo(rs.getInt("codigo_platillo"));
+                platillo.setNombre(rs.getString("nombre"));
+                platillo.setPrecio(rs.getDouble("precio"));
+                platillo.setDescripcion(rs.getString("descripcion"));
+                platillo.setCodigo_categoria(rs.getInt("fk_categoria"));
+                list.add(platillo);
             }
         } catch (Exception e) {
         }
         System.out.println("Conectado");
         return list;
     }
-    
+
     public Platillo listForCodigo(int codigo_plato) {
         String sql = "select * from platillo where codigo_platillo=" + codigo_plato;
         try {
@@ -64,5 +65,26 @@ public class PlatilloDAO {
         }
         return p;
     }
-    
+
+    public List listForCategoria(int cod_categoria) {
+        ArrayList<Platillo> list = new ArrayList<>();
+        String sql = "select * from platillo where fk_categoria = " + cod_categoria;
+        try {
+            con = cn.getConnection();
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Platillo platillo = new Platillo();
+                platillo.setCodigo(rs.getInt("codigo_platillo"));
+                platillo.setNombre(rs.getString("nombre"));
+                platillo.setPrecio(rs.getDouble("precio"));
+                platillo.setDescripcion(rs.getString("descripcion"));
+                platillo.setCodigo_categoria(rs.getInt("fk_categoria"));
+                list.add(platillo);
+            }
+        } catch (Exception e) {
+        }
+        return list;
+    }
+
 }

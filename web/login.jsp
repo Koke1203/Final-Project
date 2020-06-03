@@ -33,7 +33,7 @@
                                             <div class="input-group">
                                                 <input type="password" name="password" id="password" class="<%=erroneo("password", errores)%> form-control input-lg" title="<%=title("password", errores)%>" placeholder="Password" required="">
                                                 <span class="input-group-addon">
-                                                    <span class="input-group-text"><i class="fa fa-lock">&#128274;</i></span>
+                                                    <span class="input-group-text"><i class="fa fa-lock"></i></span>
                                                 </span>
                                             </div>
                                         </div>

@@ -12,6 +12,7 @@ public class ControladorCompra extends HttpServlet {
     
     String comprar = "presentacion/compra.jsp"; 
     String menu = "index_menu.jsp";
+    String direccion = "presentacion/address_book.jsp";
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -43,6 +44,10 @@ public class ControladorCompra extends HttpServlet {
             acceso = menu;
         }else if(action.equalsIgnoreCase("menu")){
             acceso = menu;
+        }else if(action.equalsIgnoreCase("agregar_direccion")){
+            acceso = direccion;
+        }else if(action.equalsIgnoreCase("direcciones")){
+            acceso = direccion;
         }
         
         RequestDispatcher vista = request.getRequestDispatcher(acceso);

@@ -2,7 +2,6 @@ package Presentacion;
 
 import Logica.Carrito;
 import Logica.Categoria;
-import Logica.Model;
 import Logica.Platillo;
 import ModelDAO.CategoriaDAO;
 import ModelDAO.PlatilloDAO;
@@ -22,7 +21,7 @@ import javax.servlet.http.HttpSession;
 @WebServlet(name = "ControladorCliente", urlPatterns = {"/api/categorias/listar", "/api/platillos/listar", "/api/categorias/getDescripcion",
     "/api/carrito/agregarPlatillo", "/api/carrito/sacarPlatillo"})
 public class ControladorCliente extends HttpServlet {
-
+    
     List<Carrito> carrito_general = new ArrayList<>();
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)

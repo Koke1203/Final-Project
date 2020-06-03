@@ -24,7 +24,7 @@ public class AdicionalDAO {
     PreparedStatement ps;
     ResultSet rs;
     Adicional p = new Adicional();
-
+    
     public List listarAdicionales() {
         ArrayList<Adicional> list = new ArrayList<>();
         String sql = "select * from adicional";

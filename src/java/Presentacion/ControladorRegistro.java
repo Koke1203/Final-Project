@@ -2,6 +2,7 @@ package Presentacion;
 
 import Logica.Model;
 import Logica.Usuario;
+import ModelDAO.UsuarioDAO;
 import com.google.gson.Gson;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -29,8 +30,9 @@ public class ControladorRegistro extends HttpServlet {
             BufferedReader reader = request.getReader();
             Gson gson = new Gson();
             Usuario usuario = gson.fromJson(reader, Usuario.class);
-            System.out.println("La contrasenia es: "+usuario.getContrasenia());
             PrintWriter out = response.getWriter();
+            UsuarioDAO dao_user = new UsuarioDAO();
+            dao_user.add(usuario);
             Model.instance().agregarUsuario(usuario);
             response.setContentType("application/json; charset=UTF-8");
             out.write(gson.toJson(""));

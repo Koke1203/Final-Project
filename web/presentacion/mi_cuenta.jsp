@@ -15,9 +15,9 @@
                     <div class="row py-5">
                         <div class="col-sm-3">
                             <div class="nav flex-column">
-                                <a href="#" class="nav-item nav-link active font-weight-bold"><span class="fa fa-user mr-3"></span>My Account</a>
-                                <a href="#" class="nav-item nav-link text-reset"><span class="fa fa-book mr-3"></span>Address Book</a>
-                                <a href="#" class="nav-item nav-link text-reset"><span class="fa fa-list-alt mr-3"></span>Recent Orders</a>
+                                <a href="ControladorLogin?accion=mi_cuenta" class="nav-item nav-link active font-weight-bold"><span class="fa fa-user mr-3"></span>My Account</a>
+                                <a href="ControladorCompra?accion=direcciones" class="nav-item nav-link text-reset"><span class="fa fa-book mr-3"></span>Address Book</a>
+                                <a href="ControladorLogin?accion=mi_cuenta" class="nav-item nav-link text-reset"><span class="fa fa-list-alt mr-3"></span>Recent Orders</a>
                             </div>
                         </div>
                         
@@ -48,7 +48,7 @@
                             <div class="card">
                                 <div class="card-body">
                                     <h5 class="font-weight-normal mb-3">Edit My Details</h5>
-                                    <form role="form" action="ControladorRegistro">
+                                    <form role="form" action="ControladorLogin">
                                         <div class="form-row">
                                             <div class="col col-sm-6">
                                                 <div class="form-group">
@@ -69,7 +69,7 @@
                                             </div>
                                             <div class="col col-sm-6">
                                                 <div class="form-group">
-                                                    <input type="text" class="form-control" value="<%=user.getCorreo()%>" name="correo" placeholder="Email Address" disabled="">
+                                                    <input type="text" class="form-control" value="<%=user.getCorreo()%>" name="correo" placeholder="Email Address" readonly>
                                                 </div>
                                             </div>
                                         </div>
@@ -87,27 +87,29 @@
                                         </div>
 
                                         <div class="form-group">
-                                            <input type="password" name="old_password" class="form-control" value="" placeholder="Old Password">
+                                            <input type="password" name="old_password" class="form-control" placeholder="Old Password">
                                         </div>
 
                                         <div class="form-row">
                                             <div class="col col-sm-6">
                                                 <div class="form-group">
-                                                    <input type="password" class="form-control" value="" name="new_password" placeholder="New Password">
+                                                    <input type="password" class="form-control" name="new_password" placeholder="New Password">
                                                 </div>
                                             </div>
                                             <div class="col col-sm-6">
                                                 <div class="form-group">
-                                                    <input type="password" class="form-control" name="confirm_new_password" value="" placeholder="New Password Confirm">
+                                                    <input type="password" class="form-control" name="confirm_new_password" placeholder="New Password Confirm">
                                                 </div>
                                             </div>
                                         </div>
-
+                                        
                                         <div class="buttons">
-                                            <button type="submit" value="editar_usuario" name="accion" class="btn btn-primary">Actualizar información</button>
+                                            <button type="submit" value="editar_usuario" name="accion" class="btn btn-primary">Save Details</button>
                                         </div>
-                                    </form>
                                                 
+                                                
+                                        <input type="text" name="password_user" value="<%=user.getContrasenia()%>" hidden>
+                                    </form>          
                                 </div>
                             </div>
 
@@ -115,6 +117,6 @@
                     </div>
                 </div>
             </div>
-        </main>
+        </main>                                    
     </body>
 </html>

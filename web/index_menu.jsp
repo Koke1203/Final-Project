@@ -23,7 +23,7 @@
                             </div>
                         </div>
                         <%--FIN Categorias--%>
-
+                        
                         <%--INICIO DIV SEARCH(ASAP,SCHEDULER)--%>
                         <div class="div-platillo col-sm-6" style="background-color: white;">
                             <div class="content">
@@ -102,9 +102,10 @@
 
                                 <%--Platillos--%>
                                 <div class="panel">
-                                    <ul class="ul-itemsMenu" id="ul-itemsMenu">
+                                    <div class="div-itemsMenu" id="div-itemsMenu">
                                         <%-- Aquí se muestran los platillos por categoria --%>
-                                    </ul>
+                                        
+                                    </div>
                                 </div>
                                 <%--FIN Platillos--%>
 
@@ -155,8 +156,6 @@
                 </div>
             </div>
         </main>
-
-
 
         <div class="modal fade" id="opciones-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
@@ -231,11 +230,10 @@
                 infoCarrito();
             }
             $(loaded);
-
+            
             function listarCategorias() {
-                $.ajax({type: "GET", url: "api/categorias/listar", contentType: "application/json"})
+                $.ajax({type: "GET",data:"", url: "api/categorias/listar", contentType: "application/json"})
                         .then((categorias) => {
-                            //console.log(categorias);
                             listCat(categorias);
                         }, (error) => {
                             alert(errorMessage(error.status));
@@ -262,7 +260,6 @@
                 $.ajax({type: "POST", data: JSON.stringify(categoria), url: "api/platillos/listar", contentType: "application/json"})
                         .then((platillos) => {
                             listarPlatillos(platillos, cat);
-                            //console.log(platillos);
                         }, (error) => {
                             alert(errorMessage(error.status));
                         });
@@ -270,8 +267,8 @@
 
             function listarPlatillos(platillos, cat) {
                 //console.log(platillos);
-                //console.log(cat);
-                var listado = $("#ul-itemsMenu");
+                //console.log;
+                var listado = $("#div-itemsMenu");
                 listado.html("");
                 var h3 = $("<h3>" + cat.descripcion + "</h3>");
                 listado.append(h3);
@@ -279,11 +276,11 @@
                     rowPlatillo(listado, p);
                 });
             }
-
+            
             function rowPlatillo(listado, platillo) {
-                var li = $("<li />");
-                li.addClass("list-item");
-                li.html("<div class='row'>" +
+                var div = $("<div />");
+                div.addClass("list-item");
+                div.html("<div class='row'>" +
                         "<div class='col-sm'>" +
                         "<h6 class='modal-title'>" + platillo.nombre + "</h6>" +
                         "</div>" +
@@ -299,11 +296,11 @@
                         "<div class='row'>" +
                         "<p class='text-muted col-sm'>" + platillo.descripcion + "</p>" +
                         "</div>");
-                li.find("#addMenuItemBtn").on("click", () => {
+                div.find("#addMenuItemBtn").on("click", () => {
                     agregarHeaderModal(platillo);
                     //agregarCuerpoModal(platillo);
                 });
-                listado.append(li);
+                listado.append(div);
             }
 
             function agregarHeaderModal(platillo) {
