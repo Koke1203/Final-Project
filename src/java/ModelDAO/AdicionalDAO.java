@@ -7,7 +7,6 @@ package ModelDAO;
 
 import Config.Conexion;
 import Logica.Adicional;
-import Logica.Adicional;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,13 +18,13 @@ import java.util.List;
  * @author jorge
  */
 public class AdicionalDAO {
-    
+
     Conexion cn = new Conexion();
     Connection con;
     PreparedStatement ps;
     ResultSet rs;
     Adicional p = new Adicional();
-    
+
     public List listarAdicionales() {
         ArrayList<Adicional> list = new ArrayList<>();
         String sql = "select * from adicional";
@@ -37,7 +36,7 @@ public class AdicionalDAO {
                 Adicional per = new Adicional();
                 per.setCodigo_adicional(rs.getInt("codigo_adicional"));
                 per.setDescripcion(rs.getString("descripcion"));
-                per.setPrecio(rs.getDouble("precio"));
+                per.setMultiple(rs.getInt("multiple"));
                 list.add(per);
             }
         } catch (Exception e) {
@@ -45,5 +44,5 @@ public class AdicionalDAO {
         System.out.println("Conectado");
         return list;
     }
-    
+
 }

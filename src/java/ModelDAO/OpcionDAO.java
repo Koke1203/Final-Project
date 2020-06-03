@@ -6,7 +6,8 @@
 package ModelDAO;
 
 import Config.Conexion;
-import Logica.Categoria;
+import Logica.Adicional;
+import Logica.Opcion;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,25 +18,25 @@ import java.util.List;
  *
  * @author jorge
  */
-public class CategoriaDAO {
-    
+public class OpcionDAO {
     Conexion cn = new Conexion();
     Connection con;
     PreparedStatement ps;
     ResultSet rs;
-    Categoria p = new Categoria();
+    Opcion p = new Opcion();
     
     public List listarOpcionales() {
-        ArrayList<Categoria> list = new ArrayList<>();
-        String sql = "select * from categoria";
+        ArrayList<Opcion> list = new ArrayList<>();
+        String sql = "select * from opcion";
         try {
             con = cn.getConnection();
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
             while (rs.next()) {
-                Categoria per = new Categoria();
-                per.setCodigo(rs.getInt("codigo_categoria"));
+                Opcion per = new Opcion();
+                per.setCodigo_opcion(rs.getInt("codigo_adicional"));
                 per.setDescripcion(rs.getString("descripcion"));
+                per.setPrecio(rs.getDouble("precio"));
                 list.add(per);
             }
         } catch (Exception e) {

@@ -35,9 +35,9 @@ public class PedidoDAO {
             rs = ps.executeQuery();
             while (rs.next()) {
                 Pedido per = new Pedido();
-                per.setNumero_pedido(rs.getInt("numero_Pedido"));
-                per.setTipo_pedido(rs.getInt("tipo_Pedido"));
-                per.setTipo_entrega(rs.getInt("tipo_Entrega"));
+                per.setNumero_pedido(rs.getInt("numero_pedido"));
+                per.setTipo_pedido(rs.getInt("tipo_pedido"));
+                per.setTipo_entrega(rs.getInt("tipo_entrega"));
                 per.setFk_codigo_platillo(rs.getInt("fk_codigo_platillo"));
                 list.add(per);
             }
@@ -48,7 +48,7 @@ public class PedidoDAO {
     }
     
     public boolean add(Pedido per) {
-        String sql = "insert into pedido(numero_Pedido, tipo_Pedido, tipo_Entrega, fk_codigo_platillo)values(" + per.getNumero_pedido()
+        String sql = "insert into pedido(numero_pedido, tipo_pedido, tipo_entrega, fk_codigo_platillo)values(" + per.getNumero_pedido()
                 + "," + per.getTipo_pedido()+ "," + per.getTipo_entrega()+ "," + per.getFk_codigo_platillo()+ ")";
         try {
             con = cn.getConnection();
@@ -61,15 +61,15 @@ public class PedidoDAO {
     }
     
     public Pedido listForNumPedido(int numero_Pedido) {
-        String sql = "select * from pedido where numero_Pedido=" + numero_Pedido;
+        String sql = "select * from pedido where numero_pedido=" + numero_Pedido;
         try {
             con = cn.getConnection();
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
             while (rs.next()) {
-                p.setNumero_pedido(rs.getInt("numero_Pedido"));
-                p.setTipo_pedido(rs.getInt("tipo_Pedido"));
-                p.setTipo_entrega(rs.getInt("tipo_Entrega"));
+                p.setNumero_pedido(rs.getInt("numero_pedido"));
+                p.setTipo_pedido(rs.getInt("tipo_pedido"));
+                p.setTipo_entrega(rs.getInt("tipo_entrega"));
                 p.setFk_codigo_platillo(rs.getInt("fk_codigo_platillo"));
             }
         } catch (Exception e) {
@@ -78,7 +78,7 @@ public class PedidoDAO {
     }
     
     public boolean eliminar(int numero_Pedido) {
-        String sql = "delete from pedido where numero_Pedido=" + numero_Pedido;
+        String sql = "delete from pedido where numero_pedido=" + numero_Pedido;
         try {
             con = cn.getConnection();
             ps = con.prepareStatement(sql);

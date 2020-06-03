@@ -35,10 +35,10 @@ public class FacturaDAO {
             rs = ps.executeQuery();
             while (rs.next()) {
                 Factura per = new Factura();
-                per.setCodigo_factura(rs.getInt("codigo_Factura"));
+                per.setCodigo_factura(rs.getInt("codigo_factura"));
                 per.setFecha(rs.getString("fecha"));
-                per.setTotal_pagar(rs.getDouble("total_Pagar"));
-                per.setTipo_pago(rs.getInt("tipo_Pago"));
+                per.setTotal_pagar(rs.getDouble("total_pagar"));
+                per.setTipo_pago(rs.getInt("tipo_pago"));
                 per.setFk_numero_pedido(rs.getInt("fk_numero_pedido"));
                 list.add(per);
             }
@@ -49,7 +49,7 @@ public class FacturaDAO {
     }
     
     public boolean add(Factura per) {
-        String sql = "insert into factura(codigo_Factura, fecha, total_Pagar, tipo_Pago, fk_numero_pedido)values("
+        String sql = "insert into factura(codigo_factura, fecha, total_pagar, tipo_pago, fk_numero_pedido)values("
                 + per.getCodigo_factura()+ ",'" + per.getFecha()+ "'," + per.getTotal_pagar()+ "," 
                 + per.getTipo_pago()+","+ per.getFk_numero_pedido()+ ")";
         try {
@@ -63,16 +63,16 @@ public class FacturaDAO {
     }
     
     public Factura listForCodigoF(int codigo_Factura) {
-        String sql = "select * from factura where codigo_Factura=" + codigo_Factura;
+        String sql = "select * from factura where codigo_factura=" + codigo_Factura;
         try {
             con = cn.getConnection();
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
             while (rs.next()) {
-                p.setCodigo_factura(rs.getInt("codigo_Factura"));
+                p.setCodigo_factura(rs.getInt("codigo_factura"));
                 p.setFecha(rs.getString("fecha"));
-                p.setTotal_pagar(rs.getDouble("total_Pagar"));
-                p.setTipo_pago(rs.getInt("tipo_Pago"));
+                p.setTotal_pagar(rs.getDouble("total_pagar"));
+                p.setTipo_pago(rs.getInt("tipo_pago"));
                 p.setFk_numero_pedido(rs.getInt("fk_numero_pedido"));
             }
         } catch (Exception e) {

@@ -53,7 +53,7 @@ public class UsuarioDAO {
     }
 
     public Usuario listForCorreo(String correo) {
-        String sql = "select * from usuario where correo=" + correo;
+        String sql = "select * from usuario where correo='" + correo + "'";
         try {
             con = cn.getConnection();
             ps = con.prepareStatement(sql);
@@ -74,7 +74,7 @@ public class UsuarioDAO {
     public boolean edit(Usuario per) {
         String sql = "update usuario set nombre='" + per.getNombre() + "',apellido='"
                 + per.getApellido() + "',password='" + per.getContrasenia() + "',tipo_Usuario="
-                + per.getTipo() + ",telefono=" + per.getTelefono() + " where correo=" + per.getCorreo();
+                + per.getTipo() + ",telefono=" + per.getTelefono() + " where correo='" + per.getCorreo() + "'";
         try {
             con = cn.getConnection();
             ps = con.prepareStatement(sql);
@@ -86,7 +86,7 @@ public class UsuarioDAO {
     }
 
     public boolean eliminar(String correo) {
-        String sql = "delete from usuario where correo=" + correo;
+        String sql = "delete from usuario where correo='" + correo + "'";
         try {
             con = cn.getConnection();
             ps = con.prepareStatement(sql);
