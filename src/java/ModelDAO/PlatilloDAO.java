@@ -38,6 +38,7 @@ public class PlatilloDAO {
                 per.setNombre(rs.getString("nombre"));
                 per.setPrecio(rs.getDouble("precio"));
                 per.setDescripcion(rs.getString("descripcion"));
+                per.setCodigo_categoria(rs.getInt("fk_categoria"));
                 list.add(per);
             }
         } catch (Exception e) {
@@ -57,6 +58,7 @@ public class PlatilloDAO {
                 p.setNombre(rs.getString("nombre"));
                 p.setPrecio(rs.getDouble("precio"));
                 p.setDescripcion(rs.getString("descripcion"));
+                p.setCodigo_categoria(rs.getInt("fk_categoria"));
             }
         } catch (Exception e) {
         }
