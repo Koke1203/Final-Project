@@ -13,14 +13,16 @@ public class Adicional {
     int codigo_adicional;
     String descripcion;
     double precio;
+    int multiple;
 
     public Adicional() {
     }
 
-    public Adicional(int codigo_adicional, String descripcion, double precio) {
+    public Adicional(int codigo_adicional, String descripcion, double precio, int multiple) {
         this.codigo_adicional = codigo_adicional;
         this.descripcion = descripcion;
         this.precio = precio;
+        this.multiple = multiple;
     }
 
     public int getCodigo_adicional() {
@@ -46,6 +48,16 @@ public class Adicional {
     public void setPrecio(double precio) {
         this.precio = precio;
     }
+
+    public int getMultiple() {
+        return multiple;
+    }
+
+    public void setMultiple(int multiple) {
+        this.multiple = multiple;
+    }
+
+   
     
     
     
