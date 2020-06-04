@@ -38,7 +38,7 @@ public class ControladorLogin extends HttpServlet {
             List<Usuario> list = user_dao.listarUsuarios();
             Iterator<Usuario> iter = list.iterator();
             Usuario per = null;
-            boolean es_falso = true;
+            boolean es_falso = false;
 
             while (iter.hasNext()) {
                 per = iter.next();
@@ -92,7 +92,7 @@ public class ControladorLogin extends HttpServlet {
         RequestDispatcher vista = request.getRequestDispatcher(acceso);
         vista.forward(request, response);
     }
-    
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

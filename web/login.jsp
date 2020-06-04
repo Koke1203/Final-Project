@@ -22,7 +22,7 @@
                                     <form action="ControladorLogin" accept-charset="UTF-8" role="form">
                                         <div class="form-group">
                                             <div class="input-group">
-                                                <input type="text" name="email" id="email" class="<%=erroneo("user", errores)%> form-control input-lg" title="<%=title("email", errores)%>" placeholder="Email Address" required="">
+                                                <input type="text" name="email" id="email" class="<%=erroneo("email", errores)%> form-control input-lg" title="<%=title("email", errores)%>" placeholder="Email Address" required="">
                                                 <span class="input-group-addon">
                                                     <span class="input-group-text">@</span>
                                                 </span>
@@ -75,7 +75,7 @@
 
         <script>
             //tengo que validar los campos con jquery
-            
+
         </script>
     </body>
 </html>

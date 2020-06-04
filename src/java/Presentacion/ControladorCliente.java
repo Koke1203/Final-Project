@@ -1,11 +1,15 @@
 package Presentacion;
 
+import Logica.Adicional;
 import Logica.Carrito;
 import Logica.Categoria;
 import Logica.Direccion;
 import Logica.Model;
+import Logica.Opcion;
 import Logica.Platillo;
+import ModelDAO.AdicionalDAO;
 import ModelDAO.CategoriaDAO;
+import ModelDAO.OpcionDAO;
 import ModelDAO.PlatilloDAO;
 import com.google.gson.Gson;
 import java.io.BufferedReader;
@@ -20,7 +24,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-@WebServlet(name = "ControladorCliente", urlPatterns = {"/api/categorias/listar", "/api/platillos/listar", "/api/categorias/getDescripcion",
+@WebServlet(name = "ControladorCliente", urlPatterns = {"/api/categorias/listar", "/api/platillos/listar", "/api/platillo/getAdicionales",
+    "/api/platillo/getOpciones", "/api/categorias/getDescripcion",
     "/api/carrito/agregarPlatillo", "/api/carrito/sacarPlatillo", "/api/direccion/listar"})
 public class ControladorCliente extends HttpServlet {
 
@@ -35,9 +40,12 @@ public class ControladorCliente extends HttpServlet {
             case "/api/platillos/listar":
                 this.listarPlatillos(request, response);
                 break;
-//            case "/api/categorias/getDescripcion":
-//                this.obtenerCategoria(request, response);
-//                break;
+            case "/api/platillo/getAdicionales":
+                this.listarAdicionalesPlatillo(request, response);
+                break;
+            case "/api/platillo/getOpciones":
+                this.listarOpcionesAdicional(request, response);
+                break;
             case "/api/carrito/agregarPlatillo":
                 this.agregarPlatilloCarrito(request, response);
                 break;
@@ -119,20 +127,38 @@ public class ControladorCliente extends HttpServlet {
         }
     }
 
-//    private void obtenerCategoria(HttpServletRequest request, HttpServletResponse response) {
-//        try {
-//            BufferedReader reader = request.getReader();
-//            Gson gson = new Gson();
-//            Platillo categoria_buscar = gson.fromJson(reader, Platillo.class);
-//            PrintWriter out = response.getWriter();
-//            Categoria categoria = Model.instance().obtenerCategoria(categoria_buscar.getCategoria() - 1);
-//            response.setContentType("application/json; charset=UTF-8");
-//            out.write(gson.toJson(categoria));
-//            response.setStatus(200); // ok with content
-//        } catch (Exception ex) {
-//            response.setStatus(status(ex));
-//        }
-//    }
+    private void listarAdicionalesPlatillo(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            BufferedReader reader = request.getReader();
+            Gson gson = new Gson();
+            Platillo platillo = gson.fromJson(reader, Platillo.class);
+            PrintWriter out = response.getWriter();
+            AdicionalDAO daoAdicional = new AdicionalDAO();
+            List<Adicional> adicionales = daoAdicional.listForCodPlatillo(platillo.getCodigo());
+            response.setContentType("application/json; charset=UTF-8");
+            out.write(gson.toJson(adicionales));
+            response.setStatus(200); // ok with content
+        } catch (Exception ex) {
+            response.setStatus(status(ex));
+        }
+    }
+
+    private void listarOpcionesAdicional(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            BufferedReader reader = request.getReader();
+            Gson gson = new Gson();
+            Adicional adicional = gson.fromJson(reader, Adicional.class);
+            PrintWriter out = response.getWriter();
+            OpcionDAO daoOpcion = new OpcionDAO();
+            List<Opcion> opciones = daoOpcion.listForCodAdicional(adicional.getCodigo_adicional());
+            response.setContentType("application/json; charset=UTF-8");
+            out.write(gson.toJson(opciones));
+            response.setStatus(200); // ok with content
+        } catch (Exception ex) {
+            response.setStatus(status(ex));
+        }
+    }
+
     //agrego un platillo al carrito POST
     private void agregarPlatilloCarrito(HttpServletRequest request, HttpServletResponse response) {
         try {
@@ -209,7 +235,7 @@ public class ControladorCliente extends HttpServlet {
             response.setStatus(status(ex));
         }
     }
-    
+
     private void listarDirecciones(HttpServletRequest request, HttpServletResponse response) {
         try {
             Gson gson = new Gson();
@@ -224,7 +250,7 @@ public class ControladorCliente extends HttpServlet {
             response.setStatus(status(ex));
         }
     }
-    
+
     protected int status(Exception e) {
         if (e.getMessage().startsWith("404")) {
             return 404;
@@ -234,5 +260,5 @@ public class ControladorCliente extends HttpServlet {
         }
         return 400;
     }
-    
+
 }
