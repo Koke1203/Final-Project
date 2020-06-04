@@ -39,7 +39,7 @@ public class ControladorLogin extends HttpServlet {
             Iterator<Usuario> iter = list.iterator();
             Usuario per = null;
             boolean es_falso = false;
-
+            
             while (iter.hasNext()) {
                 per = iter.next();
                 if (request.getParameter("email").equals(per.getCorreo()) && request.getParameter("password").equals(per.getContrasenia())) {
@@ -51,7 +51,7 @@ public class ControladorLogin extends HttpServlet {
                     es_falso = false;
                 }
             }
-
+            
             if (es_falso == false) {
                 //Por medio de Maps, setear errores a la vista
                 Map<String, String> errores = new HashMap<>();

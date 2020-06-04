@@ -4,12 +4,12 @@ import Logica.Adicional;
 import Logica.Carrito;
 import Logica.Categoria;
 import Logica.Direccion;
-import Logica.Model;
 import Logica.Opcion;
 import Logica.Platillo;
 import ModelDAO.AdicionalDAO;
 import ModelDAO.CategoriaDAO;
 import ModelDAO.OpcionDAO;
+import ModelDAO.DireccionDAO;
 import ModelDAO.PlatilloDAO;
 import com.google.gson.Gson;
 import java.io.BufferedReader;
@@ -240,9 +240,9 @@ public class ControladorCliente extends HttpServlet {
         try {
             Gson gson = new Gson();
             PrintWriter out = response.getWriter();
-            Model domainModel = Model.instance();
-            Direccion direccion = new Direccion();
-            direccion = domainModel.listAddress();
+            DireccionDAO dao = new DireccionDAO();
+            List<Direccion> direccion = new ArrayList<>();
+            direccion = dao.listarDirecciones();
             response.setContentType("application/json; charet=UTF-8");
             out.write(gson.toJson(direccion));
             response.setStatus(200);//Ok with content

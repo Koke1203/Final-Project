@@ -2,6 +2,7 @@ package Presentacion;
 
 import Logica.Direccion;
 import Logica.Model;
+import ModelDAO.DireccionDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
@@ -40,7 +41,6 @@ public class ControladorCompra extends HttpServlet {
         
         String acceso = "";
         String action = request.getParameter("accion");
-        Model domainModel = Model.instance();
         
         if(action.equalsIgnoreCase("checkout")) {
             acceso = comprar;
@@ -51,10 +51,10 @@ public class ControladorCompra extends HttpServlet {
         }else if(action.equalsIgnoreCase("direcciones")){
             acceso = direccion;
         }else if(action.equalsIgnoreCase("agregar_direccion")){
+            DireccionDAO dao = new DireccionDAO();
             Direccion direccion = new Direccion(request.getParameter("direccion"),request.getParameter("pais"),
-                    request.getParameter("estado"),request.getParameter("codigo_postal"),"");
-            domainModel.addAddress(direccion);
-            System.out.println("Direccion recien agregada: "+domainModel.listAddress().getDireccion_general());
+                    request.getParameter("ciudad"),request.getParameter("estado"),Integer.parseInt(request.getParameter("codigo_postal")),"");
+            dao.addDireccion(direccion);
             acceso = cuenta;
         }
         
