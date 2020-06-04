@@ -356,7 +356,7 @@
                     var rowOpc = $("<div />");
                     rowOpc.addClass("option-group");
                     rowOpc.html("<div class='custom-control custom-radio'>" +
-                            "<input type='radio' id='menuOptionRadio164' class='custom-control-input' name='" + des_adic + "'>" +
+                            "<input type='radio' id='menuOptionRadio164' class='' name='" + des_adic + "'>" +
                             "<label class='custom-control-label' for='optionRadio" + opc.codigo_opcion + "'>" + opc.descripcion +
                             "<span class='pull-right'>" + "£" + opc.precio + "</span>" +
                             "</label>" +
@@ -370,7 +370,6 @@
                      "</div>");
                      */
                     listado.append(rowOpc);
-
                 });
             }
 
@@ -490,6 +489,5 @@
                 }
             }
         </script>
-        <script src="js/global.js"></script>
     </body>
 </html>
