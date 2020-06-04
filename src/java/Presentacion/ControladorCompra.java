@@ -1,5 +1,7 @@
 package Presentacion;
 
+import Logica.Direccion;
+import Logica.Model;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
@@ -13,6 +15,7 @@ public class ControladorCompra extends HttpServlet {
     String comprar = "presentacion/compra.jsp"; 
     String menu = "index_menu.jsp";
     String direccion = "presentacion/address_book.jsp";
+    String cuenta = "presentacion/mi_cuenta.jsp";
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -37,6 +40,7 @@ public class ControladorCompra extends HttpServlet {
         
         String acceso = "";
         String action = request.getParameter("accion");
+        Model domainModel = Model.instance();
         
         if(action.equalsIgnoreCase("checkout")) {
             acceso = comprar;
@@ -44,10 +48,14 @@ public class ControladorCompra extends HttpServlet {
             acceso = menu;
         }else if(action.equalsIgnoreCase("menu")){
             acceso = menu;
-        }else if(action.equalsIgnoreCase("agregar_direccion")){
-            acceso = direccion;
         }else if(action.equalsIgnoreCase("direcciones")){
             acceso = direccion;
+        }else if(action.equalsIgnoreCase("agregar_direccion")){
+            Direccion direccion = new Direccion(request.getParameter("direccion"),request.getParameter("pais"),
+                    request.getParameter("estado"),request.getParameter("codigo_postal"),"");
+            domainModel.addAddress(direccion);
+            System.out.println("Direccion recien agregada: "+domainModel.listAddress().getDireccion_general());
+            acceso = cuenta;
         }
         
         RequestDispatcher vista = request.getRequestDispatcher(acceso);

@@ -15,12 +15,12 @@ import ModelDAO.UsuarioDAO;
 import java.util.Iterator;
 
 public class ControladorLogin extends HttpServlet {
-    
+
     String menu = "index_menu.jsp";
     String login = "login.jsp";
     String registro = "registrar_cliente.jsp";
     String mi_cuenta = "presentacion/mi_cuenta.jsp";
-    
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
     }
@@ -28,18 +28,18 @@ public class ControladorLogin extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         String acceso = "";
         String action = request.getParameter("accion");
         HttpSession session = request.getSession(true);
         UsuarioDAO user_dao = new UsuarioDAO();
-        
+
         if (action.equalsIgnoreCase("Login")) {
             List<Usuario> list = user_dao.listarUsuarios();
             Iterator<Usuario> iter = list.iterator();
             Usuario per = null;
             boolean es_falso = true;
-            
+
             while (iter.hasNext()) {
                 per = iter.next();
                 if (request.getParameter("email").equals(per.getCorreo()) && request.getParameter("password").equals(per.getContrasenia())) {
@@ -64,31 +64,31 @@ public class ControladorLogin extends HttpServlet {
             acceso = registro;
         } else if (action.equalsIgnoreCase("login_show")) {
             acceso = login;
-        }else if(action.equalsIgnoreCase("logout")) {
+        } else if (action.equalsIgnoreCase("logout")) {
             session.removeAttribute("usuario");
             acceso = login;
-        }else if(action.equalsIgnoreCase("menu")){
+        } else if (action.equalsIgnoreCase("menu")) {
             acceso = menu;
-        }else if(action.equalsIgnoreCase("mi_cuenta")){
+        } else if (action.equalsIgnoreCase("mi_cuenta")) {
             acceso = mi_cuenta;
-        }else if(action.equalsIgnoreCase("editar_usuario")){
+        } else if (action.equalsIgnoreCase("editar_usuario")) {
             Usuario new_user = new Usuario();
             new_user.setCorreo(request.getParameter("correo"));
             new_user.setNombre(request.getParameter("first_name"));
             new_user.setApellido(request.getParameter("last_name"));
             new_user.setTelefono(Integer.parseInt(request.getParameter("telephone")));
             new_user.setTipo(1);
-            if(request.getParameter("old_password").equalsIgnoreCase("")){
+            if (request.getParameter("old_password").equalsIgnoreCase("")) {
                 new_user.setContrasenia(request.getParameter("password_user"));
                 user_dao.edit(new_user);
-            }else{
+            } else {
                 new_user.setContrasenia(request.getParameter("new_password"));
                 user_dao.edit(new_user);
             }
             session.setAttribute("usuario", new_user);
             acceso = mi_cuenta;
         }
-        
+
         RequestDispatcher vista = request.getRequestDispatcher(acceso);
         vista.forward(request, response);
     }

@@ -61,3 +61,10 @@
     height: 23px;
     text-align: center;
 }
+
+.boton-header{
+    border:none;
+    background-color: white;
+}
+
+input.invalid {box-shadow: 0 0 1px 1px red;}

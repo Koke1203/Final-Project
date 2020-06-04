@@ -1,8 +1,8 @@
 <%@page import="Logica.Usuario"%>
 <%Usuario user = new Usuario(" ");
-  if(session.getAttribute("usuario")!=null){
-      user = (Usuario) session.getAttribute("usuario");
-  }
+    if (session.getAttribute("usuario") != null) {
+        user = (Usuario) session.getAttribute("usuario");
+    }
 %>
 <header>
     <nav class="div_header navbar navbar-light navbar-top navbar-expand-md fixed-top">
@@ -15,27 +15,25 @@
             <div class="justify-content-end collapse navbar-collapse" id="navbarMainHeader">
                 <ul class="nav navbar-nav">
                     <%if (user.getNombre() != " ") {%>
-                        <li class="nav-item">
-                            <a class="nav-link" href="ControladorLogin?accion=menu">View Menu</a>
-                        </li>
-                        <!--Hacer un dropdown de My account-->
-                        <li class="nav-item">
-                            <a class="nav-link" href="ControladorLogin?accion=mi_cuenta">My account</a>
-                            <!--
-                                <ul class="nav navbar-nav">
-                                    <li>
-                                        <a class="nav-link" href="ControladorLogin?accion=mi_cuenta">Ordenes Recientes</a>
-                                        <a class="nav-link" href="ControladorLogin?accion=mi_cuenta" onfocus="">Cuenta</a>
-                                        <a class="nav-link" href="ControladorLogin?accion=mi_cuenta">Direcciones</a>
-                                        <a class="nav-link" href="ControladorLogin?accion=logout">Salir</a>
-                                    </li>
-                                </ul>
-                            -->
-                        </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="ControladorLogin?accion=menu">View Menu</a>
+                    </li>
+                    <!--Hacer un dropdown de My account-->
+                    <li class="nav-item active">
+                        <div class="dropdown">
+                            <button id="dropdownMenuButton" class="boton-header nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >My Account<span class="caret"></span></button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="ControladorLogin?accion=mi_cuenta">Recent Orders</a>
+                                <a class="dropdown-item" href="ControladorLogin?accion=mi_cuenta">My Account</a>
+                                <a class="dropdown-item" href="ControladorCompra?accion=direcciones">Address Book</a>
+                                <a class="dropdown-item" href="ControladorLogin?accion=logout">Logout</a>
+                            </div>
+                        </div>
+                    </li>
                     <%} else {%>
-                        <li class="nav-item">
-                            <a class="nav-link" href="ControladorLogin?accion=login_show">Login</a>
-                        </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="ControladorLogin?accion=login_show">Login</a>
+                    </li>
                     <%}%>
                 </ul>
             </div>

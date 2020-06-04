@@ -2,6 +2,8 @@ package Presentacion;
 
 import Logica.Carrito;
 import Logica.Categoria;
+import Logica.Direccion;
+import Logica.Model;
 import Logica.Platillo;
 import ModelDAO.CategoriaDAO;
 import ModelDAO.PlatilloDAO;
@@ -19,9 +21,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 @WebServlet(name = "ControladorCliente", urlPatterns = {"/api/categorias/listar", "/api/platillos/listar", "/api/categorias/getDescripcion",
-    "/api/carrito/agregarPlatillo", "/api/carrito/sacarPlatillo"})
+    "/api/carrito/agregarPlatillo", "/api/carrito/sacarPlatillo", "/api/direccion/listar"})
 public class ControladorCliente extends HttpServlet {
-    
+
     List<Carrito> carrito_general = new ArrayList<>();
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -41,6 +43,9 @@ public class ControladorCliente extends HttpServlet {
                 break;
             case "/api/carrito/sacarPlatillo":
                 this.sacarPlatilloCarrito(request, response);
+                break;
+            case "/api/direccion/listar":
+                this.listarDirecciones(request, response);
                 break;
         }
     }
@@ -204,7 +209,22 @@ public class ControladorCliente extends HttpServlet {
             response.setStatus(status(ex));
         }
     }
-
+    
+    private void listarDirecciones(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            Gson gson = new Gson();
+            PrintWriter out = response.getWriter();
+            Model domainModel = Model.instance();
+            Direccion direccion = new Direccion();
+            direccion = domainModel.listAddress();
+            response.setContentType("application/json; charet=UTF-8");
+            out.write(gson.toJson(direccion));
+            response.setStatus(200);//Ok with content
+        } catch (Exception ex) {
+            response.setStatus(status(ex));
+        }
+    }
+    
     protected int status(Exception e) {
         if (e.getMessage().startsWith("404")) {
             return 404;
@@ -214,5 +234,5 @@ public class ControladorCliente extends HttpServlet {
         }
         return 400;
     }
-
+    
 }

@@ -1,7 +1,7 @@
 <%@page import="java.util.Map"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html> 
+<html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Login</title>
@@ -9,7 +9,7 @@
     </head>
     <body style="background-color:#E8E8E8;">
         <%@include file="/presentacion/header.jsp"%><br><br><br><br>
-        <% Map<String, String> errores = (Map<String, String>) request.getAttribute("errores"); %>
+        <% Map<String, String> errores = (Map<String, String>) request.getAttribute("errores");%>
         <main role="main">
             <div id="page-wrapper">
                 <div class="container">
@@ -46,23 +46,23 @@
                                             </div>
                                         </div>
 
+
                                         <div class="form-group">
                                             <div class="row">
                                                 <div class="col-12">
-                                                    <button type="submit" name="accion" value="Login" class="login btn btn btn-block btn-lg">Login</button>
+                                                    <button type="submit" name="accion" value="Login" class="btn btn-primary btn-block btn-lg">Login</button>
                                                 </div>
                                             </div>
                                         </div>
-                                        
                                     </form>
                                     <div class="row">
-                                        <div class="col-sm-5">
-                                            <a class="registrarse btn btn-default" href="ControladorLogin?accion=registro_show">Registrarse</a>
-                                        </div>
-                                        <div class="col-md-7">
+                                        <div class="col-md-5 p-sm-0">
                                             <a class="btn btn-link btn-lg" href="#">
-                                                <span class="letra-forgot small">Olvidó la contraseña?</span>
+                                                <span class="small">Forgot password?</span>
                                             </a>
+                                        </div>
+                                        <div class="col-sm-7">
+                                            <a class="btn btn-outline-default btn-block btn-lg" href="ControladorLogin?accion=registro_show">Register                            </a>
                                         </div>
                                     </div>
                                 </div>
@@ -72,11 +72,7 @@
                 </div>
             </div>
         </main>
-        
-                                                
-                                                
-                                                
-         
+
         <script>
             //tengo que validar los campos con jquery
             
@@ -100,11 +96,4 @@
             return "";
         }
     }
-    /*
-    private Map<String,String[]> getForm(ModelLogin model){
-       Map<String,String[]> values = new HashMap<>();
-       values.put("user", new String[]{model.getCurrent().getCedula()""});
-       values.put("password", new String[]{model.getCurrent().getClave()""});
-       return values;
-    }*/
 %>

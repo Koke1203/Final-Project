@@ -219,11 +219,10 @@
                 </div>
             </div>
         </div>
-
-
+                
         <script>
             var contador = 0;
-
+            
             function loaded() {
                 AumentaDisminuye_Cantidad();
                 listarCategorias();
@@ -233,11 +232,11 @@
             
             function listarCategorias() {
                 $.ajax({type: "GET",data:"", url: "api/categorias/listar", contentType: "application/json"})
-                        .then((categorias) => {
-                            listCat(categorias);
-                        }, (error) => {
-                            alert(errorMessage(error.status));
-                        });
+                .then((categorias) => {
+                    listCat(categorias);
+                }, (error) => {
+                    alert(errorMessage(error.status));
+                });
             }
 
             function listCat(categorias) {
@@ -246,7 +245,7 @@
                     rowCategoria(listado, c);
                 });
             }
-
+            
             function rowCategoria(listado, categoria) {
                 var li = $("<li class='nav-item organge-link'><button class='btn'>" + categoria.descripcion + "</button></li>");
                 li.on("click", () => {
@@ -408,7 +407,7 @@
                     $("#cantidad-platillos").val(contador);
                 });
             }
-
+            
             function errorMessage(status) {
                 switch (status) {
                     case 404:

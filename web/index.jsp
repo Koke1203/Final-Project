@@ -14,6 +14,7 @@
                 <div class="navbar-left" style="width:17%">
                     <img src="images/tastyigniter-horizontal-logo.png">
                 </div>
+            </div>
         </nav>
         <section id="site-content" class="site-content pt-2">
             <div id="flash">

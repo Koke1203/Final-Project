@@ -20,7 +20,7 @@
                                 <a href="ControladorLogin?accion=mi_cuenta" class="nav-item nav-link text-reset"><span class="fa fa-list-alt mr-3"></span>Recent Orders</a>
                             </div>
                         </div>
-                        
+
                         <div class="col-sm-9">
                             <div class="card mb-1">
                                 <div class="card-body">
@@ -30,11 +30,10 @@
 
                             <div class="card-group mb-1">
                                 <div class="card mr-sm-1">
-                                    <div class="card-body">
-                                        <p>You don't have a default address</p>
+                                    <div id="div-direcciones" class="card-body">
                                     </div>
                                 </div>
-                                
+
                                 <div class="card">
                                     <div class="card-body text-center">
                                         <p><i class="fa fa-shopping-basket fa-3x text-muted"></i></p>
@@ -44,7 +43,7 @@
                                     </div>
                                 </div>
                             </div>
-
+                            
                             <div class="card">
                                 <div class="card-body">
                                     <h5 class="font-weight-normal mb-3">Edit My Details</h5>
@@ -78,7 +77,7 @@
                                             <div class="custom-control custom-checkbox">
                                                 <input type="checkbox" name="newsletter" id="newsletter" class="custom-control-input" value="1">
                                                 <label for="newsletter" class="custom-control-label">
-                                                    Keep me up-to-date with offers by email.            </label>
+                                                    Keep me up-to-date with offers by email.</label>
                                             </div>
                                         </div>
 
@@ -89,7 +88,7 @@
                                         <div class="form-group">
                                             <input type="password" name="old_password" class="form-control" placeholder="Old Password">
                                         </div>
-
+                                               
                                         <div class="form-row">
                                             <div class="col col-sm-6">
                                                 <div class="form-group">
@@ -102,21 +101,62 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        
-                                        <div class="buttons">
+                                                
+                                        <div>
                                             <button type="submit" value="editar_usuario" name="accion" class="btn btn-primary">Save Details</button>
                                         </div>
-                                                
-                                                
+
                                         <input type="text" name="password_user" value="<%=user.getContrasenia()%>" hidden>
                                     </form>          
                                 </div>
                             </div>
-
+                                    
                         </div>
                     </div>
                 </div>
             </div>
-        </main>                                    
+        </main>      
+
+        <script>
+            function loaded() {
+                listarDirecciones();
+            }
+            $(loaded);
+            
+            function listarDirecciones() {
+                $.ajax({type: "GET",data:"", url: "api/direccion/listar", contentType: "application/json"})
+                .then((direccion) => {
+                    listDireccion(direccion);
+                }, (error) => {
+                    alert(errorMessage(error.status));
+                });
+            }
+            
+            function listDireccion(direccion) {
+                var listado = $("#div-direcciones");
+                var p;
+                listado.html("");
+                if(direccion!=null){        
+                    p = $("<p>"+direccion.direccion_general+", "+direccion.pais+", "+direccion.estado+"</p>");
+                }else{
+                    p = $("<p>You don't have a default address</p>");   
+                }
+                listado.append(p);
+            }
+            
+            function errorMessage(status) {
+                switch (status) {
+                    case 404:
+                        return "Registro no encontrado";
+                    case 403:
+                    case 405:
+                        return "Usuario no autorizado";
+                    case 406:
+                        return "Registro duplicado";
+                    default:
+                        return "Error: " + status;
+                }
+            }
+        </script>
     </body>
 </html>

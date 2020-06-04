@@ -20,53 +20,48 @@
                                 <a href="ControladorLogin?accion=mi_cuenta" class="nav-item nav-link text-reset"><span class="fa fa-list-alt mr-3"></span>Recent Orders</a>
                             </div>
                         </div>
-
+                        
                         <div class="col-sm-9">
                             <div class="card">
                                 <div class="card-body">
                                     <div id="address-book">
                                         <form action="ControladorCompra">
-                                            <input type="hidden" name="address[address_id]" value="">
                                             <div class="form-group">
                                                 <label>Address 1</label>
-                                                <input type="text" name="address[address_1]" class="form-control" value="">
+                                                <input type="text" id="direccion" name="direccion" class="form-control">
                                             </div>
-
-                                            <div class="form-group">
-                                                <label>Address 2</label>
-                                                <input type="text" name="address[address_2]" class="form-control" value="">
-                                            </div>
-
+                                            
                                             <div class="row">
                                                 <div class="col-xs-12 col-sm-4 col-md-4">
                                                     <div class="form-group">
                                                         <label>City</label>
-                                                        <input type="text" class="form-control" name="address[city]" value="" placeholder="City">
+                                                        <input type="text" class="form-control" name="ciudad" placeholder="City">
                                                     </div>
                                                 </div>
                                                 <div class="col-xs-12 col-sm-4 col-md-4">
                                                     <div class="form-group">
                                                         <label>State</label>
-                                                        <input type="text" class="form-control" value="" name="address[state]" placeholder="State">
+                                                        <input type="text" class="form-control" name="estado" placeholder="State">
                                                     </div>
                                                 </div>
                                                 <div class="col-xs-12 col-sm-4 col-md-4">
                                                     <div class="form-group">
                                                         <label>Postcode</label>
-                                                        <input type="text" class="form-control" name="address[postcode]" value="" placeholder="Postcode">
+                                                        <input type="text" class="form-control" name="codigo_postal" value="" placeholder="Postcode">
                                                     </div>
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
                                                 <label>Country</label>
-                                                <select name="address[country]" class="form-control">
-                                                    <option value="1">Costa Rica</option>
+                                                <select name="pais" class="form-control">
+                                                    <option value="Costa Rica">Costa Rica</option>
+                                                    <option value="USA">USA</option>
                                                 </select>
                                             </div>
-
+                                            
                                             <div class="d-flex justify-content-between">
-                                                <button type="submit" name="accion" value="agregar_direccion" class="btn btn-primary">Update Address</button>
+                                                <button type="submit" name="accion" value="agregar_direccion" class="btn btn-primary">Save Address</button>
                                             </div>
                                         </form>
 
@@ -79,6 +74,5 @@
                 </div>
             </div>
         </main>
-
     </body>
 </html>

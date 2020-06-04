@@ -18,6 +18,7 @@ public class Model {
     HashMap<String, Usuario> usuarios;
     HashMap<Integer, Categoria> categorias;
     HashMap<Integer, Platillo> platillos;
+    HashMap<Integer, Direccion> direcciones;
     
     private Model() {
         //Tipos (codigo,descripcion)
@@ -51,6 +52,8 @@ public class Model {
 //        platillos.put(5, new Platillo(5, 5, "African Salad", "With baked beans, egg, tuna, onion, tomatoes , green peas and carrot with your choice of dressing.", 8.99));
 //        platillos.put(6, new Platillo(6, 6, "Rice And Beans", "Traditional caribbean food", 5.01));
         //
+        
+        direcciones = new HashMap<>();
     }
     
     public List<Usuario> listUsuarios() {
@@ -84,6 +87,14 @@ public class Model {
 
     public Categoria obtenerCategoria(int codigo) {
         return categorias.get(codigo);
+    }
+    
+    public void addAddress(Direccion direccion){
+        direcciones.put(1,direccion);
+    }
+    
+    public Direccion listAddress(){
+        return direcciones.get(1);
     }
     
 }
