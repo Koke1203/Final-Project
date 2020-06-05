@@ -4,7 +4,14 @@
     <head>
         <meta charset="utf-8">
         <title>Demo of TastyIgniter - Restaurant Online Ordering System</title>
-        <%@ include file="/presentacion/head.jsp" %>
+        <base href="http://localhost:8080/Proyecto2/">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+        <link rel="stylesheet" title="pink" type="text/css" href="css/estilo.css">
+        <link rel="stylesheet" title="pink" type="text/css" href="css/style.css">
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
     </head>
     <body class="layout-default page-site-demo ">
         <nav id="site-navbar" class="site-navbar navbar navbar-expand-lg navbar-stick-dark navbar-dark"
@@ -68,5 +75,6 @@
                 </div>
             </div>
         </section>
+        <script src="js/global.js"></script>
     </body>
 </html>

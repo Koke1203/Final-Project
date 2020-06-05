@@ -171,9 +171,28 @@ public class ControladorCliente extends HttpServlet {
             Gson gson = new Gson();
             Carrito carrito_parametro = gson.fromJson(reader, Carrito.class);
             PrintWriter out = response.getWriter();
+
+            //actualizar precio total
+            double precio_platillo = carrito_parametro.getPlatillo().getPrecio();
+            double precio_radio = 0;
+            double precio_check = 0;
+            double precio_total = 0;
             
-            //nuevo carrito, tengo que agregarlo a la lista
-           // Carrito nuevo_carrito = new Carrito(platillo_parametro, 1, platillo_parametro.getPrecio());
+            if (carrito_parametro.getAdicional_radio()!=null) {
+                int index = carrito_parametro.getOpcion_radio().size()-1;
+                precio_radio += carrito_parametro.getOpcion_radio().get(index).getPrecio();
+            }
+
+            if (carrito_parametro.getOpcion_check()!=null) {
+                for (Opcion o : carrito_parametro.getOpcion_check()) {
+                    precio_check += o.getPrecio();
+                }
+            }
+            
+            if(carrito_parametro.getOpcion_check()!=null || carrito_parametro.getOpcion_radio()!=null){
+                precio_total = (precio_platillo + precio_radio + precio_check)*carrito_parametro.getCantidad();
+                carrito_parametro.setPrecio_total(precio_total);
+            }
             
             boolean carrito_esta = false;
             //recorro la lista para ver si esta repetido
@@ -185,12 +204,13 @@ public class ControladorCliente extends HttpServlet {
                     carrito_esta = true;
                 }
             }
+
             if (carrito_esta == false) {
                 carrito_general.add(carrito_parametro);
             }
             
             session.setAttribute("carrito", carrito_general);
-            
+
             response.setContentType("application/json; charset=UTF-8");
             out.write(gson.toJson(carrito_general));
             response.setStatus(200); // ok with content

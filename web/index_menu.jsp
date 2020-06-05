@@ -4,7 +4,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Inicio</title>
-        <%@ include file="/presentacion/head.jsp" %>
+        <%@ include file="/presentacion/head.jsp"%>
     </head>
     <body>
         <%@include file="/presentacion/header.jsp"%>
@@ -129,7 +129,7 @@
                                                     </label>
                                                 </div>
                                             </div>
-
+                                            
                                             <div id="cart-items"></div>
                                         </div>
                                         <ul id="ul-itemsPedido"> </ul>
@@ -284,7 +284,7 @@
                             .then((adicionales) => {
                                 //console.log(adicionales);
                                 if (adicionales.length === 0) {/*Se agrega directamente al carrito de compras*/
-                                    agregarPlatilloCarrito(platillo);
+                                    agregarPlatilloCarrito(platillo,null,null,null,null);
                                 } else {
                                     agregarHeaderModal(platillo);
                                     agregarCuerpoModal(adicionales);
@@ -400,10 +400,14 @@
                 });
             }
             
-            function agregarPlatilloCarrito(platillo,adicional_radio,adicional_check,opcion_radio, opcion_check) {
-                var cantidad_platillo = $("#cantidad-platillos").val();
-                var parametro = {platillo: platillo, adicional_radio: adicional_radio,adicional_check: adicional_check,opcion_radio: opcion_radio,opcion_check: opcion_check, cantidad:cantidad_platillo, precio_total:10000};
-                $.ajax({type: "POST", data: JSON.stringify(parametro), url: "api/carrito/agregarPlatillo", contentType: "application/json"})
+            function agregarPlatilloCarrito(platillo,adicional_radio,adicional_check,opcion_radio,opcion_check) {
+                if(adicional_radio==null && adicional_check==null && opcion_radio==null && opcion_check==null){
+                    var parametro = {platillo: platillo, cantidad: 1, precio_total:platillo.precio};
+                }else{
+                    var cantidad_platillo = $("#cantidad-platillos").val();
+                    var parametro = {platillo: platillo, adicional_radio: adicional_radio,adicional_check: adicional_check,opcion_radio: opcion_radio,opcion_check: opcion_check, cantidad:cantidad_platillo, precio_total:0};
+                 }
+                 $.ajax({type: "POST", data: JSON.stringify(parametro), url: "api/carrito/agregarPlatillo", contentType: "application/json"})
                     .then((carrito_platillos) => {
                         listCarrito(carrito_platillos);
                         contador++;
@@ -431,11 +435,14 @@
             }
             
             function rowCarrito(lista_pedido, carrito) {
-                var index = (carrito.opcion_radio.length)-1;
                 var li = $("<li class='li-pedido' />");
                 li.html("<p><button class='cart-btn btn btn-light btn-sm text-muted' id='quitar_platillo'>-</button>" + " <b>" +
-                        carrito.cantidad + " x </b>" + carrito.platillo.nombre + "<span class='price pull-right'> £" + carrito.precio_total + "</span>\n\
-                        "+carrito.adicional_radio.descripcion+", "+carrito.opcion_radio[index].descripcion+"</p>");
+                        carrito.cantidad + " x </b>" + carrito.platillo.nombre + "<span class='price pull-right'> £" + carrito.precio_total.toFixed(2) + "</span></p>");
+                
+                if(carrito.adicional_radio!=null && carrito.opcion_radio!=null){
+                    var index = (carrito.opcion_radio.length)-1;
+                    li.append("<p>"+carrito.adicional_radio.descripcion+", "+carrito.opcion_radio[index].descripcion+"</p>");
+                }
                 
                 if(carrito.adicional_check!=null && carrito.opcion_check!=null){
                     li.append("<p>"+carrito.adicional_check.descripcion+"</p>");
