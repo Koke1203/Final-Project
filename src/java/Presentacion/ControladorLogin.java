@@ -17,8 +17,8 @@ import java.util.Iterator;
 public class ControladorLogin extends HttpServlet {
 
     String menu = "index_menu.jsp";
-    String login_admin ="login_admin.jsp";
-    String dashboard ="dashboard.jsp";
+    String login_admin = "login_admin.jsp";
+    String dashboard = "dashboard.jsp";
     String login = "login.jsp";
     String registro = "registrar_cliente.jsp";
     String mi_cuenta = "presentacion/mi_cuenta.jsp";
@@ -41,10 +41,12 @@ public class ControladorLogin extends HttpServlet {
             Iterator<Usuario> iter = list.iterator();
             Usuario per = null;
             boolean es_falso = false;
-            
+
             while (iter.hasNext()) {
                 per = iter.next();
-                if (request.getParameter("email").equals(per.getCorreo()) && request.getParameter("password").equals(per.getContrasenia())) {
+                if (request.getParameter("email").equals(per.getCorreo())
+                        && request.getParameter("password").equals(per.getContrasenia())
+                        && per.getTipo() == 1) {
                     acceso = mi_cuenta;
                     es_falso = true;
                     session.setAttribute("usuario", per);
@@ -53,7 +55,7 @@ public class ControladorLogin extends HttpServlet {
                     es_falso = false;
                 }
             }
-            
+
             if (es_falso == false) {
                 //Por medio de Maps, setear errores a la vista
                 Map<String, String> errores = new HashMap<>();
@@ -61,6 +63,35 @@ public class ControladorLogin extends HttpServlet {
                 errores.put("email", "Correo o clave incorrectos");
                 errores.put("password", "Correo o clave incorrectos");
                 acceso = login;
+            }
+        }
+        if (action.equalsIgnoreCase("LoginAdmin")) {
+            List<Usuario> list = user_dao.listarUsuarios();
+            Iterator<Usuario> iter = list.iterator();
+            Usuario per = null;
+            boolean es_falso = false;
+
+            while (iter.hasNext()) {
+                per = iter.next();
+                if (request.getParameter("email").equals(per.getCorreo())
+                        && request.getParameter("password").equals(per.getContrasenia())
+                        && per.getTipo() == 0) {
+                    acceso = dashboard;
+                    es_falso = true;
+                    session.setAttribute("usuario", per);
+                    break;
+                } else {
+                    es_falso = false;
+                }
+            }
+
+            if (es_falso == false) {
+                //Por medio de Maps, setear errores a la vista
+                Map<String, String> errores = new HashMap<>();
+                request.setAttribute("errores", errores);
+                errores.put("email", "Correo o clave incorrectos");
+                errores.put("password", "Correo o clave incorrectos");
+                acceso = login_admin;
             }
         } else if (action.equalsIgnoreCase("registro_show")) {
             acceso = registro;
@@ -95,8 +126,8 @@ public class ControladorLogin extends HttpServlet {
             acceso = mi_cuenta;
         } else if (action.equalsIgnoreCase("Registrarse")) {
             UsuarioDAO dao_user = new UsuarioDAO();
-            Usuario usuario = new Usuario(request.getParameter("correo"),request.getParameter("nombre"),
-                    request.getParameter("apellido"),request.getParameter("password"),1,Integer.parseInt(request.getParameter("telefono")));
+            Usuario usuario = new Usuario(request.getParameter("correo"), request.getParameter("nombre"),
+                    request.getParameter("apellido"), request.getParameter("password"), 1, Integer.parseInt(request.getParameter("telefono")));
             dao_user.add(usuario);
             session.setAttribute("usuario", usuario);
             acceso = mi_cuenta;
