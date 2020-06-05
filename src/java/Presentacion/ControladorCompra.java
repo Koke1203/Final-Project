@@ -2,6 +2,7 @@ package Presentacion;
 
 import Logica.Direccion;
 import Logica.Model;
+import Logica.Usuario;
 import ModelDAO.DireccionDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -10,6 +11,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 public class ControladorCompra extends HttpServlet {
     
@@ -41,6 +43,7 @@ public class ControladorCompra extends HttpServlet {
         
         String acceso = "";
         String action = request.getParameter("accion");
+        HttpSession session = request.getSession(true);
         
         if(action.equalsIgnoreCase("checkout")) {
             acceso = comprar;
@@ -51,9 +54,11 @@ public class ControladorCompra extends HttpServlet {
         }else if(action.equalsIgnoreCase("direcciones")){
             acceso = direccion;
         }else if(action.equalsIgnoreCase("agregar_direccion")){
+            Usuario logueado = (Usuario)session.getAttribute("usuario");
             DireccionDAO dao = new DireccionDAO();
             Direccion direccion = new Direccion(request.getParameter("direccion"),request.getParameter("pais"),
-                    request.getParameter("ciudad"),request.getParameter("estado"),Integer.parseInt(request.getParameter("codigo_postal")),"");
+                    request.getParameter("ciudad"),request.getParameter("estado"),
+                    Integer.parseInt(request.getParameter("codigo_postal")),logueado.getCorreo());
             dao.addDireccion(direccion);
             acceso = cuenta;
         }

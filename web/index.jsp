@@ -4,7 +4,6 @@
     <head>
         <meta charset="utf-8">
         <title>Demo of TastyIgniter - Restaurant Online Ordering System</title>
-        <link rel="stylesheet" title="pink" type="text/css" href="css/style.css">
         <%@ include file="/presentacion/head.jsp" %>
     </head>
     <body class="layout-default page-site-demo ">
@@ -32,7 +31,7 @@
                         <div class="row no-gutters">
                             <div class="col-sm-6">
                                 <div class="demo-box border-0">
-                                    <a class="box-overlay" href="ControladorLogin?accion=login_show" target="_blank">
+                                    <a class="box-overlay" href="ControladorLogin?accion=menu" target="_blank">
                                         <div class="inner">
                                             <i class="fa fa-external-link opacity-70"></i>
                                             <p class="fw-600 my-4">See what your website will look like</p>
@@ -69,6 +68,5 @@
                 </div>
             </div>
         </section>
-        <script src="js/global.js"></script>
     </body>
 </html>

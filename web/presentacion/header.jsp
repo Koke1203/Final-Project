@@ -32,11 +32,17 @@
                     </li>
                     <%} else {%>
                     <li class="nav-item">
+                        <a class="nav-link" href="ControladorLogin?accion=menu">View Menu</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="ControladorLogin?accion=login_show">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="ControladorLogin?accion=registro_show">Register</a>
                     </li>
                     <%}%>
                 </ul>
             </div>
         </div>
     </nav>
-</header><br>
+</header>

@@ -43,7 +43,7 @@ public class ControladorLogin extends HttpServlet {
             while (iter.hasNext()) {
                 per = iter.next();
                 if (request.getParameter("email").equals(per.getCorreo()) && request.getParameter("password").equals(per.getContrasenia())) {
-                    acceso = menu;
+                    acceso = mi_cuenta;
                     es_falso = true;
                     session.setAttribute("usuario", per);
                     break;
@@ -86,6 +86,13 @@ public class ControladorLogin extends HttpServlet {
                 user_dao.edit(new_user);
             }
             session.setAttribute("usuario", new_user);
+            acceso = mi_cuenta;
+        } else if (action.equalsIgnoreCase("Registrarse")) {
+            UsuarioDAO dao_user = new UsuarioDAO();
+            Usuario usuario = new Usuario(request.getParameter("correo"),request.getParameter("nombre"),
+                    request.getParameter("apellido"),request.getParameter("password"),1,Integer.parseInt(request.getParameter("telefono")));
+            dao_user.add(usuario);
+            session.setAttribute("usuario", usuario);
             acceso = mi_cuenta;
         }
 

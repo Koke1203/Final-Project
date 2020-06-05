@@ -166,30 +166,31 @@ public class ControladorCliente extends HttpServlet {
             if ((List<Carrito>) session.getAttribute("carrito") != null) {
                 carrito_general = (List<Carrito>) session.getAttribute("carrito");
             }
+            
             BufferedReader reader = request.getReader();
             Gson gson = new Gson();
-            Platillo platillo_parametro = gson.fromJson(reader, Platillo.class);
+            Carrito carrito_parametro = gson.fromJson(reader, Carrito.class);
             PrintWriter out = response.getWriter();
-
+            
             //nuevo carrito, tengo que agregarlo a la lista
-            Carrito nuevo_carrito = new Carrito(platillo_parametro, 1, platillo_parametro.getPrecio());
-
+           // Carrito nuevo_carrito = new Carrito(platillo_parametro, 1, platillo_parametro.getPrecio());
+            
             boolean carrito_esta = false;
             //recorro la lista para ver si esta repetido
             for (Carrito c : carrito_general) {
-                if (c.getPlatillo().getCodigo() == nuevo_carrito.getPlatillo().getCodigo()) {
+                if (c.getPlatillo().getCodigo() == carrito_parametro.getPlatillo().getCodigo()) {
                     c.setCantidad(c.getCantidad() + 1);
                     //actualizamos el precio total
-                    c.setPrecio_total((c.getPrecio_total() + nuevo_carrito.getPrecio_total()));
+                    c.setPrecio_total((c.getPrecio_total() + carrito_parametro.getPrecio_total()));
                     carrito_esta = true;
                 }
             }
             if (carrito_esta == false) {
-                carrito_general.add(nuevo_carrito);
+                carrito_general.add(carrito_parametro);
             }
-
+            
             session.setAttribute("carrito", carrito_general);
-
+            
             response.setContentType("application/json; charset=UTF-8");
             out.write(gson.toJson(carrito_general));
             response.setStatus(200); // ok with content
@@ -241,10 +242,14 @@ public class ControladorCliente extends HttpServlet {
             Gson gson = new Gson();
             PrintWriter out = response.getWriter();
             DireccionDAO dao = new DireccionDAO();
-            List<Direccion> direccion = new ArrayList<>();
-            direccion = dao.listarDirecciones();
+            List<Direccion> direcciones = new ArrayList<>();
+            direcciones = dao.listarDirecciones();
+            //enlisto las direcciones solo del usuario logueado
+//            for(Direccion dir in direcciones){
+//                
+//            }
             response.setContentType("application/json; charet=UTF-8");
-            out.write(gson.toJson(direccion));
+            out.write(gson.toJson(direcciones));
             response.setStatus(200);//Ok with content
         } catch (Exception ex) {
             response.setStatus(status(ex));

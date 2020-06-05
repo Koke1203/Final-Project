@@ -20,7 +20,7 @@
                                 <a href="ControladorLogin?accion=mi_cuenta" class="nav-item nav-link text-reset"><span class="fa fa-list-alt mr-3"></span>Recent Orders</a>
                             </div>
                         </div>
-
+                        
                         <div class="col-sm-9">
                             <div class="card mb-1">
                                 <div class="card-body">
@@ -136,8 +136,8 @@
                 var listado = $("#div-direcciones");
                 var p;
                 listado.html("");
-                if(direccion!=null){        
-                    p = $("<p>"+direccion.direccion_general+", "+direccion.pais+", "+direccion.estado+"</p>");
+                if(direccion!=null){
+                    p = $("<p>"+direccion[0].direccion_general+", "+direccion[0].pais+", "+direccion[0].estado+"</p>");
                 }else{
                     p = $("<p>You don't have a default address</p>");   
                 }

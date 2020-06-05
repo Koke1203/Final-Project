@@ -136,7 +136,7 @@
                                         <div id="cart-coupon"></div>
 
                                         <div id="cart-totals"></div>
-
+                                        
                                         <div id="cart-buttons" class="mt-3"><a href="ControladorCompra?accion=checkout" class="checkout-btn btn-block btn-lg">Checkout</a>
                                         </div>
                                     </div>
@@ -165,7 +165,7 @@
                         <div id="header-modal-platillo">
 
                         </div>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <button id="cancelar-modal" type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
@@ -187,7 +187,7 @@
                             <div class="input-group-append">
                                 <button id="btnIncrementar" type="button" class="btn btn-light"><i class='fa fa-plus'></i></button>
                             </div>
-                            &nbsp;&nbsp;<button type="button" class="btn btn-primary">ADD TO ORDER</button>
+                            &nbsp;&nbsp;<button id="add_order" type="button" class="btn btn-primary">ADD TO ORDER</button>
                         </div>
                     </div>
                     <%--FIN BUTTONS - INPUT CANTIDAD--%>
@@ -198,12 +198,22 @@
 
         <script>
             var contador = 0;
+            
+            var platillo_seleccionado;
+            var opcion_radio = new Array();
+            var adicional_radio;
+            var adicional_check;
+            var opcion_check = new Array();
+            
             function loaded() {
                 AumentaDisminuye_Cantidad();
                 listarCategorias();
                 infoCarrito();
+                agregarOrdenPlatillo();
+                limpiarRegistrosModal();
             }
             $(loaded);
+            
             function listarCategorias() {
                 $.ajax({type: "GET", url: "api/categorias/listar", contentType: "application/json"})
                         .then((categorias) => {
@@ -213,7 +223,7 @@
                             alert(errorMessage(error.status));
                         });
             }
-
+            
             function listCat(categorias) {
                 var listado = $("#ul-categorias");
                 categorias.forEach((c) => {
@@ -234,15 +244,12 @@
                 $.ajax({type: "POST", data: JSON.stringify(categoria), url: "api/platillos/listar", contentType: "application/json"})
                         .then((platillos) => {
                             listarPlatillos(platillos, cat);
-                            //console.log(platillos);
                         }, (error) => {
                             alert(errorMessage(error.status));
                         });
             }
-
+            
             function listarPlatillos(platillos, cat) {
-                //console.log(platillos);
-                //console.log;
                 var listado = $("#div-itemsMenu");
                 listado.html("");
                 var h3 = $("<h3>" + cat.descripcion + "</h3>");
@@ -251,7 +258,7 @@
                     rowPlatillo(listado, p);
                 });
             }
-
+            
             function rowPlatillo(listado, platillo) {
                 var div = $("<div />");
                 div.addClass("list-item");
@@ -272,6 +279,7 @@
                         "<p class='text-muted col-sm'>" + platillo.descripcion + "</p>" +
                         "</div>");
                 div.find("#addMenuItemBtn").on("click", () => {
+                    platillo_seleccionado = platillo;
                     $.ajax({type: "POST", data: JSON.stringify(platillo), url: "api/platillo/getAdicionales", contentType: "application/json"})
                             .then((adicionales) => {
                                 //console.log(adicionales);
@@ -316,7 +324,6 @@
             }
             function rowAdicional(listado, adicional) {
                 //Titulo Adicional
-                console.log(adicional);
                 var div_general = $("<div/>");
                 var div_adicional = $("<div class='titulo-opcion'>" +
                         "<h5 class='mb-0'>" +
@@ -326,54 +333,41 @@
                 div_general.append(div_adicional);
                 listado.append(div_general);
                 $.ajax({type: "POST", data: JSON.stringify(adicional), url: "api/platillo/getOpciones", contentType: "application/json"})
-                        .then((opciones) => {
-                            //console.log(opciones);
-                            if (adicional.multiple) {
-                                listarOpcionesCheckBox(opciones, div_general);
-                            } else {
-                                listarOpcionesRadioButton(opciones, div_general, adicional.descripcion);
-                            }
-                        }, (error) => {
-                            alert(errorMessage(error.status));
-                        });
-                //listarOpcionesAdicional(adicional);
-
+                .then((opciones) => {
+                    if (adicional.multiple) {
+                        listarOpcionesCheckBox(opciones, div_general,adicional);
+                    } else {
+                        listarOpcionesRadioButton(opciones, div_general, adicional);
+                    }
+                }, (error) => {
+                    alert(errorMessage(error.status));
+                });
             }
-
-            /*function listarOpcionesAdicional(adicional) {
-             $.ajax({type: "POST", data: JSON.stringify(adicional), url: "api/platillo/getOpciones", contentType: "application/json"})
-             .then((opciones) => {
-             //console.log(opciones);
-             listarOpciones(opciones);
-             }, (error) => {
-             alert(errorMessage(error.status));
-             });
-             }*/
-
-            function listarOpcionesRadioButton(opciones, div, des_adic) {
+            
+            function listarOpcionesRadioButton(opciones, div, adicional) {
                 var listado = div;
                 opciones.forEach((opc) => {
                     var rowOpc = $("<div />");
                     rowOpc.addClass("option-group");
                     rowOpc.html("<div class='custom-control custom-radio'>" +
-                            "<input type='radio' id='menuOptionRadio164' class='' name='" + des_adic + "'>" +
+                            "<input type='radio' id='optionRadio" + opc.codigo_opcion + "' class='custom-control-input' name='" + adicional.descripcion + "'>" +
                             "<label class='custom-control-label' for='optionRadio" + opc.codigo_opcion + "'>" + opc.descripcion +
                             "<span class='pull-right'>" + "£" + opc.precio + "</span>" +
                             "</label>" +
                             "</div>");
-                    /*
-                     *                    rowOpc.html("<div class='custom-control custom-radio'>" +
-                     "<input type='radio' id='optionRadio" + opc.codigo_opcion + "' class='custom-control-input' name='" + des_adic + "'>" +
-                     "<label class='custom-control-label' for='optionRadio" + opc.codigo_opcion + "'>" + opc.descripcion +
-                     "<span class='pull-right'>" + "£" + opc.precio + "</span>" +
-                     "</label>" +
-                     "</div>");
-                     */
+                    
+                    var boton = "#optionRadio"+opc.codigo_opcion;
+                    
+                    rowOpc.find(boton).on("click", () => {
+                        opcion_radio.push(opc);
+                        adicional_radio = adicional;
+                    });
+                    
                     listado.append(rowOpc);
                 });
             }
-
-            function listarOpcionesCheckBox(opciones, div) {
+            
+            function listarOpcionesCheckBox(opciones, div, adicional) {
                 var listado = div;
                 opciones.forEach((opc) => {
                     var rowOpc = $("<div />");
@@ -383,34 +377,40 @@
                             "<span class='pull-right'>" + "£" + opc.precio + "</span>" +
                             "</div>");
                     listado.append(rowOpc);
+                    var boton = "#check" + opc.descripcion ;
+                    rowOpc.find(boton).on("click", () => {
+                        opcion_check.push(opc);
+                        adicional_check = adicional;
+                    });
                 });
-
             }
-
-
-            /*function rowPlatillo(listado, platillo) {
-             var li = $("<li class='nav-item organge-link'/>");
-             li.html("<div>" +
-             "<h5>" + platillo.nombre + "</h5>" +
-             "<p>" + platillo.descripcion + "</p>" +
-             "<p>" + platillo.precio + "</p>" +
-             "<input type='button' id='addPlatillo' value='Add'>" +
-             "</div>");
-             li.find("#addPlatillo").on("click", () => {
-             //agregarPlatilloCarrito(platillo)
-             });
-             listado.append(li);
-             }*/
-
-            function agregarPlatilloCarrito(platillo) {
-                $.ajax({type: "POST", data: JSON.stringify(platillo), url: "api/carrito/agregarPlatillo", contentType: "application/json"})
-                        .then((carrito_platillos) => {
-                            listCarrito(carrito_platillos);
-                            contador++;
-                            infoCarrito(); //actualizo la info
-                        }, (error) => {
-                            alert(errorMessage(error.status));
-                        });
+            
+            function agregarOrdenPlatillo(){
+                $("#add_order").on("click",()=>{
+                    var index = (opcion_radio.length)-1;
+                    agregarPlatilloCarrito(platillo_seleccionado,adicional_radio,adicional_check,opcion_radio,opcion_check);                    
+                    //limpiamos registros
+                    platillo_seleccionado = null;
+                    adicional_radio = null;
+                    adicional_check = null;
+                    opcion_radio = new Array();
+                    opcion_check = new Array();
+                    $("#cantidad-platillos").val(1);
+                    $('#opciones-modal').modal('hide');
+                });
+            }
+            
+            function agregarPlatilloCarrito(platillo,adicional_radio,adicional_check,opcion_radio, opcion_check) {
+                var cantidad_platillo = $("#cantidad-platillos").val();
+                var parametro = {platillo: platillo, adicional_radio: adicional_radio,adicional_check: adicional_check,opcion_radio: opcion_radio,opcion_check: opcion_check, cantidad:cantidad_platillo, precio_total:10000};
+                $.ajax({type: "POST", data: JSON.stringify(parametro), url: "api/carrito/agregarPlatillo", contentType: "application/json"})
+                    .then((carrito_platillos) => {
+                        listCarrito(carrito_platillos);
+                        contador++;
+                        infoCarrito(); //actualizo la info
+                    }, (error) => {
+                        alert(errorMessage(error.status));
+                    });
             }
 
             function listCarrito(carrito_platillos) {
@@ -429,14 +429,28 @@
                         "<p class='p-totales'>Delivery: <span class='price pull-right'>Free</span><p>" +
                         "<p class='p-totales'>Order Total: <span class='price pull-right'>£" + monto.toFixed(2) + "</span><p>");
             }
-
+            
             function rowCarrito(lista_pedido, carrito) {
+                var index = (carrito.opcion_radio.length)-1;
                 var li = $("<li class='li-pedido' />");
                 li.html("<p><button class='cart-btn btn btn-light btn-sm text-muted' id='quitar_platillo'>-</button>" + " <b>" +
-                        carrito.cantidad + " x </b>" + carrito.platillo.nombre + "<span class='price pull-right'> £" + carrito.precio_total + "</span></p>");
+                        carrito.cantidad + " x </b>" + carrito.platillo.nombre + "<span class='price pull-right'> £" + carrito.precio_total + "</span>\n\
+                        "+carrito.adicional_radio.descripcion+", "+carrito.opcion_radio[index].descripcion+"</p>");
+                
+                if(carrito.adicional_check!=null && carrito.opcion_check!=null){
+                    li.append("<p>"+carrito.adicional_check.descripcion+"</p>");
+                    carrito.opcion_check.forEach((e)=>{
+                        var opciones = $("<p/>");
+                        opciones.html("<p>"+e.descripcion+"</p>");
+                        li.append(opciones);
+                    }); 
+                }
+                
                 li.find("#quitar_platillo").on("click", () => {
                     sacarPlatilloCarrito(carrito.platillo);
                 });
+                
+                
                 lista_pedido.append(li);
             }
 
@@ -472,6 +486,17 @@
                 $("#btnDecrementar").on("click", () => {
                     contador - 1 >= 1 ? --contador : 1;
                     $("#cantidad-platillos").val(contador);
+                });
+            }
+            
+            function limpiarRegistrosModal(){
+                $("#cancelar-modal").on("click",()=>{
+                    platillo_seleccionado = null;
+                    adicional_radio = null;
+                    adicional_check = null;
+                    opcion_radio = new Array();
+                    opcion_check = new Array();
+                    $("#cantidad-platillos").val(1);
                 });
             }
 
