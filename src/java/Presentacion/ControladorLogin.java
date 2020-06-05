@@ -18,6 +18,7 @@ public class ControladorLogin extends HttpServlet {
 
     String menu = "index_menu.jsp";
     String login_admin ="login_admin.jsp";
+    String dashboard ="dashboard.jsp";
     String login = "login.jsp";
     String registro = "registrar_cliente.jsp";
     String mi_cuenta = "presentacion/mi_cuenta.jsp";
@@ -72,6 +73,8 @@ public class ControladorLogin extends HttpServlet {
             acceso = menu;
         } else if (action.equalsIgnoreCase("login_admin")) {
             acceso = login_admin;
+        } else if (action.equalsIgnoreCase("dashboard")) {
+            acceso = dashboard;
         } else if (action.equalsIgnoreCase("mi_cuenta")) {
             acceso = mi_cuenta;
         } else if (action.equalsIgnoreCase("editar_usuario")) {
