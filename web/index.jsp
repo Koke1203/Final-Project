@@ -55,7 +55,7 @@
                             </div>
                             <div class="col-sm-6">
                                 <div class="demo-box border-0">
-                                    <a class="box-overlay" href="" target="_blank">
+                                    <a class="box-overlay" href="ControladorLogin?accion=login_admin" target="_blank">
                                         <div class="inner">
                                             <i class="fa fa-external-link opacity-70"></i>
                                             <p class="fw-600 my-4">See how you'll accept orders from your customers</p>

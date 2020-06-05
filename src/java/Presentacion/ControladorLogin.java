@@ -17,6 +17,7 @@ import java.util.Iterator;
 public class ControladorLogin extends HttpServlet {
 
     String menu = "index_menu.jsp";
+    String login_admin ="login_admin.jsp";
     String login = "login.jsp";
     String registro = "registrar_cliente.jsp";
     String mi_cuenta = "presentacion/mi_cuenta.jsp";
@@ -69,6 +70,8 @@ public class ControladorLogin extends HttpServlet {
             acceso = login;
         } else if (action.equalsIgnoreCase("menu")) {
             acceso = menu;
+        } else if (action.equalsIgnoreCase("login_admin")) {
+            acceso = login_admin;
         } else if (action.equalsIgnoreCase("mi_cuenta")) {
             acceso = mi_cuenta;
         } else if (action.equalsIgnoreCase("editar_usuario")) {
