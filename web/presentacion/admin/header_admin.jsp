@@ -55,7 +55,7 @@
                             Edit Details </a>
                         <a class="dropdown-item text-danger" href="">
                             <img src="https://img.icons8.com/dusk/24/000000/logout-rounded-left.png"/>
-                            Logout </a>          
+                            Logout </a>
                     </div>
                 </li>
             </ul>
@@ -114,10 +114,17 @@
 
                 <ul class="nav collapse" aria-expanded="false">
                     <li class="nav-item">
-                        <a class="nav-link orders" href="DIRECCIONES NUESTRAS"
+                        <a class="nav-link orders" id="nav-list-orders" href="DIRECCIONES NUESTRAS"
                            aria-expanded="false">
 
                             Orders </a>
+
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link reservations" href="DIRECCIONES NUESTRAS"
+                           aria-expanded="false">
+
+                            Reservations </a>
 
                     </li>
                 </ul>
@@ -148,4 +155,9 @@
             </li>
         </ul>
     </div>
-</div> 
+</div>
+<script>
+    $('li.nav-item a').on("click", (event) => {
+        event.preventDefault();
+    });
+</script>
