@@ -98,10 +98,10 @@ public class ControladorAdministrador extends HttpServlet {
             PrintWriter out = response.getWriter();
             OrdenDAO daoOrden = new OrdenDAO();
             daoOrden.editarOrden(orden);
-            List<Orden> ordenes = daoOrden.listarOrdenes();
-            response.setContentType("application/json; charset=UTF-8");
-            out.write(gson.toJson(ordenes));
-            response.setStatus(200); // ok with content
+//            List<Orden> ordenes = daoOrden.listarOrdenes();
+//            response.setContentType("application/json; charset=UTF-8");
+//            out.write(gson.toJson(ordenes));
+            response.setStatus(204); // ok with no content
         } catch (Exception e) {
             response.setStatus(status(e));
         }

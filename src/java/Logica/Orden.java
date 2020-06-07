@@ -5,11 +5,15 @@
  */
 package Logica;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  *
  * @author jorge
  */
 public class Orden {
+
     int codigo_orden;
     String nombre_cliente;
     int tipo_entrega;
@@ -18,6 +22,22 @@ public class Orden {
     String estado;
     int tipo_pago;
     double total_pagar;
+
+    private static final Map<Integer, String> TIPO_ENTREGA = new HashMap<>();
+    private static final Map<Integer, String> TIPO_PAGO = new HashMap<>();
+
+    static {
+        TIPO_ENTREGA.put(0, "Delivery");
+        TIPO_ENTREGA.put(1, "Pick-up");
+    }
+
+    static {
+        TIPO_PAGO.put(0, "Cash On Delivery");
+        TIPO_PAGO.put(1, "PayPal Express");
+        TIPO_PAGO.put(2, "Stripe Payment");
+        TIPO_PAGO.put(3, "Mollie Payment");
+        TIPO_PAGO.put(4, "Square Payment");
+    }
 
     public Orden() {
     }
@@ -53,6 +73,10 @@ public class Orden {
         return tipo_entrega;
     }
 
+    public String getTipoEntrega() {
+        return TIPO_ENTREGA.get(tipo_entrega);
+    }
+
     public void setTipo_entrega(int tipo_entrega) {
         this.tipo_entrega = tipo_entrega;
     }
@@ -85,6 +109,10 @@ public class Orden {
         return tipo_pago;
     }
 
+    public String getTipoPago() {
+        return TIPO_PAGO.get(tipo_pago);
+    }
+
     public void setTipo_pago(int tipo_pago) {
         this.tipo_pago = tipo_pago;
     }
@@ -96,8 +124,5 @@ public class Orden {
     public void setTotal_pagar(double total_pagar) {
         this.total_pagar = total_pagar;
     }
-    
-    
-    
-    
+
 }

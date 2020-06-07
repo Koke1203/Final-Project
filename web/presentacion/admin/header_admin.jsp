@@ -114,16 +114,12 @@
 
                 <ul class="nav collapse" aria-expanded="false">
                     <li class="nav-item">
-                        <a class="nav-link orders" id="nav-list-orders" href="DIRECCIONES NUESTRAS"
-                           aria-expanded="false">
-
+                        <a class="nav-link orders" id="nav-list-orders" href="ControladorOrden?accion=listarOdenes" aria-expanded="false">
                             Orders </a>
 
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link reservations" href="DIRECCIONES NUESTRAS"
-                           aria-expanded="false">
-
+                        <a class="nav-link reservations" href="DIRECCIONES NUESTRAS" aria-expanded="false">
                             Reservations </a>
 
                     </li>
@@ -156,8 +152,3 @@
         </ul>
     </div>
 </div>
-<script>
-    $('li.nav-item a').on("click", (event) => {
-        event.preventDefault();
-    });
-</script>
