@@ -14,7 +14,7 @@
 <nav class="navbar navbar-top navbar-expand navbar-fixed-top" role="navigation">
     <div class="container-fluid">
         <div class="navbar-brand">
-            <a class="logo" href="DIRECCIONES NUESTRAS">
+            <a class="logo" href="ControladorLogin?accion=dashboard">
                 <img src="https://img.icons8.com/dusk/44/000000/waiter.png"/>
             </a>
         </div>
@@ -43,17 +43,17 @@
                             </div>
                             <div class="pb-3 text-center">
                                 <div class="text-uppercase"><%=user.getNombre()%></div>
-                                <div class="text-muted">Demo Admin</div>
+                                <div class="text-muted"><%=user.getApellido()%></div>
                             </div>
                         </div>
                         <a class="dropdown-item" data-toggle="modal" data-target="#editStaffStatusModal"
                            role="button">
                             <img src="https://img.icons8.com/dusk/24/000000/online.png"/>
                             Set Status </a>
-                        <a class="dropdown-item" href="DIRECCIONES NUESTRAS">
+                        <a class="dropdown-item" href="ControladorLogin?accion=editar_admin">
                             <img src="https://img.icons8.com/cute-clipart/24/000000/edit.png"/>
                             Edit Details </a>
-                        <a class="dropdown-item text-danger" href="">
+                        <a class="dropdown-item text-danger" href="ControladorLogin?accion=logout_admin">
                             <img src="https://img.icons8.com/dusk/24/000000/logout-rounded-left.png"/>
                             Logout </a>
                     </div>
@@ -118,11 +118,6 @@
                             Orders </a>
 
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link reservations" href="DIRECCIONES NUESTRAS" aria-expanded="false">
-                            Reservations </a>
-
-                    </li>
                 </ul>
             </li>
             <li class="nav-item">
@@ -134,14 +129,14 @@
 
                 <ul class="nav collapse" aria-expanded="false">
                     <li class="nav-item">
-                        <a class="nav-link customers" href="DIRECCIONES NUESTRAS"
+                        <a class="nav-link customers" href="ControladorOrden?accion=list_customer"
                            aria-expanded="false">
 
                             Customers </a>
 
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link staffs" href="DIRECCIONES NUESTRAS"
+                        <a class="nav-link staffs" href="ControladorOrden?accion=list_staff"
                            aria-expanded="false">
 
                             Staff </a>

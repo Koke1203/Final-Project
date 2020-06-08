@@ -22,6 +22,7 @@ public class ControladorLogin extends HttpServlet {
     String login = "login.jsp";
     String registro = "registrar_cliente.jsp";
     String mi_cuenta = "presentacion/mi_cuenta.jsp";
+    String edit_admin = "presentacion/admin/editar_admin.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -100,12 +101,17 @@ public class ControladorLogin extends HttpServlet {
         } else if (action.equalsIgnoreCase("logout")) {
             session.removeAttribute("usuario");
             acceso = login;
+        } else if (action.equalsIgnoreCase("logout_admin")) {
+            session.removeAttribute("usuario");
+            acceso = login_admin;
         } else if (action.equalsIgnoreCase("menu")) {
             acceso = menu;
         } else if (action.equalsIgnoreCase("login_admin")) {
             acceso = login_admin;
         } else if (action.equalsIgnoreCase("dashboard")) {
             acceso = dashboard;
+        } else if (action.equalsIgnoreCase("editar_admin")) {
+            acceso = edit_admin;
         } else if (action.equalsIgnoreCase("mi_cuenta")) {
             acceso = mi_cuenta;
         } else if (action.equalsIgnoreCase("editar_usuario")) {
@@ -124,6 +130,17 @@ public class ControladorLogin extends HttpServlet {
             }
             session.setAttribute("usuario", new_user);
             acceso = mi_cuenta;
+        }else if (action.equalsIgnoreCase("update_admin")) {
+            Usuario new_user = new Usuario();
+            new_user.setCorreo(request.getParameter("correo"));
+            new_user.setNombre(request.getParameter("first_name"));
+            new_user.setApellido(request.getParameter("last_name"));
+            new_user.setTelefono(Integer.parseInt(request.getParameter("telephone")));
+            new_user.setTipo(0);
+            new_user.setContrasenia(request.getParameter("new_password"));
+            user_dao.edit(new_user);
+            session.setAttribute("usuario", new_user);
+            acceso = edit_admin;
         } else if (action.equalsIgnoreCase("Registrarse")) {
             UsuarioDAO dao_user = new UsuarioDAO();
             Usuario usuario = new Usuario(request.getParameter("correo"), request.getParameter("nombre"),

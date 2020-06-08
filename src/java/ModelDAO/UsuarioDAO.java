@@ -38,6 +38,52 @@ public class UsuarioDAO {
         System.out.println("Conectado");
         return list;
     }
+    
+    public List listStaff() {
+        ArrayList<Usuario> list = new ArrayList<>();
+        String sql = "select * from usuario where tipo_usuario = 0";
+        try {
+            con = cn.getConnection();
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Usuario per = new Usuario();
+                per.setCorreo(rs.getString("correo"));
+                per.setNombre(rs.getString("nombre"));
+                per.setApellido(rs.getString("apellido"));
+                per.setContrasenia(rs.getString("password"));
+                per.setTipo(rs.getInt("tipo_usuario"));
+                per.setTelefono(rs.getInt("telefono"));
+                list.add(per);
+            }
+        } catch (Exception e) {
+        }
+        System.out.println("Conectado");
+        return list;
+    }
+    
+    public List listCustomer() {
+        ArrayList<Usuario> list = new ArrayList<>();
+        String sql = "select * from usuario where tipo_usuario = 1";
+        try {
+            con = cn.getConnection();
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Usuario per = new Usuario();
+                per.setCorreo(rs.getString("correo"));
+                per.setNombre(rs.getString("nombre"));
+                per.setApellido(rs.getString("apellido"));
+                per.setContrasenia(rs.getString("password"));
+                per.setTipo(rs.getInt("tipo_usuario"));
+                per.setTelefono(rs.getInt("telefono"));
+                list.add(per);
+            }
+        } catch (Exception e) {
+        }
+        System.out.println("Conectado");
+        return list;
+    }
 
     public boolean add(Usuario per) {
         String sql = "insert into usuario(correo, nombre, apellido, password, tipo_Usuario, telefono)values('" + per.getCorreo()

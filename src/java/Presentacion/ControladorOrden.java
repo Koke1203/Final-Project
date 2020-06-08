@@ -8,6 +8,7 @@ package Presentacion;
 import Logica.Orden;
 import Logica.Usuario;
 import ModelDAO.OrdenDAO;
+import ModelDAO.UsuarioDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -25,6 +26,8 @@ import javax.servlet.http.HttpSession;
 public class ControladorOrden extends HttpServlet {
 
     String listar_ordenes = "presentacion/listado_ordenes.jsp";
+    String listar_staff = "presentacion/admin/list_staff.jsp";
+    String listar_customer = "presentacion/admin/list_customer.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -59,6 +62,22 @@ public class ControladorOrden extends HttpServlet {
             request.setAttribute("listaOrdenes", ordenes);
 
             acceso = listar_ordenes;
+        }else if (action.equalsIgnoreCase("list_customer")) {
+            Usuario logueado = (Usuario) session.getAttribute("usuario");
+            UsuarioDAO usuarioDAO = new UsuarioDAO();
+            List<Usuario> usuarios = usuarioDAO.listCustomer();
+
+            request.setAttribute("listaCustomer", usuarios);
+
+            acceso = listar_customer;
+        }else if (action.equalsIgnoreCase("list_staff")) {
+            Usuario logueado = (Usuario) session.getAttribute("usuario");
+            UsuarioDAO usuarioDAO = new UsuarioDAO();
+            List<Usuario> usuarios = usuarioDAO.listStaff();
+
+            request.setAttribute("listaStaff", usuarios);
+
+            acceso = listar_staff;
         }
         RequestDispatcher vista = request.getRequestDispatcher(acceso);
         vista.forward(request, response);
