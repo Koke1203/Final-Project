@@ -87,4 +87,18 @@ public class PlatilloDAO {
         return list;
     }
 
+    public boolean edit(Platillo per) {
+        String sql = "update platillo set nombre='" + per.getNombre() + "',precio="
+                + per.getPrecio() + ",descripcion='" + per.getDescripcion() + "',fk_categoria="
+                + per.getCodigo_categoria() + " where codigo_platillo=" + per.getCodigo();
+        try {
+            con = cn.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("No se ejecuto la consulta");
+        }
+        return false;
+    }
+
 }

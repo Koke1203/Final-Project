@@ -6,7 +6,9 @@
 package Presentacion;
 
 import Logica.Orden;
+import Logica.Platillo;
 import ModelDAO.OrdenDAO;
+import ModelDAO.PlatilloDAO;
 import com.google.gson.Gson;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -22,7 +24,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author groya
  */
-@WebServlet(name = "ControladorAdministrador", urlPatterns = {"/api/orders/listAll", "/api/order/edit"})
+@WebServlet(name = "ControladorAdministrador", urlPatterns = {"/api/orders/listAll", "/api/order/edit", "/api/platillo/get"})
 public class ControladorAdministrador extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -33,6 +35,9 @@ public class ControladorAdministrador extends HttpServlet {
                 break;
             case "/api/order/edit":
                 this.editarOrden(request, response);
+                break;
+            case "/api/platillo/get":
+                this.doPlatilloGet(request, response);
                 break;
         }
     }
@@ -105,6 +110,25 @@ public class ControladorAdministrador extends HttpServlet {
         } catch (Exception e) {
             response.setStatus(status(e));
         }
+    }
+    
+    
+    private void doPlatilloGet(HttpServletRequest request, 
+        HttpServletResponse response) throws ServletException, IOException {
+      try{
+        BufferedReader reader = request.getReader();
+        Gson gson = new Gson();
+        Platillo platillo = gson.fromJson(reader, Platillo.class);
+        PrintWriter out = response.getWriter();
+        PlatilloDAO platillo_dao = new PlatilloDAO();
+        platillo_dao.edit(platillo);
+        response.setContentType("application/json; charset=UTF-8");
+        out.write(gson.toJson(platillo));        
+        response.setStatus(200); // ok with content
+      }
+      catch(Exception e){	
+        response.setStatus(status(e)); 
+      }		
     }
 
     protected int status(Exception e) {
