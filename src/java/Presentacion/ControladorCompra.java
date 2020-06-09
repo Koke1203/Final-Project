@@ -1,7 +1,6 @@
 package Presentacion;
 
 import Logica.Direccion;
-import Logica.Model;
 import Logica.Usuario;
 import ModelDAO.DireccionDAO;
 import java.io.IOException;
@@ -14,12 +13,13 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 public class ControladorCompra extends HttpServlet {
-    
-    String comprar = "presentacion/compra.jsp"; 
+
+    String comprar = "presentacion/compra.jsp";
     String menu = "index_menu.jsp";
     String direccion = "presentacion/address_book.jsp";
     String cuenta = "presentacion/mi_cuenta.jsp";
-    
+    String orden_completada = "presentacion/orden_completada.jsp";
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -28,7 +28,7 @@ public class ControladorCompra extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ControladorCompra</title>");            
+            out.println("<title>Servlet ControladorCompra</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet ControladorCompra at " + request.getContextPath() + "</h1>");
@@ -40,29 +40,39 @@ public class ControladorCompra extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         String acceso = "";
         String action = request.getParameter("accion");
         HttpSession session = request.getSession(true);
         
-        if(action.equalsIgnoreCase("checkout")) {
+        if (action.equalsIgnoreCase("Checkout")) {
+            if (session.getAttribute("carrito")!=null) {
+                session.setAttribute("tipo_entrega", request.getParameter("order_type"));
+                System.out.println("Tipo de entrega: "+request.getParameter("order_type"));
+                acceso = comprar;
+            }else{
+                String carrito_vacio = "El carrito está vacío";
+                request.setAttribute("carrito_vacio", carrito_vacio);
+                acceso = menu;
+            }
+        } else if (action.equalsIgnoreCase("comprar")) {
             acceso = comprar;
-        }else if(action.equalsIgnoreCase("comprar")){
+        } else if (action.equalsIgnoreCase("menu")) {
             acceso = menu;
-        }else if(action.equalsIgnoreCase("menu")){
-            acceso = menu;
-        }else if(action.equalsIgnoreCase("direcciones")){
+        } else if (action.equalsIgnoreCase("direcciones")) {
             acceso = direccion;
-        }else if(action.equalsIgnoreCase("agregar_direccion")){
-            Usuario logueado = (Usuario)session.getAttribute("usuario");
+        } else if (action.equalsIgnoreCase("agregar_direccion")) {
+            Usuario logueado = (Usuario) session.getAttribute("usuario");
             DireccionDAO dao = new DireccionDAO();
-            Direccion direccion = new Direccion(request.getParameter("direccion"),request.getParameter("pais"),
-                    request.getParameter("ciudad"),request.getParameter("estado"),
-                    Integer.parseInt(request.getParameter("codigo_postal")),logueado.getCorreo());
+            Direccion direccion = new Direccion(request.getParameter("direccion"), request.getParameter("pais"),
+                    request.getParameter("ciudad"), request.getParameter("estado"),
+                    Integer.parseInt(request.getParameter("codigo_postal")), logueado.getCorreo());
             dao.addDireccion(direccion);
             acceso = cuenta;
+        }else if(action.equalsIgnoreCase("show_orden")){
+            acceso = orden_completada;
         }
-        
+
         RequestDispatcher vista = request.getRequestDispatcher(acceso);
         vista.forward(request, response);
     }

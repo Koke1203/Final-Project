@@ -27,19 +27,16 @@
                                     <h5 class="mb-0">Welcome <%=user.getNombre()%></h5>
                                 </div>
                             </div>
-
+                            
                             <div class="card-group mb-1">
                                 <div class="card mr-sm-1">
                                     <div id="div-direcciones" class="card-body">
                                     </div>
                                 </div>
-
+                                
                                 <div class="card">
-                                    <div class="card-body text-center">
+                                    <div id="carrito" class="card-body text-center">
                                         <p><i class="fa fa-shopping-basket fa-3x text-muted"></i></p>
-                                        <p>There are no menus added in your cart.</p>
-                                        <a class="btn btn-light" href="ControladorCompra?accion=menu">
-                                            ORDER NOW                </a>
                                     </div>
                                 </div>
                             </div>
@@ -116,10 +113,11 @@
                 </div>
             </div>
         </main>      
-
+        
         <script>
             function loaded() {
                 listarDirecciones();
+                infoCarritoCuenta();
             }
             $(loaded);
             
@@ -136,12 +134,33 @@
                 var listado = $("#div-direcciones");
                 var p;
                 listado.html("");
-                if(direccion!=null){
-                    p = $("<p>"+direccion[0].direccion_general+", "+direccion[0].pais+", "+direccion[0].estado+"</p>");
+                if(direccion.length<=0){
+                    p = $("<p>You don't have a default address</p>");  
                 }else{
-                    p = $("<p>You don't have a default address</p>");   
+                    p = $("<p>"+direccion[0].direccion_general+", "+direccion[0].pais+", "+direccion[0].estado+"</p>");
                 }
                 listado.append(p);
+            }
+            
+            function infoCarritoCuenta(){
+                $.ajax({type: "GET",data:"", url: "api/carrito/verificar", contentType: "application/json"})
+                .then((carrito) => {
+                    var div_carrito = $("#carrito");
+                    if(carrito == null){
+                        div_carrito.append("<p>There are no menus added in your cart.</p><a class='btn btn-light'"+ 
+                        "href='ControladorCompra?accion=menu'>ORDER NOW</a>");
+                    }else{
+                        var precio_final = 0.0;
+                        carrito.forEach((c)=>{
+                            precio_final+=c.precio_total;
+                        });
+                        
+                        div_carrito.append("<p>You have 1 items: £"+precio_final.toFixed(2)+"</p>"+
+                        "<a class='btn btn-primary' href='ControladorCompra?accion=comprar'>CHECKOUT NOW</a></div>");
+                    }
+                }, (error) => {
+                    alert(errorMessage(error.status));
+                });
             }
             
             function errorMessage(status) {

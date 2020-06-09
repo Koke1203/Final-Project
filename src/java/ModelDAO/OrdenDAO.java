@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ModelDAO;
 
 import Config.Conexion;
@@ -14,10 +9,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author jorge
- */
 public class OrdenDAO {
 
     Conexion cn = new Conexion();
@@ -25,7 +16,7 @@ public class OrdenDAO {
     PreparedStatement ps;
     ResultSet rs;
     Orden p = new Orden();
-
+    
     public List listarOrdenes() {
         ArrayList<Orden> list = new ArrayList<>();
         String sql = "select * from orden";
@@ -43,7 +34,7 @@ public class OrdenDAO {
                 per.setEstado(rs.getString("estado"));
                 per.setTipo_pago(rs.getInt("tipo_pago"));
                 per.setTotal_pagar(rs.getDouble("total_pagar"));
-
+                
                 list.add(per);
             }
         } catch (Exception e) {

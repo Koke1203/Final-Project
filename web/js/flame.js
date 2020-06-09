@@ -458,12 +458,6 @@ if (window.jQuery.request !== undefined)
     if ($.ti === undefined)
         $.ti = {}
 
-    const LOADER_CLASS = 'ti-loading',
-        LOADER_MARGIN = 12.5,
-        LOADER_LEFT_MARGIN = LOADER_MARGIN / 100,
-        LOADER_RIGHT_MARGIN = 1 - LOADER_LEFT_MARGIN;
-
-
     var LoadingIndicator = function () {
         var self = this
         this.timeout = undefined

@@ -3,13 +3,18 @@ package Presentacion;
 import Logica.Adicional;
 import Logica.Carrito;
 import Logica.Categoria;
+import Logica.DetalleOrden;
 import Logica.Direccion;
 import Logica.Opcion;
+import Logica.Orden;
+import Logica.Orden_Factura;
 import Logica.Platillo;
+import Logica.Usuario;
 import ModelDAO.AdicionalDAO;
 import ModelDAO.CategoriaDAO;
 import ModelDAO.OpcionDAO;
 import ModelDAO.DireccionDAO;
+import ModelDAO.OrdenDAO;
 import ModelDAO.PlatilloDAO;
 import com.google.gson.Gson;
 import java.io.BufferedReader;
@@ -25,8 +30,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 @WebServlet(name = "ControladorCliente", urlPatterns = {"/api/categorias/listar", "/api/platillos/listar", "/api/platillo/getAdicionales",
-    "/api/platillo/getOpciones", "/api/categorias/getDescripcion",
-    "/api/carrito/agregarPlatillo", "/api/carrito/sacarPlatillo", "/api/direccion/listar"})
+    "/api/platillo/getOpciones", "/api/categorias/getDescripcion","/api/carrito/agregarPlatillo", "/api/carrito/sacarPlatillo", 
+    "/api/carrito/listarCarrito", "/api/direccion/listar", "/api/carrito/verificar","/api/usuario/listar", "/api/carrito/total_pagar",
+    "/api/orden/guardarOrdenPedido", "/api/orden/listarInfo"})
 public class ControladorCliente extends HttpServlet {
 
     List<Carrito> carrito_general = new ArrayList<>();
@@ -55,6 +61,24 @@ public class ControladorCliente extends HttpServlet {
             case "/api/direccion/listar":
                 this.listarDirecciones(request, response);
                 break;
+            case "/api/carrito/listarCarrito":
+                this.listarCarritoInicio(request, response);
+                return;
+            case "/api/carrito/verificar":
+                this.verificarCarritoCuenta(request, response);
+                return;
+            case "/api/usuario/listar":
+                this.listarUsuario(request, response);
+                return;
+            case "/api/carrito/total_pagar":
+                this.listarInfoOrdenFactura(request, response);
+                return;
+            case "/api/orden/guardarOrdenPedido":
+                this.guardarOrdenPedido(request, response);
+                return;
+            case "/api/orden/listarInfo":
+                this.listarInfoOrden(request, response);
+                return;
         }
     }
 
@@ -171,29 +195,29 @@ public class ControladorCliente extends HttpServlet {
             Gson gson = new Gson();
             Carrito carrito_parametro = gson.fromJson(reader, Carrito.class);
             PrintWriter out = response.getWriter();
-
+            
             //actualizar precio total
             double precio_platillo = carrito_parametro.getPlatillo().getPrecio();
             double precio_radio = 0;
             double precio_check = 0;
             double precio_total = 0;
-            
-            if (carrito_parametro.getAdicional_radio()!=null) {
-                int index = carrito_parametro.getOpcion_radio().size()-1;
+
+            if (carrito_parametro.getAdicional_radio() != null) {
+                int index = carrito_parametro.getOpcion_radio().size() - 1;
                 precio_radio += carrito_parametro.getOpcion_radio().get(index).getPrecio();
             }
 
-            if (carrito_parametro.getOpcion_check()!=null) {
+            if (carrito_parametro.getOpcion_check() != null) {
                 for (Opcion o : carrito_parametro.getOpcion_check()) {
                     precio_check += o.getPrecio();
                 }
             }
-            
-            if(carrito_parametro.getOpcion_check()!=null || carrito_parametro.getOpcion_radio()!=null){
-                precio_total = (precio_platillo + precio_radio + precio_check)*carrito_parametro.getCantidad();
+
+            if (carrito_parametro.getOpcion_check() != null || carrito_parametro.getOpcion_radio() != null) {
+                precio_total = (precio_platillo + precio_radio + precio_check) * carrito_parametro.getCantidad();
                 carrito_parametro.setPrecio_total(precio_total);
             }
-            
+
             boolean carrito_esta = false;
             //recorro la lista para ver si esta repetido
             for (Carrito c : carrito_general) {
@@ -208,7 +232,7 @@ public class ControladorCliente extends HttpServlet {
             if (carrito_esta == false) {
                 carrito_general.add(carrito_parametro);
             }
-            
+
             session.setAttribute("carrito", carrito_general);
 
             response.setContentType("application/json; charset=UTF-8");
@@ -262,12 +286,10 @@ public class ControladorCliente extends HttpServlet {
             Gson gson = new Gson();
             PrintWriter out = response.getWriter();
             DireccionDAO dao = new DireccionDAO();
+            HttpSession session = request.getSession(true);
             List<Direccion> direcciones = new ArrayList<>();
-            direcciones = dao.listarDirecciones();
-            //enlisto las direcciones solo del usuario logueado
-//            for(Direccion dir in direcciones){
-//                
-//            }
+            Usuario logueado = (Usuario)session.getAttribute("usuario");
+            direcciones = dao.listarDireccionesXCorreo(logueado.getCorreo());
             response.setContentType("application/json; charet=UTF-8");
             out.write(gson.toJson(direcciones));
             response.setStatus(200);//Ok with content
@@ -276,6 +298,137 @@ public class ControladorCliente extends HttpServlet {
         }
     }
 
+    private void listarCarritoInicio(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            Gson gson = new Gson();
+            PrintWriter out = response.getWriter();
+            HttpSession session = request.getSession(true);
+            List<Carrito> carrito_platillos = new ArrayList<>();
+            if ((List<Carrito>) session.getAttribute("carrito") != null) {
+                carrito_platillos = (List<Carrito>) session.getAttribute("carrito");
+            }
+            response.setContentType("application/json; charet=UTF-8");
+            out.write(gson.toJson(carrito_platillos));
+            response.setStatus(200);//Ok with content
+        } catch (Exception ex) {
+            response.setStatus(status(ex));
+        }
+    }
+
+    private void verificarCarritoCuenta(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            Gson gson = new Gson();
+            PrintWriter out = response.getWriter();
+            HttpSession session = request.getSession(true);
+            List<Carrito> carrito_platillos = null;
+            if ((List<Carrito>) session.getAttribute("carrito") != null) {
+                carrito_platillos = (List<Carrito>) session.getAttribute("carrito");
+            }
+            response.setContentType("application/json; charet=UTF-8");
+            out.write(gson.toJson(carrito_platillos));
+            response.setStatus(200);//Ok with content
+        } catch (Exception ex) {
+            response.setStatus(status(ex));
+        }
+    }
+    
+    private void listarUsuario(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            Gson gson = new Gson();
+            PrintWriter out = response.getWriter();
+            HttpSession session = request.getSession(true);
+            Usuario usuario = (Usuario) session.getAttribute("usuario");
+            response.setContentType("application/json; charet=UTF-8");
+            out.write(gson.toJson(usuario));
+            response.setStatus(200);//Ok with content
+        } catch (Exception ex) {
+            response.setStatus(status(ex));
+        }
+    }
+    
+    private void listarInfoOrdenFactura(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            Gson gson = new Gson();
+            PrintWriter out = response.getWriter();
+            HttpSession session = request.getSession(true);
+            Orden_Factura orden = new Orden_Factura();
+            double total_pagar = 0;
+            List<Carrito> carrito = new ArrayList<>();
+            int tipo_entrega=0;
+            String entrega = (String) session.getAttribute("tipo_entrega");
+            
+            if ((List<Carrito>) session.getAttribute("carrito") != null) {
+                carrito = (List<Carrito>) session.getAttribute("carrito");
+            }
+            
+            for (Carrito c : carrito) {
+                total_pagar+=c.getPrecio_total();
+            }
+            
+            if(entrega.equalsIgnoreCase("delivery") ){
+                tipo_entrega = 0;
+            }else{
+                tipo_entrega = 1;
+            }
+            
+            orden.setTipo_entrega(tipo_entrega); 
+            orden.setTotal_pagar(total_pagar);
+            
+            response.setContentType("application/json; charet=UTF-8");
+            out.write(gson.toJson(orden));
+            response.setStatus(200);//Ok with content
+        } catch (Exception ex) {
+            response.setStatus(status(ex));
+        }
+    }
+    
+    private void guardarOrdenPedido(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            BufferedReader reader = request.getReader();
+            Gson gson = new Gson();
+            Orden orden_agregar = gson.fromJson(reader, Orden.class);
+            PrintWriter out = response.getWriter();
+            HttpSession session = request.getSession(true);
+            OrdenDAO dao_orden = new OrdenDAO(); 
+            dao_orden.add(orden_agregar);
+            
+            //DAO DE DETALLE, LO LLENO CON LA SESION
+            List<Carrito> carrito_ordenes = (List<Carrito>) session.getAttribute("carrito");
+            for(Carrito c : carrito_ordenes){
+                DetalleOrden dao_detalle = new DetalleOrden();
+                dao_detalle.setTotal_platillo(0);
+                dao_detalle.setTotal_platillo(0);
+                dao_detalle.setTotal_platillo(0);
+                dao_detalle.setTotal_platillo(0);
+                dao_detalle.setTotal_platillo(0);
+            }
+            //
+
+            //poner en sesion la orden que viene desde la vista 
+            session.setAttribute("orden_reciente",orden_agregar);
+            
+            response.setContentType("application/json; charet=UTF-8");
+            out.write(gson.toJson(""));
+            response.setStatus(200);//Ok with content
+        } catch (Exception ex) {
+            response.setStatus(status(ex));
+        }
+    }
+    
+    private void listarInfoOrden(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            Gson gson = new Gson();
+            PrintWriter out = response.getWriter();
+            HttpSession session = request.getSession(true);
+            Orden orden = (Orden)session.getAttribute("orden_reciente");
+            response.setContentType("application/json; charet=UTF-8");
+            out.write(gson.toJson(orden));
+            response.setStatus(200);//Ok with content
+        } catch (Exception ex) {
+            response.setStatus(status(ex));
+        }
+    }
+    
     protected int status(Exception e) {
         if (e.getMessage().startsWith("404")) {
             return 404;

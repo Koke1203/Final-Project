@@ -7,6 +7,7 @@
         <%@ include file="/presentacion/head.jsp"%>
     </head>
     <body>
+        <% String valida = (String) request.getAttribute("carrito_vacio");%>
         <%@include file="/presentacion/header.jsp"%>
         <main>
             <div id="page-wrapper">
@@ -23,7 +24,7 @@
                             </div>
                         </div>
                         <%--FIN Categorias--%>
-
+                        
                         <%--INICIO DIV SEARCH(ASAP,SCHEDULER)--%>
                         <div class="div-platillo col-sm-6" style="background-color: white;">
                             <div class="content">
@@ -41,7 +42,7 @@
                                                             <div class="dropdown-menu" aria-labelledby="orderTimePicker" style="">
                                                                 <button type="button" class="dropdown-item py-2 active" data-timepicker-option="asap"><i class="fa fa-clock-o"></i>&nbsp;&nbsp;ASAP</button>
                                                                 <button type="button" class="dropdown-item py-2" data-timepicker-option="later"><i class="fa fa-calendar"></i>&nbsp;&nbsp;Schedule Order</button>
-
+                                                                
                                                                 <form class="dropdown-content px-4 py-3 hide" role="form" data-request="localBox::onSetOrderTime">
                                                                     <input type="hidden" data-timepicker-control="type" value="asap">
                                                                     <div class="form-group">
@@ -62,7 +63,7 @@
                                         </div>
                                     </div>
                                     <%--FIN DIV SEARCH--%>
-
+                                    
                                     <%--DIV INFO RESTAURANTE--%>
                                     <div class="panel panel-local">
                                         <div class="panel-body">
@@ -83,7 +84,7 @@
                                                             <span class="fa fa-clock"></span>&nbsp;&nbsp;
                                                             <span>24 hours, 7 days.</span>
                                                         </dd>
-
+                                                        
                                                         <dd class="text-muted">
                                                             Delivery and pick-up available            </dd>
                                                         <dd class="text-muted">
@@ -111,59 +112,60 @@
 
                             </div>
                         </div>
-
+                        
                         <%--PEDIDO--%>
                         <div class="div-pedido col-sm-4">
                             <div class="affix-cart d-none d-sm-block affix-top" data-control="cart-box" data-load-item-handler="cartBox::onLoadItemPopup" data-update-item-handler="cartBox::onUpdateCart" data-apply-coupon-handler="cartBox::onApplyCoupon" data-change-order-type-handler="cartBox::onChangeOrderType" data-remove-item-handler="cartBox::onRemoveItem" data-remove-condition-handler="cartBox::onRemoveCondition" style="width: 350px;">
                                 <div id="cart-box" class="module-box">
-                                    <div class="panel panel-cart">
-                                        <div class="panel-body">
-                                            <div id="cart-control"><div class="btn-group btn-group-toggle w-100 text-center order-type" data-toggle="buttons">
-                                                    <label class="btn btn-light">
-                                                        <input type="radio" name="order_type" data-cart-toggle="order-type" value="delivery">&nbsp;&nbsp;
-                                                        <strong>Delivery</strong>
-                                                    </label>
-                                                    <label class="btn btn-light active">
-                                                        <input type="radio" name="order_type" data-cart-toggle="order-type" value="collection" checked="checked">&nbsp;&nbsp;
-                                                        <strong>Pick-up</strong>
-                                                    </label>
+                                    <form action="ControladorCompra">
+                                        <div class="panel panel-cart">
+                                            <div class="panel-body">
+                                                <div id="cart-control">
+                                                    <div class="btn-group btn-group-toggle w-100 text-center order-type" data-toggle="buttons">
+                                                        <label class="btn btn-light">
+                                                            <input type="radio" name="order_type" id="order_type" data-cart-toggle="order-type" value="delivery">&nbsp;&nbsp;
+                                                            <strong>Delivery</strong>
+                                                        </label>
+                                                        <label class="btn btn-light active">
+                                                            <input type="radio" name="order_type" id="order_type" data-cart-toggle="order-type" value="pick-up" checked="checked">&nbsp;&nbsp;
+                                                            <strong>Pick-up</strong>
+                                                        </label>
+                                                    </div>
+                                                    
+                                                    <div class="pedido car-items">
+                                                        <ul id="ul-itemsPedido" class="pedido"></ul>
+                                                    </div>
+                                                    
                                                 </div>
-                                            </div>
-                                            
-                                            <div id="cart-items"></div>
-                                        </div>
-                                        <ul id="ul-itemsPedido"> </ul>
-                                        <div id="cart-coupon"></div>
+                                                <br>
+                                                <div id="cart-coupon"></div>
+                                                
+                                                <div class="division-total"></div>
+                                                
+                                                <div id="cart-totals" class="pedido"></div>
 
-                                        <div id="cart-totals"></div>
-                                        
-                                        <div id="cart-buttons" class="mt-3"><a href="ControladorCompra?accion=checkout" class="checkout-btn btn-block btn-lg">Checkout</a>
+                                                <div id="cart-buttons" class="mt-3"><button type="submit" name="accion" value="Checkout" class="checkout-btn btn-block btn-lg">Checkout</button>
+                                                </div>
+                                                <input type="text" id="validacion" value="<%=valida_checkout(valida)%>" hidden>
+                                            </div>
                                         </div>
-                                    </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
-
-                        <div id="cart-mobile-buttons" class="fixed-bottom d-block d-sm-none" style="">
-                            <a class="btn btn-primary btn-block btn-lg radius-none cart-toggle text-nowrap" href="https://demo.tastyigniter.com/cart">
-                                My Order:
-                                <span id="cart-total" class="font-weight-bold">£106.99</span>
-                            </a>
-                        </div>
+                                            
                     </div>
                     <!--FIN PEDIDO-->
                 </div>
             </div>
         </main>
-
-
-
+        
+        <!--MODAL PARA AGREGAR PLATILLOS-->
         <div class="modal fade" id="opciones-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <div id="header-modal-platillo">
-
                         </div>
                         <button id="cancelar-modal" type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
@@ -171,7 +173,6 @@
                     </div>
                     <div class="modal-body">
                         <div class="opciones-menu" id="opciones-menu">
-
                         </div>
                         <div>
                             <textarea name="comment" class="form-control" rows="2" placeholder="Add Comment"></textarea>
@@ -193,8 +194,7 @@
                     <%--FIN BUTTONS - INPUT CANTIDAD--%>
                 </div>
             </div>
-        </div>
-
+        </div>                
 
         <script>
             var contador = 0;
@@ -211,6 +211,8 @@
                 infoCarrito();
                 agregarOrdenPlatillo();
                 limpiarRegistrosModal();
+                validaCheckout();
+                listarCarritoInicio();
             }
             $(loaded);
             
@@ -285,6 +287,7 @@
                                 //console.log(adicionales);
                                 if (adicionales.length === 0) {/*Se agrega directamente al carrito de compras*/
                                     agregarPlatilloCarrito(platillo,null,null,null,null);
+                                    infoCarrito();
                                 } else {
                                     agregarHeaderModal(platillo);
                                     agregarCuerpoModal(adicionales);
@@ -296,7 +299,7 @@
                 });
                 listado.append(div);
             }
-
+            
             function agregarHeaderModal(platillo) {
                 //console.log(platillo);
                 var modal_header = $("#header-modal-platillo");
@@ -322,6 +325,7 @@
                     rowAdicional(listado, a);
                 });
             }
+            
             function rowAdicional(listado, adicional) {
                 //Titulo Adicional
                 var div_general = $("<div/>");
@@ -350,13 +354,19 @@
                     var rowOpc = $("<div />");
                     rowOpc.addClass("option-group");
                     rowOpc.html("<div class='custom-control custom-radio'>" +
-                            "<input type='radio' id='optionRadio" + opc.codigo_opcion + "' class='custom-control-input' name='" + adicional.descripcion + "'>" +
+                            "<input type='radio' id='optionRadio" + opc.codigo_opcion + "' class='custom-control-input' name='" + adicional.descripcion + "' checked>" +
                             "<label class='custom-control-label' for='optionRadio" + opc.codigo_opcion + "'>" + opc.descripcion +
                             "<span class='pull-right'>" + "£" + opc.precio + "</span>" +
                             "</label>" +
                             "</div>");
                     
                     var boton = "#optionRadio"+opc.codigo_opcion;
+                    
+                    //Por si el usuario esta de acuerdo con la selección y no presiona ningun radio
+                    //no da problemas porque al final de cuentas siempre agarramos el ultimo
+                    opcion_radio.push(opc);
+                    adicional_radio = adicional;
+                    //
                     
                     rowOpc.find(boton).on("click", () => {
                         opcion_radio.push(opc);
@@ -379,8 +389,19 @@
                     listado.append(rowOpc);
                     var boton = "#check" + opc.descripcion ;
                     rowOpc.find(boton).on("click", () => {
-                        opcion_check.push(opc);
-                        adicional_check = adicional;
+                        //averiguo si el check ya estaba en el array
+                        var elimina = false;
+                        opcion_check.forEach((p) => {
+                            if(p.codigo_opcion == opc.codigo_opcion){
+                                elimina=true;
+                            }
+                        });
+                        if(elimina==true){
+                            opcion_check = opcion_check.filter(o=>o.codigo_opcion!=opc.codigo_opcion);;
+                        }else{
+                            opcion_check.push(opc);
+                            adicional_check = adicional;
+                        }
                     });
                 });
             }
@@ -407,16 +428,28 @@
                     var cantidad_platillo = $("#cantidad-platillos").val();
                     var parametro = {platillo: platillo, adicional_radio: adicional_radio,adicional_check: adicional_check,opcion_radio: opcion_radio,opcion_check: opcion_check, cantidad:cantidad_platillo, precio_total:0};
                  }
-                 $.ajax({type: "POST", data: JSON.stringify(parametro), url: "api/carrito/agregarPlatillo", contentType: "application/json"})
-                    .then((carrito_platillos) => {
-                        listCarrito(carrito_platillos);
-                        contador++;
-                        infoCarrito(); //actualizo la info
-                    }, (error) => {
-                        alert(errorMessage(error.status));
-                    });
+                $.ajax({type: "POST", data: JSON.stringify(parametro), url: "api/carrito/agregarPlatillo", contentType: "application/json"})
+                .then((carrito_platillos) => {
+                    listCarrito(carrito_platillos);
+                    contador++;
+                    infoCarrito(); //actualizo la info
+                }, (error) => {
+                    alert(errorMessage(error.status));
+                });
             }
-
+            
+            function listarCarritoInicio(){ //cuando se refresque la pagina se carga el carrito 
+                $.ajax({type: "GET", url: "api/carrito/listarCarrito", contentType: "application/json"})
+                .then((carrito_platillos) => {
+                    if(carrito_platillos!=null){
+                        listCarrito(carrito_platillos);
+                        infoCarrito(); //actualizo la info
+                    }
+                }, (error) => {
+                    alert(errorMessage(error.status));
+                });
+            }
+            
             function listCarrito(carrito_platillos) {
                 var lista_pedido = $("#ul-itemsPedido");
                 lista_pedido.html("");
@@ -436,20 +469,19 @@
             
             function rowCarrito(lista_pedido, carrito) {
                 var li = $("<li class='li-pedido' />");
-                li.html("<p><button class='cart-btn btn btn-light btn-sm text-muted' id='quitar_platillo'>-</button>" + " <b>" +
+                li.html("<p><button type='button' class='cart-btn btn btn-light btn-sm text-muted' id='quitar_platillo'>-</button>" + " <b>" +
                         carrito.cantidad + " x </b>" + carrito.platillo.nombre + "<span class='price pull-right'> £" + carrito.precio_total.toFixed(2) + "</span></p>");
                 
                 if(carrito.adicional_radio!=null && carrito.opcion_radio!=null){
                     var index = (carrito.opcion_radio.length)-1;
-                    li.append("<p>"+carrito.adicional_radio.descripcion+", "+carrito.opcion_radio[index].descripcion+"</p>");
+                    li.append("<ul class='pedido-item primer-item list-unstyled small'> <li class='text-muted'><b>"+carrito.adicional_radio.descripcion+"</b></li><li>"+carrito.opcion_radio[index].descripcion+
+                            " &nbsp; (£"+carrito.opcion_radio[index].precio+")</li> </ul>");
                 }
                 
                 if(carrito.adicional_check!=null && carrito.opcion_check!=null){
-                    li.append("<p>"+carrito.adicional_check.descripcion+"</p>");
+                    li.append("<ul class='pedido-item list-unstyled small'><li class='text-muted'><b>"+carrito.adicional_check.descripcion+"</b></li><li>");
                     carrito.opcion_check.forEach((e)=>{
-                        var opciones = $("<p/>");
-                        opciones.html("<p>"+e.descripcion+"</p>");
-                        li.append(opciones);
+                        li.append("<li class='pedido-item list-unstyled small'>"+e.descripcion+" &nbsp; (£"+e.precio+")</li> </ul>");
                     }); 
                 }
                 
@@ -457,21 +489,20 @@
                     sacarPlatilloCarrito(carrito.platillo);
                 });
                 
-                
                 lista_pedido.append(li);
             }
-
+            
             function sacarPlatilloCarrito(platillo) {
                 $.ajax({type: "POST", data: JSON.stringify(platillo), url: "api/carrito/sacarPlatillo", contentType: "application/json"})
-                        .then((carrito_platillos) => {
-                            listCarrito(carrito_platillos);
-                            contador--;
-                            infoCarrito(); //actualizo la info
-                        }, (error) => {
-                            alert(errorMessage(error.status));
-                        });
+                .then((carrito_platillos) => {
+                    listCarrito(carrito_platillos);
+                    contador--;
+                    infoCarrito(); //actualizo la info
+                }, (error) => {
+                    alert(errorMessage(error.status));
+                });
             }
-
+            
             function infoCarrito() {
                 var div_info = $("#cart-items");
                 if (contador > 0) {
@@ -482,7 +513,7 @@
                     div_total.html("");
                 }
             }
-
+            
             //Botones para aumentar o disminuir cantidad (Modal)
             function AumentaDisminuye_Cantidad() {
                 var contador = $("#cantidad-platillos").val();
@@ -506,7 +537,13 @@
                     $("#cantidad-platillos").val(1);
                 });
             }
-
+            
+            function validaCheckout(){
+                if($("#validacion").val()=="El carrito está vacío"){
+                    swal($("#validacion").val());
+                }
+            }
+            
             function errorMessage(status) {
                 switch (status) {
                     case 404:
@@ -523,3 +560,13 @@
         </script>
     </body>
 </html>
+
+<%!
+    private String valida_checkout(String error) {
+        if ((error != "")) {
+            return error;
+        } else {
+            return "";
+        }
+    }
+%>

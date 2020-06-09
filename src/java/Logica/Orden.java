@@ -1,17 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Logica;
 
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- *
- * @author jorge
- */
 public class Orden {
 
     int codigo_orden;
@@ -22,10 +13,10 @@ public class Orden {
     String estado;
     int tipo_pago;
     double total_pagar;
-
+    
     private static final Map<Integer, String> TIPO_ENTREGA = new HashMap<>();
     private static final Map<Integer, String> TIPO_PAGO = new HashMap<>();
-
+    
     static {
         TIPO_ENTREGA.put(0, "Delivery");
         TIPO_ENTREGA.put(1, "Pick-up");
@@ -124,5 +115,5 @@ public class Orden {
     public void setTotal_pagar(double total_pagar) {
         this.total_pagar = total_pagar;
     }
-
+    
 }

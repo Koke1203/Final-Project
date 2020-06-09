@@ -44,7 +44,7 @@ public class AdicionalDAO {
         System.out.println("Conectado");
         return list;
     }
-
+    
     public List listForCodPlatillo(int cod_platillo) {
         ArrayList<Adicional> list = new ArrayList<>();
         String sql = "select a.* from adicional a inner join detalleadicional da on da.fk_codigoAdicional = a.codigo_adicional where da.fk_codigoPlatillo =" + cod_platillo;

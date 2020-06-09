@@ -9,11 +9,11 @@ public class Carrito {
     Adicional adicional_check;
     List<Opcion> opcion_radio;
     List<Opcion> opcion_check;
-    
     int cantidad;
     double precio_total;
-    
-    public Carrito(Platillo platillo,Adicional adicional_radio,Adicional adicional_check,List<Opcion> opcion_radio,List<Opcion> opcion_check,int cantidad, double precio_total) {
+    //String usuario_correo;
+
+    public Carrito(Platillo platillo, Adicional adicional_radio, Adicional adicional_check, List<Opcion> opcion_radio, List<Opcion> opcion_check, int cantidad, double precio_total/*, String usuario_correo*/) {
         this.platillo = platillo;
         this.adicional_radio = adicional_radio;
         this.adicional_check = adicional_check;
@@ -21,7 +21,10 @@ public class Carrito {
         this.opcion_check = opcion_check;
         this.cantidad = cantidad;
         this.precio_total = precio_total;
+        //this.usuario_correo = usuario_correo;
     }
+    
+    public Carrito(){}
     
     public Platillo getPlatillo() {
         return platillo;
@@ -79,4 +82,13 @@ public class Carrito {
         this.adicional_check = adicional_check;
     }
     
+    /*
+    public String getUsuario_correo() {
+        return usuario_correo;
+    }
+
+    public void setUsuario_correo(String usuario_correo) {
+        this.usuario_correo = usuario_correo;
+    }
+    */
 }

@@ -52,5 +52,26 @@ public class DireccionDAO {
         return list;
     }
     
-    
+    public List listarDireccionesXCorreo(String correo) {
+        ArrayList<Direccion> list = new ArrayList<>();
+        String sql = "select * from direccion where usuario_correo='" + correo + "'";
+        try {
+            con = cn.getConnection();
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Direccion dir = new Direccion();
+                dir.setDireccion_general(rs.getString("direccion_general"));
+                dir.setPais(rs.getString("pais"));
+                dir.setCiudad(rs.getString("ciudad"));
+                dir.setEstado(rs.getString("estado"));
+                dir.setCodigo_postal(rs.getInt("codigo_postal"));
+                dir.setCorreo_cliente(rs.getString("usuario_correo"));
+                list.add(dir);
+            }
+        } catch (Exception e) {
+        }
+        System.out.println("Conectado");
+        return list;
+    }
 }
