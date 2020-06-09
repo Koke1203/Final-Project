@@ -28,6 +28,7 @@ public class ControladorOrden extends HttpServlet {
     String listar_ordenes = "presentacion/listado_ordenes.jsp";
     String listar_staff = "presentacion/admin/list_staff.jsp";
     String listar_customer = "presentacion/admin/list_customer.jsp";
+    String listar_menu = "presentacion/admin/list_dish.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -78,6 +79,8 @@ public class ControladorOrden extends HttpServlet {
             request.setAttribute("listaStaff", usuarios);
 
             acceso = listar_staff;
+        }else if(action.equalsIgnoreCase("listarMenu")){
+            acceso = listar_menu;
         }
         RequestDispatcher vista = request.getRequestDispatcher(acceso);
         vista.forward(request, response);

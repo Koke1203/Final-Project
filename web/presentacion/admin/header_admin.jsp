@@ -90,7 +90,7 @@
 
                 <ul class="nav collapse" aria-expanded="false">
                     <li class="nav-item">
-                        <a class="nav-link menus" href="DIRECCIONES NUESTRAS"
+                        <a class="nav-link menus" href="ControladorOrden?accion=listarMenu"
                            aria-expanded="false">
 
                             Menu Items </a>
