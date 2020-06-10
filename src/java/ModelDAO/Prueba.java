@@ -15,10 +15,7 @@ import java.util.List;
 public class Prueba {
 
     public static void main(String args[]) {
-        AdicionalDAO dao = new AdicionalDAO();
-        List<Adicional> adicionales = dao.listarAdicionales();
-        for (Adicional ad : adicionales) {
-            System.out.println(ad.getDescripcion());
-        }
+        PlatilloDAO dao = new PlatilloDAO();
+        dao.eliminar(6);
     }
 }

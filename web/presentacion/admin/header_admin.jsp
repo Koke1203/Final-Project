@@ -97,7 +97,7 @@
 
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link categories" href="DIRECCIONES NUESTRAS"
+                        <a class="nav-link categories" href="ControladorOrden?accion=listarCategorias"
                            aria-expanded="false">
 
                             Categories </a>

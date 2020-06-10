@@ -29,6 +29,7 @@ public class ControladorOrden extends HttpServlet {
     String listar_staff = "presentacion/admin/list_staff.jsp";
     String listar_customer = "presentacion/admin/list_customer.jsp";
     String listar_menu = "presentacion/admin/list_dish.jsp";
+    String listar_categorias = "presentacion/admin/list_categories.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -63,7 +64,7 @@ public class ControladorOrden extends HttpServlet {
             request.setAttribute("listaOrdenes", ordenes);
 
             acceso = listar_ordenes;
-        }else if (action.equalsIgnoreCase("list_customer")) {
+        } else if (action.equalsIgnoreCase("list_customer")) {
             Usuario logueado = (Usuario) session.getAttribute("usuario");
             UsuarioDAO usuarioDAO = new UsuarioDAO();
             List<Usuario> usuarios = usuarioDAO.listCustomer();
@@ -71,7 +72,7 @@ public class ControladorOrden extends HttpServlet {
             request.setAttribute("listaCustomer", usuarios);
 
             acceso = listar_customer;
-        }else if (action.equalsIgnoreCase("list_staff")) {
+        } else if (action.equalsIgnoreCase("list_staff")) {
             Usuario logueado = (Usuario) session.getAttribute("usuario");
             UsuarioDAO usuarioDAO = new UsuarioDAO();
             List<Usuario> usuarios = usuarioDAO.listStaff();
@@ -79,8 +80,10 @@ public class ControladorOrden extends HttpServlet {
             request.setAttribute("listaStaff", usuarios);
 
             acceso = listar_staff;
-        }else if(action.equalsIgnoreCase("listarMenu")){
+        } else if (action.equalsIgnoreCase("listarMenu")) {
             acceso = listar_menu;
+        } else if (action.equalsIgnoreCase("listarCategorias")) {
+            acceso = listar_categorias;
         }
         RequestDispatcher vista = request.getRequestDispatcher(acceso);
         vista.forward(request, response);
