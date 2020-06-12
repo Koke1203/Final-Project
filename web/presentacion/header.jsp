@@ -23,7 +23,7 @@
                         <div class="dropdown">
                             <button id="dropdownMenuButton" class="boton-header nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >My Account<span class="caret"></span></button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="ControladorLogin?accion=mi_cuenta">Recent Orders</a>
+                                <a class="dropdown-item" href="ControladorCompra?accion=recent_orders">Recent Orders</a>
                                 <a class="dropdown-item" href="ControladorLogin?accion=mi_cuenta">My Account</a>
                                 <a class="dropdown-item" href="ControladorCompra?accion=direcciones">Address Book</a>
                                 <a class="dropdown-item" href="ControladorLogin?accion=logout">Logout</a>

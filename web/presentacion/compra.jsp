@@ -465,18 +465,24 @@
             
             //se realiza el pedido, el usuario presionó el boton confirmar
             function confirmarOrdenPedido(){
-                if(!validarPedido()){
-                    swal("Datos incompletos, revise el formulario!");
-                    return;
+                if(localStorage.getItem('tipo_entrega')==0){ //delivery
+                    if(!validarPedidoDelivery()){
+                        swal("Datos incompletos, revise el formulario!");
+                        return;
+                    }
+                }else{//pick-up
+                    if(!validarPedidoPickup()){
+                        swal("Datos incompletos, revise el formulario!");
+                        return;
+                    }
                 }
                 
                 var div_error = $("#errors_pago");
                 div_error.html("");
-                    
                 var total_pagar = 0.0;
                 var tipo_entrega = 0;
-                var nombre_usuario = "";
-                //el tipo de entrega y total a pagar estan el servidor, hacemos una petición para traer a los dos
+                
+                llenarDatosDetalleOrden();
                 
                 $.ajax({type: "GET", url: "api/carrito/total_pagar", contentType: "application/json"})
                 .then((ordenFactura) => {
@@ -486,7 +492,6 @@
                     var hoy = new Date();
                     
                     var orden = {
-                        codigo_orden : 1,
                         nombre_cliente : $("#first-name").val()+" "+$("#last-name").val(),
                         tipo_entrega : tipo_entrega,
                         hora : ""+hoy.getHours()+":"+hoy.getMinutes(),
@@ -495,8 +500,6 @@
                         tipo_pago : parseInt($("#formulario input:radio[name='payment']:checked").val()),
                         total_pagar : total_pagar
                     };
-                    
-                    //*****REVISAR LO DEL PEDIDO (CREO QUE NO ES NECESARIO) *******
                     
                     //si todos los campos estan bien (llenos), hago la peticion para guardar en BD el pedido,
                     // una vez success redirecciono a la pegina de pedidos
@@ -510,18 +513,53 @@
                 }, (error) => {
                     alert(errorMessage(error.status));
                 });
-                 
+            }
+            
+            function llenarDatosDetalleOrden(){
+                var detalle;
+                //el tipo de entrega es pickup entonces no tiene direccion
+                if(localStorage.getItem('tipo_entrega')==1){
+                    detalle = {
+                        correo_cliente: $("#email").val(),
+                        direccion_cliente: "N/A"
+                    };
+                }else{
+                    if($('select[id=direcciones]').val()!=0){ //el combo box NO es nulo
+                        detalle = {
+                            correo_cliente: $("#email").val(),
+                            direccion_cliente:$('select[id=direcciones]').val()
+                        };
+                    }else{ //el combo box es nulo
+                        detalle = {
+                            correo_cliente: $("#email").val(),
+                            direccion_cliente: $("#address1").val()+", "+$("#address2").val()+", "+$("#city").val()+", "+$("#estado").val()+
+                            ", "+$("#codigo_postal").val()
+                        };
+                    }
+                }
+                $.ajax({type: "POST",data:JSON.stringify(detalle), url: "api/detalle/guardarDetalleOrden", contentType: "application/json"})
+                .then(() => {
+                }, (error) => {
+                    alert(errorMessage(error.status));
+                });
             }
             
             //valida los campos del form
-            function validarPedido(){
+            function validarPedidoDelivery(){
                 var error=false;
                 $("#formulario input").removeClass("invalid");
-                error |= $("#formulario input[type='text']")
-                        .filter( (i,e)=>{ return e.value=='';}).length>0;
                 
-                $("#formulario input[type='text']")
+                if($('select[id=direcciones]').val()==0){
+                    //si el check box de las direcciones sigue con el primer elemento, entonces sí valide los campos de address
+                    error |= $("#formulario input[type='text']")
+                        .filter( (i,e)=>{ return e.value=='';}).length>0;
+                    $("#formulario input[type='text']")
                         .filter( (i,e)=>{ return e.value=='';}).addClass("invalid");
+                }else{
+                    if($("#first-name").val()==''||$("#last-name").val()==''||$("#email").val()==''||$("#telephone").val()==''){
+                        error = true;
+                    }
+                }
                 
                 error |= $("#formulario input[name='payment']:checked").length==0;
                 if ( $("#formulario input[name='payment']:checked").length==0){ 
@@ -534,14 +572,32 @@
                 return !error;
             }
             
+            function validarPedidoPickup(){
+                var error=false;
+                $("#formulario input").removeClass("invalid");
+                if($("#first-name").val()==''||$("#last-name").val()==''||$("#email").val()==''||$("#telephone").val()==''){
+                    error = true;
+                }
+                
+                error |= $("#formulario input[name='payment']:checked").length==0;
+                if ($("#formulario input[name='payment']:checked").length==0){ 
+                    $("#formulario input[name='payment'").addClass("invalid");
+                    var div_error = $("#errors_pago");
+                    div_error.html("");
+                    var error = "<p><b>The Payment Method field is required.</b></p>";
+                    div_error.append(error);
+                }
+                return !error;
+            }
+            
             function validaTipoEntrega(){
                 $.ajax({type: "GET", url: "api/carrito/total_pagar", contentType: "application/json"})
                 .then((ordenFactura) => {
+                    localStorage.setItem('tipo_entrega', ordenFactura.tipo_entrega);
                     if(ordenFactura.tipo_entrega==1){//pickup
                         $("#address_general").hide();
                         $("#address_usuario").hide();
                     }
-                    
                 }, (error) => {
                     alert(errorMessage(error.status));
                 });
@@ -560,6 +616,7 @@
                         return "Error: " + status;
                 }
             }
+            
         </script>
     </body>
 </html>

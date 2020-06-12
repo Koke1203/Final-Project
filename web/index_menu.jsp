@@ -7,7 +7,6 @@
         <%@ include file="/presentacion/head.jsp"%>
     </head>
     <body>
-        <% String valida = (String) request.getAttribute("carrito_vacio");%>
         <%@include file="/presentacion/header.jsp"%>
         <main>
             <div id="page-wrapper">
@@ -96,7 +95,7 @@
                                     </div>
                                 </div>
                                 <%--FIN INFO RESTAURANTE--%>
-
+                                
                                 <%--MENU REVIEWS INFO--%>
                                 <ul id="nav-tabs" class="nav-menus nav nav-tabs">
                                 </ul>
@@ -144,16 +143,14 @@
                                                 
                                                 <div id="cart-totals" class="pedido"></div>
 
-                                                <div id="cart-buttons" class="mt-3"><button type="submit" name="accion" value="Checkout" class="checkout-btn btn-block btn-lg">Checkout</button>
+                                                <div id="cart-buttons" class="mt-3"><button type="button" id="Checkout" name="accion" value="Checkout" class="checkout-btn btn-block btn-lg">Checkout</button>
                                                 </div>
-                                                <input type="text" id="validacion" value="<%=valida_checkout(valida)%>" hidden>
                                             </div>
                                         </div>
                                     </form>
                                 </div>
                             </div>
-                        </div>
-                                            
+                        </div>         
                     </div>
                     <!--FIN PEDIDO-->
                 </div>
@@ -211,19 +208,19 @@
                 infoCarrito();
                 agregarOrdenPlatillo();
                 limpiarRegistrosModal();
-                validaCheckout();
                 listarCarritoInicio();
+                validaCheckout();
             }
             $(loaded);
             
             function listarCategorias() {
                 $.ajax({type: "GET", url: "api/categorias/listar", contentType: "application/json"})
-                        .then((categorias) => {
-                            //console.log(categorias);
-                            listCat(categorias);
-                        }, (error) => {
-                            alert(errorMessage(error.status));
-                        });
+                .then((categorias) => {
+                    //console.log(categorias);
+                    listCat(categorias);
+                }, (error) => {
+                    alert(errorMessage(error.status));
+                });
             }
             
             function listCat(categorias) {
@@ -244,11 +241,11 @@
             function listarPlatillosXCategoria(cat) {
                 categoria = {codigo: cat.codigo};
                 $.ajax({type: "POST", data: JSON.stringify(categoria), url: "api/platillos/listar", contentType: "application/json"})
-                        .then((platillos) => {
-                            listarPlatillos(platillos, cat);
-                        }, (error) => {
-                            alert(errorMessage(error.status));
-                        });
+                .then((platillos) => {
+                    listarPlatillos(platillos, cat);
+                }, (error) => {
+                    alert(errorMessage(error.status));
+                });
             }
             
             function listarPlatillos(platillos, cat) {
@@ -423,7 +420,7 @@
             
             function agregarPlatilloCarrito(platillo,adicional_radio,adicional_check,opcion_radio,opcion_check) {
                 if(adicional_radio==null && adicional_check==null && opcion_radio==null && opcion_check==null){
-                    var parametro = {platillo: platillo, cantidad: 1, precio_total:platillo.precio};
+                    var parametro = {platillo: platillo, cantidad: 1, precio_total:platillo.precio, opcion_radio: new Array(), opcion_check: new Array()};
                 }else{
                     var cantidad_platillo = $("#cantidad-platillos").val();
                     var parametro = {platillo: platillo, adicional_radio: adicional_radio,adicional_check: adicional_check,opcion_radio: opcion_radio,opcion_check: opcion_check, cantidad:cantidad_platillo, precio_total:0};
@@ -539,9 +536,30 @@
             }
             
             function validaCheckout(){
-                if($("#validacion").val()=="El carrito está vacío"){
-                    swal($("#validacion").val());
-                }
+                $("#Checkout").on("click",()=>{
+                    $.ajax({type: "GET", url: "api/carrito/listarCarrito", contentType: "application/json"})
+                    .then((carrito_platillos) => {
+                        if(carrito_platillos.length==0){
+                            swal("Carrito vacío");
+                        }else{
+                            var tipo = $('input:radio[name=order_type]:checked').val();
+                            if(tipo=="delivery"){
+                                var orden_factura = {tipo_entrega: 0,total_pagar:0.0};
+                            }else{
+                               var orden_factura = {tipo_entrega: 1, total_pagar:0.0}; 
+                            }
+                            $.ajax({type: "POST",data: JSON.stringify(orden_factura), url: "api/tipo_orden/agregarSesion", contentType: "application/json"})
+                            .then(() => {
+                                //redireccionar a la pantalla compra
+                                window.location.href = "http://localhost:8080/Proyecto2/ControladorCompra?accion=comprar";
+                            }, (error) => {
+                                alert(errorMessage(error.status));
+                            });
+                        }
+                    }, (error) => {
+                        alert(errorMessage(error.status));
+                    });
+                });
             }
             
             function errorMessage(status) {
@@ -560,13 +578,3 @@
         </script>
     </body>
 </html>
-
-<%!
-    private String valida_checkout(String error) {
-        if ((error != "")) {
-            return error;
-        } else {
-            return "";
-        }
-    }
-%>

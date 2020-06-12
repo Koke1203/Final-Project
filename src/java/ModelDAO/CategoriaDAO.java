@@ -44,7 +44,7 @@ public class CategoriaDAO {
         }
         return false;
     }
-
+    
     public boolean edit(Categoria per) {
         String sql = "update categoria set descripcion='" + per.getDescripcion() + "' where (codigo_categoria=" + per.getCodigo() + ")";
         try {

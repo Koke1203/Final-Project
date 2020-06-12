@@ -19,7 +19,9 @@ public class ControladorCompra extends HttpServlet {
     String direccion = "presentacion/address_book.jsp";
     String cuenta = "presentacion/mi_cuenta.jsp";
     String orden_completada = "presentacion/orden_completada.jsp";
-
+    String orden_recientes = "presentacion/ordenes_cliente.jsp";
+    String orden_show = "presentacion/orden_show.jsp";
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -45,17 +47,7 @@ public class ControladorCompra extends HttpServlet {
         String action = request.getParameter("accion");
         HttpSession session = request.getSession(true);
         
-        if (action.equalsIgnoreCase("Checkout")) {
-            if (session.getAttribute("carrito")!=null) {
-                session.setAttribute("tipo_entrega", request.getParameter("order_type"));
-                System.out.println("Tipo de entrega: "+request.getParameter("order_type"));
-                acceso = comprar;
-            }else{
-                String carrito_vacio = "El carrito está vacío";
-                request.setAttribute("carrito_vacio", carrito_vacio);
-                acceso = menu;
-            }
-        } else if (action.equalsIgnoreCase("comprar")) {
+        if (action.equalsIgnoreCase("comprar")) {
             acceso = comprar;
         } else if (action.equalsIgnoreCase("menu")) {
             acceso = menu;
@@ -71,6 +63,12 @@ public class ControladorCompra extends HttpServlet {
             acceso = cuenta;
         }else if(action.equalsIgnoreCase("show_orden")){
             acceso = orden_completada;
+        }else if(action.equalsIgnoreCase("recent_orders")){
+            acceso = orden_recientes;
+        }else if(action.equalsIgnoreCase("orden_show")){
+            String id = request.getParameter("id");
+            session.setAttribute("id_orden", id);
+            acceso = orden_show;
         }
 
         RequestDispatcher vista = request.getRequestDispatcher(acceso);

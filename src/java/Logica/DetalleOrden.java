@@ -3,22 +3,22 @@ package Logica;
 public class DetalleOrden {
     
     double total_platillo;
-    double total_opcion;
+    String direccion_cliente;
+    String correo_cliente;
     int codigo_orden;
     int codigo_platillo;
     int codigo_opcion;
-    String correo_cliente;
     
     public DetalleOrden() {
     }
 
-    public DetalleOrden(double total_platillo, double total_opcion, int codigo_orden, int codigo_platillo, int codigo_opcion, String correo_cliente) {
+    public DetalleOrden(double total_platillo, String direccion_cliente, String correo_cliente, int codigo_orden, int codigo_platillo, int codigo_opcion) {
         this.total_platillo = total_platillo;
-        this.total_opcion = total_opcion;
+        this.direccion_cliente = direccion_cliente;
+        this.correo_cliente = correo_cliente;
         this.codigo_orden = codigo_orden;
         this.codigo_platillo = codigo_platillo;
         this.codigo_opcion = codigo_opcion;
-        this.correo_cliente = correo_cliente;
     }
 
     public double getTotal_platillo() {
@@ -29,12 +29,20 @@ public class DetalleOrden {
         this.total_platillo = total_platillo;
     }
 
-    public double getTotal_opcion() {
-        return total_opcion;
+    public String getDireccion_cliente() {
+        return direccion_cliente;
     }
 
-    public void setTotal_opcion(double total_opcion) {
-        this.total_opcion = total_opcion;
+    public void setDireccion_cliente(String direccion_cliente) {
+        this.direccion_cliente = direccion_cliente;
+    }
+
+    public String getCorreo_cliente() {
+        return correo_cliente;
+    }
+
+    public void setCorreo_cliente(String correo_cliente) {
+        this.correo_cliente = correo_cliente;
     }
 
     public int getCodigo_orden() {
@@ -59,14 +67,6 @@ public class DetalleOrden {
 
     public void setCodigo_opcion(int codigo_opcion) {
         this.codigo_opcion = codigo_opcion;
-    }
-
-    public String getCorreo_cliente() {
-        return correo_cliente;
-    }
-
-    public void setCorreo_cliente(String correo_cliente) {
-        this.correo_cliente = correo_cliente;
     }
     
 }

@@ -17,7 +17,7 @@
                             <div class="nav flex-column">
                                 <a href="ControladorLogin?accion=mi_cuenta" class="nav-item nav-link text-reset"><span class="fa fa-user mr-3"></span>My Account</a>
                                 <a href="ControladorCompra?accion=direcciones" class="nav-item nav-link active font-weight-bold"><span class="fa fa-book mr-3"></span>Address Book</a>
-                                <a href="ControladorLogin?accion=mi_cuenta" class="nav-item nav-link text-reset"><span class="fa fa-list-alt mr-3"></span>Recent Orders</a>
+                                <a href="ControladorCompra?accion=recent_orders" class="nav-item nav-link text-reset"><span class="fa fa-list-alt mr-3"></span>Recent Orders</a>
                             </div>
                         </div>
                         

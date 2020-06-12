@@ -32,7 +32,7 @@ public class Orden {
 
     public Orden() {
     }
-
+    
     public Orden(int codigo_orden, String nombre_cliente, int tipo_entrega, String hora, String fecha, String estado, int tipo_pago, double total_pagar) {
         this.codigo_orden = codigo_orden;
         this.nombre_cliente = nombre_cliente;
@@ -62,10 +62,6 @@ public class Orden {
 
     public int getTipo_entrega() {
         return tipo_entrega;
-    }
-
-    public String getTipoEntrega() {
-        return TIPO_ENTREGA.get(tipo_entrega);
     }
 
     public void setTipo_entrega(int tipo_entrega) {
@@ -98,10 +94,6 @@ public class Orden {
 
     public int getTipo_pago() {
         return tipo_pago;
-    }
-
-    public String getTipoPago() {
-        return TIPO_PAGO.get(tipo_pago);
     }
 
     public void setTipo_pago(int tipo_pago) {

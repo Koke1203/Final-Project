@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ModelDAO;
 
 import Config.Conexion;
@@ -14,10 +9,6 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author jorge
- */
 public class OpcionDAO {
 
     Conexion cn = new Conexion();
@@ -64,5 +55,22 @@ public class OpcionDAO {
         }
         return list;
     }
-
+    
+    public Opcion listXCodigoOpcion(int codigo_opcion){
+        Opcion retorno = new Opcion();
+        String sql = "select * from opcion where codigo_opcion=" + codigo_opcion;
+        try {
+            con = cn.getConnection();
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                retorno.setCodigo_opcion(rs.getInt("codigo_opcion"));
+                retorno.setDescripcion(rs.getString("descripcion"));
+                retorno.setPrecio(rs.getDouble("precio"));
+            }
+        } catch (Exception e) {
+        }
+        return retorno;
+    }
+    
 }

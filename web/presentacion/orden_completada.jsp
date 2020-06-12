@@ -130,9 +130,9 @@
                 numero.append("<b>Order #"+orden.codigo_orden+"</b>");
                 var tipoEntrega = $("#tipoPedido");
                 if(orden.tipo_entrega==0){ //delivery
-                    tipoEntrega.append("<h2 class='h4 font-weight-normal'>Delivering to...</h2><b>"+orden.correo_cliente+"</b><br><br><br><br><br>");
+                    tipoEntrega.append("<h2 class='h4 font-weight-normal'>Delivering to...</h2><b>"+orden.nombre_cliente+"</b><br><br><br><br><br>");
                 }else{
-                    tipoEntrega.append("<h2 class='h4 font-weight-normal'>Pick-up to...</h2><b>"+orden.correo_cliente+"</b>");
+                    tipoEntrega.append("<h2 class='h4 font-weight-normal'>Pick-up to...</h2><b>"+orden.nombre_cliente+"</b>");
                 }
                 
                 var metodo_pago = $("#metodo_pago");
@@ -147,7 +147,6 @@
                 }else{
                     metodo_pago.append("Square");
                 }
-                
                 localStorage.setItem('tipo_entrega', ""+orden.tipo_entrega);
             }
             
@@ -157,7 +156,7 @@
                     var summary = $("#order_summary");
                     summary.html("");
                     carrito_ordenes.forEach((c)=>{
-                        var item = $("<li><span class='price pull-right'>£"+c.precio_total+"</span><span class='name'>"+
+                        var item = $("<li><span class='price pull-right'>£"+c.precio_total.toFixed(2)+"</span><span class='name'>"+
                         c.platillo.nombre+"</span><ul class='list-unstyled small text-muted'>");
                         
                         if(c.adicional_radio!=null && c.opcion_radio!=null){
@@ -175,7 +174,6 @@
                         summary.append(item);
                         listPreciosTotales(carrito_ordenes);
                     });
-                    
                 },(error) => {
                     alert(errorMessage(error.status));
                 });
@@ -190,15 +188,15 @@
                 });
                 if(localStorage.getItem('tipo_entrega')==0){ //delivery
                     cuerpo_totales.append("<tr><td class='border-top p-0' colspan='99999'></td></tr><tr><td class='px-0 text-muted border-0'>"+
-                    "Sub Total</td><td class='text-right px-0 border-0'>£"+precio_totales+"</td></tr>"+
+                    "Sub Total</td><td class='text-right px-0 border-0'>£"+precio_totales.toFixed(2)+"</td></tr>"+
                     "<tr><td class='px-0 text-muted border-0'>Delivery</td><td class='text-right px-0 border-0'>£0.00</td></tr><tr>"+
                     "<td class='px-0 border-top lead font-weight-bold'>Order Total</td>"+
-                    "<td class='text-right px-0 border-top lead font-weight-bold'>£"+precio_totales+"</td></tr>");
+                    "<td class='text-right px-0 border-top lead font-weight-bold'>£"+precio_totales.toFixed(2)+"</td></tr>");
                 }else{
                     cuerpo_totales.append("<tr><td class='border-top p-0' colspan='99999'></td></tr><tr><td class='px-0 text-muted border-0'>"+
-                    "Sub Total</td><td class='text-right px-0 border-0'>£"+precio_totales+"</td></tr>"+
+                    "Sub Total</td><td class='text-right px-0 border-0'>£"+precio_totales.toFixed(2)+"</td></tr>"+
                     "<tr><td class='px-0 border-top lead font-weight-bold'>Order Total</td>"+
-                    "<td class='text-right px-0 border-top lead font-weight-bold'>£"+precio_totales+"</td></tr>");
+                    "<td class='text-right px-0 border-top lead font-weight-bold'>£"+precio_totales.toFixed(2)+"</td></tr>");
                 }
             }
             

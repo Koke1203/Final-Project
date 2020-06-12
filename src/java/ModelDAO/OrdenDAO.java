@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OrdenDAO {
-
+    
     Conexion cn = new Conexion();
     Connection con;
     PreparedStatement ps;
@@ -34,7 +34,6 @@ public class OrdenDAO {
                 per.setEstado(rs.getString("estado"));
                 per.setTipo_pago(rs.getInt("tipo_pago"));
                 per.setTotal_pagar(rs.getDouble("total_pagar"));
-                
                 list.add(per);
             }
         } catch (Exception e) {
@@ -44,8 +43,8 @@ public class OrdenDAO {
     }
 
     public boolean add(Orden per) {
-        String sql = "insert into orden(codigo_orden, nombre_cliente, tipo_entrega, hora, fecha,estado,tipo_pago,total_pagar)"
-                + "values(" + per.getCodigo_orden() + ",'" + per.getNombre_cliente() + "'," + per.getTipo_entrega() + ",'"
+        String sql = "insert into orden(nombre_cliente, tipo_entrega, hora, fecha,estado,tipo_pago,total_pagar)"
+                + "values('" + per.getNombre_cliente() + "'," + per.getTipo_entrega() + ",'"
                 + per.getHora() + "','" + per.getFecha() + "','" + per.getEstado() + "'," + per.getTipo_pago() + ","
                 + per.getTotal_pagar() + ")";
         try {
@@ -92,5 +91,5 @@ public class OrdenDAO {
         }
         return editado;
     }
-
+    
 }

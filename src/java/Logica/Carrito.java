@@ -82,13 +82,4 @@ public class Carrito {
         this.adicional_check = adicional_check;
     }
     
-    /*
-    public String getUsuario_correo() {
-        return usuario_correo;
-    }
-
-    public void setUsuario_correo(String usuario_correo) {
-        this.usuario_correo = usuario_correo;
-    }
-    */
 }

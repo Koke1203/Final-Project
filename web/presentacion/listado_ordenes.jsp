@@ -1,4 +1,3 @@
-
 <%@page import="Logica.Orden"%>
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -13,7 +12,7 @@
         <%@include file="/presentacion/admin/header_admin.jsp" %>
 
         <%List<Orden> ordenes = (List<Orden>) request.getAttribute("listaOrdenes");%>
-
+        
         <div class="row-fluid" style="margin-top: 70px; margin-left: 250px; margin-right: 25px;">
             <div class="alert alert-dismissible fade show" role="alert">
                 <p id="message"></p>
@@ -81,13 +80,12 @@
                                         $(".close").removeAttr("hidden");
                                         $(".alert").show();
                                     });
-
                         });
                     </script>
 
                     </tr>
                     <%}%>
-
+                    
                     </tbody>
                 </table>
             </div>
