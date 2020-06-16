@@ -77,7 +77,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="price">Price</label>
-                                        <input type="text" class="form-control" id="price" name="price" placeholder="Price">
+                                        <input type="text" class="form-control" id="price" name="price" placeholder="Price" onkeypress="return solonumeros(event)">
                                     </div>
                                     <div class="form-group">
                                         <label for="description">Description</label>
@@ -327,6 +327,23 @@
                         return "Registro duplicado";
                     default:
                         return "Error: " + status;
+                }
+            }
+
+            function solonumeros(e) {
+                key = e.keyCode || e.which;
+                teclado = String.fromCharCode(key);
+                numeros = "0123456789";
+                especiales = "8-37-38-46";
+                teclado_especial = false;
+                for (var i in especiales) {
+                    if (key == especiales[i]) {
+                        teclado_especial = true;
+                        break;
+                    }
+                }
+                if (numeros.indexOf(teclado) == -1 && !teclado_especial) {
+                    return false;
                 }
             }
 
