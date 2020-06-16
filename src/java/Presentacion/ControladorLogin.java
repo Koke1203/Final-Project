@@ -100,6 +100,7 @@ public class ControladorLogin extends HttpServlet {
             acceso = login;
         } else if (action.equalsIgnoreCase("logout")) {
             session.removeAttribute("usuario");
+            session.removeAttribute("carrito");
             acceso = login;
         } else if (action.equalsIgnoreCase("logout_admin")) {
             session.removeAttribute("usuario");

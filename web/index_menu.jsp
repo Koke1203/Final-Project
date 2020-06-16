@@ -205,11 +205,11 @@
             function loaded() {
                 AumentaDisminuye_Cantidad();
                 listarCategorias();
-                infoCarrito();
                 agregarOrdenPlatillo();
                 limpiarRegistrosModal();
                 listarCarritoInicio();
                 validaCheckout();
+                listarTotales(new Array());
             }
             $(loaded);
             
@@ -438,7 +438,7 @@
             function listarCarritoInicio(){ //cuando se refresque la pagina se carga el carrito 
                 $.ajax({type: "GET", url: "api/carrito/listarCarrito", contentType: "application/json"})
                 .then((carrito_platillos) => {
-                    if(carrito_platillos!=null){
+                    if(carrito_platillos.length>0){
                         listCarrito(carrito_platillos);
                         infoCarrito(); //actualizo la info
                     }
@@ -453,15 +453,25 @@
                 carrito_platillos.forEach((p) => {
                     rowCarrito(lista_pedido, p);
                 });
+                listarTotales(carrito_platillos);
+            }
+            
+            function listarTotales(carrito_platillos){
                 //agrego los subtotales
                 var div_montos = $("#cart-totals");
-                var monto = 0;
-                carrito_platillos.forEach((p) => {
-                    monto = monto + p.precio_total;
-                });
-                div_montos.html("<p class='p-totales'>Sub Total: <span class='price pull-right'>£" + monto.toFixed(2) + "</span><p>" +
-                        "<p class='p-totales'>Delivery: <span class='price pull-right'>Free</span><p>" +
-                        "<p class='p-totales'>Order Total: <span class='price pull-right'>£" + monto.toFixed(2) + "</span><p>");
+                if(carrito_platillos.length<=0){
+                    div_montos.html("<p class='p-totales'>Sub Total: <span class='price pull-right'>£0</span><p>" +
+                            "<p class='p-totales'>Delivery: <span class='price pull-right'>Free</span><p>" +
+                            "<p class='p-totales'>Order Total: <span class='price pull-right'>£0</span><p>");
+                }else{
+                    var monto = 0;
+                    carrito_platillos.forEach((p) => {
+                        monto = monto + p.precio_total;
+                    });
+                    div_montos.html("<p class='p-totales'>Sub Total: <span class='price pull-right'>£" + monto.toFixed(2) + "</span><p>" +
+                            "<p class='p-totales'>Delivery: <span class='price pull-right'>Free</span><p>" +
+                            "<p class='p-totales'>Order Total: <span class='price pull-right'>£" + monto.toFixed(2) + "</span><p>");
+                }
             }
             
             function rowCarrito(lista_pedido, carrito) {
@@ -506,8 +516,8 @@
                     div_info.html("<div class='panel-body'><p class='text-center'>Your order</p");
                 } else {
                     div_info.html("<div class='panel-body'><p class='text-center'>Add menu items to your cart</p");
-                    var div_total = $("#cart-totals");
-                    div_total.html("");
+                    //var div_total = $("#cart-totals");
+                    //div_total.html("");
                 }
             }
             
@@ -555,6 +565,12 @@
                             }, (error) => {
                                 alert(errorMessage(error.status));
                             });
+                            contador = 0;
+                            platillo_seleccionado = null;
+                            opcion_radio = new Array();
+                            adicional_radio = null;
+                            adicional_check = null;
+                            opcion_check = new Array();
                         }
                     }, (error) => {
                         alert(errorMessage(error.status));

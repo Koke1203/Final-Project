@@ -2,6 +2,7 @@ package Presentacion;
 
 import Logica.Adicional;
 import Logica.Carrito;
+import Logica.CarritoDetalleOrden;
 import Logica.CarritoOrden;
 import Logica.Categoria;
 import Logica.DetalleOrden;
@@ -96,12 +97,6 @@ public class ControladorCliente extends HttpServlet {
             case "/api/cliente/listarOrden":
                 this.listarCarritoCliente(request, response);
                 return;
-           /* case "/api/platillos/listarCodigoPlatillo":
-                this.listarCodigoPlatillo(request, response);
-                return;
-            case "/api/opcion/listarCodigoOpcion":
-                this.listarCodigoOpcion(request, response);
-                return;*/
         }
     }
 
@@ -414,12 +409,13 @@ public class ControladorCliente extends HttpServlet {
                     }
                 }
             }
-
+            
             session.setAttribute("orden_reciente", orden_agregar);
-
+            
             response.setContentType("application/json; charet=UTF-8");
             out.write(gson.toJson(""));
             response.setStatus(200);//Ok with content
+            session.removeAttribute("carrito");
         } catch (Exception ex) {
             response.setStatus(status(ex));
         }
@@ -501,73 +497,6 @@ public class ControladorCliente extends HttpServlet {
         }
     }
     
-    /*
-    private void listarCarritoCliente(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            Gson gson = new Gson();
-            BufferedReader reader = request.getReader();
-            PrintWriter out = response.getWriter();
-            HttpSession session = request.getSession(true);
-            OrdenClienteDetalle retorno = new OrdenClienteDetalle();
-            int id_orden = Integer.parseInt((String) session.getAttribute("id_orden"));
-            OrdenDAO dao_orden = new OrdenDAO();
-            Orden orden = dao_orden.listForCodigoF(id_orden);
-
-            DetalleOrdenDAO detalle_dao = new DetalleOrdenDAO();
-            List<DetalleOrden> detalles = new ArrayList<>();
-            detalles = detalle_dao.listarDetalleOrdenXCodigo(id_orden);
-
-            retorno.setDetalles(detalles);
-            retorno.setOrden(orden);
-
-            response.setContentType("application/json; charet=UTF-8");
-            out.write(gson.toJson(retorno));
-            response.setStatus(200);//Ok with content
-        } catch (Exception ex) {
-            response.setStatus(status(ex));
-        }
-    }
-    */
-    /*
-     private void listarCodigoPlatillo(HttpServletRequest request, HttpServletResponse response) {
-     try {
-     Gson gson = new Gson();
-     BufferedReader reader = request.getReader();
-     PrintWriter out = response.getWriter();
-     Platillo parametro = gson.fromJson(reader, Platillo.class);
-
-     Platillo nuevo = new Platillo();
-     nuevo.setCodigo(parametro.getCodigo());
-     codigos_platillos.add(nuevo);
-
-     PlatilloDAO dao = new PlatilloDAO();
-     Platillo retorno = dao.listForCodigo(parametro.getCodigo());
-     response.setContentType("application/json; charet=UTF-8");
-     out.write(gson.toJson(retorno));
-     response.setStatus(200);//Ok with content
-     } catch (Exception ex) {
-     response.setStatus(status(ex));
-     }
-     }
-
-     private void listarCodigoOpcion(HttpServletRequest request, HttpServletResponse response) {
-     try {
-     Gson gson = new Gson();
-     BufferedReader reader = request.getReader();
-     PrintWriter out = response.getWriter();
-     Opcion parametro = gson.fromJson(reader, Opcion.class);
-
-     OpcionDAO dao = new OpcionDAO();
-     Opcion retorno = dao.listXCodigoOpcion(parametro.getCodigo_opcion());
-
-     response.setContentType("application/json; charet=UTF-8");
-     out.write(gson.toJson(retorno));
-     response.setStatus(200);//Ok with content
-     } catch (Exception ex) {
-     response.setStatus(status(ex));
-     }
-     }
-     */
     private void listarCarritoCliente(HttpServletRequest request, HttpServletResponse response) {
         try {
             Gson gson = new Gson();
@@ -588,6 +517,7 @@ public class ControladorCliente extends HttpServlet {
             
             int seleccionado = 0;
             List<CarritoOrden> detalles_lista = new ArrayList<>();
+            CarritoDetalleOrden retorno_orden = new CarritoDetalleOrden();
             //solo me tengo que enfocar en detalles
             for (DetalleOrden det : detalles) {
                 if (det.getCodigo_platillo() == seleccionado) {
@@ -613,8 +543,11 @@ public class ControladorCliente extends HttpServlet {
             
             retorno.setDetalles(detalles_lista);
             
+            retorno_orden.setOrden_cliente(retorno);
+            retorno_orden.setDireccion(detalles.get(0).getDireccion_cliente());
+            
             response.setContentType("application/json; charet=UTF-8");
-            out.write(gson.toJson(retorno));
+            out.write(gson.toJson(retorno_orden));
             response.setStatus(200);//Ok with content
         } catch (Exception ex) {
             response.setStatus(status(ex));

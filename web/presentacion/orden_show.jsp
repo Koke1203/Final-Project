@@ -112,11 +112,13 @@
                 $.ajax({type: "GET", data:"", url: "api/cliente/listarOrden", contentType: "application/json"})
                 .then((orden_detalles) => {
                     if(orden_detalles!=null){
-                        listarHeaderOrden(orden_detalles.orden);
-                        listarOrderSummary(orden_detalles.detalles);
-                        listarTotales(orden_detalles.orden);
-                        listarInfoPersonal(orden_detalles.orden,orden_detalles.detalles[0]);
-                        listarTipoPago(orden_detalles.orden);
+                        listarHeaderOrden(orden_detalles.orden_cliente.orden);
+                        listarOrderSummary(orden_detalles.orden_cliente.detalles);
+                        listarTotales(orden_detalles.orden_cliente.orden);
+                        var detalles_orden = new Array();
+                        detalles_orden = orden_detalles.orden_cliente.detalles;
+                        listarInfoPersonal(orden_detalles.orden_cliente.orden,orden_detalles.direccion);
+                        listarTipoPago(orden_detalles.orden_cliente.orden);
                     }
                 }, (error) => {
                     alert(errorMessage(error.status));
@@ -129,19 +131,19 @@
                 header_div.append(
                     "<div class='label label-light mb-3'>" +
                     "<span class='h6'><i class='fa fa-clock'></i>&nbsp;" + orden.fecha + " at " + orden.hora + "</span>" +
-                    "</div><h5>Order " + orden.codigo_orden + "</h5>" +
+                    "</div><h5>Order #" + orden.codigo_orden + "</h5>" +
                     "<h3 style='color: #00a65a;'>" + orden.estado + "</h3>" +
                     "<p class='lead'>Details of your order.</p>" +
                     "<p class='mb-0'>Order Summary and personal information.</p>"
                 );
             }
             
-            function listarInfoPersonal(orden,detalle){
+            function listarInfoPersonal(orden,direccion){
                 var div_personal = $("#info_personal");
                 div_personal.html("");
                 if(orden.tipo_entrega==0){
                     div_personal.append("<div class='card-body'><h2 class='h4 font-weight-normal'>Delivering to...</h2><b>"+
-                        orden.nombre_cliente+"</b><br>"+detalle.direccion_cliente+"</div>");
+                        orden.nombre_cliente+"</b><br>"+direccion+"</div>");
                 }else{
                     div_personal.append("<div class='card-body'><h2 class='h4 font-weight-normal'>Pick-up to...</h2><b>"+
                         orden.nombre_cliente+"</b></div>");
@@ -199,11 +201,11 @@
                         "<div class='table-responsive'><table class='table table-sm mb-0'>"+
                         "<tbody><tr><td class='border-top p-0' colspan='99999'></td></tr><tr>"+
                         "<td class='px-0 text-muted border-0'>Sub Total</td>"+
-                        "<td class='text-right px-0 border-0'>£"+orden.total_pagar+"</td></tr>"+
+                        "<td class='text-right px-0 border-0'>£"+orden.total_pagar.toFixed(2)+"</td></tr>"+
                         "<tr><td class='px-0 text-muted border-0'>Delivery</td>"+
                         "<td class='text-right px-0 border-0'>£0.00</td></tr>"+
                         "<tr><td class='px-0 border-top lead font-weight-bold'>Order Total</td>"+
-                        "<td class='text-right px-0 border-top lead font-weight-bold'>£"+orden.total_pagar+"</td></tr>"+
+                        "<td class='text-right px-0 border-top lead font-weight-bold'>£"+orden.total_pagar.toFixed(2)+"</td></tr>"+
                         "</tbody></table></div>"
                     );
                 }else{
