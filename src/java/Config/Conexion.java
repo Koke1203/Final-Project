@@ -10,7 +10,7 @@ public class Conexion {
     public Conexion() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost/restaurante?user=root&password=1234&useSSL=false");
+            con = DriverManager.getConnection("jdbc:mysql://localhost/restaurante?user=root&password=12345&useSSL=false");
             System.out.println("Conectado");
         } catch (Exception e) {
             System.out.println("Error esta aquí" + e);

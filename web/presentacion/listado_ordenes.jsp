@@ -1,3 +1,4 @@
+<%@page import="java.text.DecimalFormat"%>
 <%@page import="Logica.Orden"%>
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -12,7 +13,7 @@
         <%@include file="/presentacion/admin/header_admin.jsp" %>
 
         <%List<Orden> ordenes = (List<Orden>) request.getAttribute("listaOrdenes");%>
-        
+
         <div class="row-fluid" style="margin-top: 70px; margin-left: 250px; margin-right: 25px;">
             <div class="alert alert-dismissible fade show" role="alert">
                 <p id="message"></p>
@@ -43,10 +44,11 @@
                     </thead>
                     <tbody>
                         <%for (Orden orden : ordenes) {%>
+                        <%DecimalFormat df = new DecimalFormat("#.00");%>
                         <tr>
                             <td class="list-col-index-2 list-col-name-order-id list-col-type-text"><%=orden.getCodigo_orden()%></td>
                             <td class="list-col-index-3 list-col-name-full-name list-col-type-text"><%= orden.getNombre_cliente()%></td>
-                            <td class="list-col-index-4 list-col-name-order-type-name list-col-type-text"><%= orden.getTipo_entrega()%></td>
+                            <td class="list-col-index-4 list-col-name-order-type-name list-col-type-text"><%= orden.getTipoEntrega()%></td>
                             <td class="list-col-index-5 list-col-name-order-time list-col-type-time"><%= orden.getHora()%></td>
                             <td class="list-col-index-6 list-col-name-order-date list-col-type-date"><%= orden.getFecha()%></td>
                             <td class="list-col-index-7 list-col-name-status-name list-col-type-partial">
@@ -59,8 +61,8 @@
                                     <option value="Canceled">Canceled</option>
                                 </select>
                             </td>
-                            <td class="list-col-index-8 list-col-name-payment list-col-type-text"><%=orden.getTipo_pago()%></td>
-                            <td class="list-col-index-9 list-col-name-order-total list-col-type-currency"> <%= "£" + orden.getTotal_pagar()%></td>
+                            <td class="list-col-index-8 list-col-name-payment list-col-type-text"><%=orden.getTipoPago()%></td>
+                            <td class="list-col-index-9 list-col-name-order-total list-col-type-currency"> <%= "£" + df.format(orden.getTotal_pagar())%></td>
 
                     <script>
                         $("#selectEstado<%=orden.getCodigo_orden()%>").val("<%=orden.getEstado()%>");
@@ -85,7 +87,7 @@
 
                     </tr>
                     <%}%>
-                    
+
                     </tbody>
                 </table>
             </div>
