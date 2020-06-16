@@ -63,7 +63,7 @@ public class Orden {
     public int getTipo_entrega() {
         return tipo_entrega;
     }
-
+    
     public void setTipo_entrega(int tipo_entrega) {
         this.tipo_entrega = tipo_entrega;
     }

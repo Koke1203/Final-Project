@@ -46,7 +46,7 @@
                         <tr>
                             <td class="list-col-index-2 list-col-name-order-id list-col-type-text"><%=orden.getCodigo_orden()%></td>
                             <td class="list-col-index-3 list-col-name-full-name list-col-type-text"><%= orden.getNombre_cliente()%></td>
-                            <td class="list-col-index-4 list-col-name-order-type-name list-col-type-text"><%= orden.getTipoEntrega()%></td>
+                            <td class="list-col-index-4 list-col-name-order-type-name list-col-type-text"><%= orden.getTipo_entrega()%></td>
                             <td class="list-col-index-5 list-col-name-order-time list-col-type-time"><%= orden.getHora()%></td>
                             <td class="list-col-index-6 list-col-name-order-date list-col-type-date"><%= orden.getFecha()%></td>
                             <td class="list-col-index-7 list-col-name-status-name list-col-type-partial">
@@ -59,7 +59,7 @@
                                     <option value="Canceled">Canceled</option>
                                 </select>
                             </td>
-                            <td class="list-col-index-8 list-col-name-payment list-col-type-text"><%=orden.getTipoPago()%></td>
+                            <td class="list-col-index-8 list-col-name-payment list-col-type-text"><%=orden.getTipo_pago()%></td>
                             <td class="list-col-index-9 list-col-name-order-total list-col-type-currency"> <%= "£" + orden.getTotal_pagar()%></td>
 
                     <script>
