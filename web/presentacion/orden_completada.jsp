@@ -59,18 +59,11 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <h2 class="h4 mb-0 font-weight-normal">Order Summary</h2>
-                                            <div class="cart-items pt-2">
-                                                <ul id="order_summary"> <!--INFORMACION DEL CARRITO-->
-                                                </ul>
+                                            <!--PLATILLOS-->
+                                            <div class="cart-items pt-2" id="summary">
                                             </div>
-
-                                            <div class="cart-totals">
-                                                <div class="table-responsive">
-                                                    <table class="table table-sm mb-0">
-                                                        <tbody id="cuerpo_totales">
-                                                        </tbody>
-                                                    </table>
-                                                </div>
+                                            <!--TOTALES-->
+                                            <div class="cart-totals" id="totales">
                                             </div>
                                         </div>
                                     </div>
@@ -108,7 +101,7 @@
         <script>
             function loaded(){
                 listarInfoOrden();
-                listSummaryOrder();
+                traerOrdenClienteDetalle();
             }
             $(loaded);
             
@@ -150,56 +143,95 @@
                 localStorage.setItem('tipo_entrega', ""+orden.tipo_entrega);
             }
             
-            function listSummaryOrder(){
-                $.ajax({type: "GET", url: "api/carrito/listarCarrito", contentType: "application/json"})
-                .then((carrito_ordenes)=>{
-                    var summary = $("#order_summary");
-                    summary.html("");
-                    carrito_ordenes.forEach((c)=>{
-                        var item = $("<li><span class='price pull-right'>£"+c.precio_total.toFixed(2)+"</span><span class='name'>"+
-                        c.platillo.nombre+"</span><ul class='list-unstyled small text-muted'>");
-                        
-                        if(c.adicional_radio!=null && c.opcion_radio!=null){
-                            var index = (c.opcion_radio.length)-1;
-                            item.append("<li class='text-muted'>"+c.adicional_radio.descripcion+"&nbsp; (£"+c.opcion_radio[index].precio.toFixed(2)+")</li>");
+            function traerOrdenClienteDetalle(){
+                $.ajax({type: "GET", url: "api/orden/listarInfo", contentType: "application/json"})
+                .then((orden)=>{
+                    alert(orden.codigo_orden);
+                    $.ajax({type: "POST", data: JSON.stringify(orden), url: "api/cliente/listarOrdenCompletada", contentType: "application/json"})
+                    .then((orden_detalles) => {
+                        if(orden_detalles!=null){
+                            listarOrderSummary(orden_detalles.orden_cliente.detalles);
+                            listarTotales(orden_detalles.orden_cliente.orden);
+                            var detalles_orden = new Array();
+                            detalles_orden = orden_detalles.orden_cliente.detalles;
                         }
-                        
-                        if(c.adicional_check!=null && c.opcion_check!=null){
-                            var precio_check = 0.0;
-                            c.opcion_check.forEach((e)=>{
-                                precio_check += e.precio;
-                            });
-                            item.append("<li class='text-muted'>"+c.adicional_check.descripcion+"&nbsp; (£"+precio_check.toFixed(2)+"</li>");
-                        }
-                        summary.append(item);
-                        listPreciosTotales(carrito_ordenes);
+                    }, (error) => {
+                        alert(errorMessage(error.status));
                     });
                 },(error) => {
                     alert(errorMessage(error.status));
-                });
+                });   
             }
             
-            function listPreciosTotales(carrito_ordenes){
-                var cuerpo_totales = $("#cuerpo_totales");
-                cuerpo_totales.html("");
-                var precio_totales = 0.0;
-                carrito_ordenes.forEach((c)=>{
-                    precio_totales += c.precio_total;
+            function listarOrderSummary(detalles){
+                var summary = $("#summary");
+                summary.html("");
+                summary.append("<div class='cart-items pt-2'><ul>");
+                
+                detalles.forEach((d)=>{
+                    listarPlatillo(d.platillo,summary);
+                    d.opciones.forEach((o)=>{
+                        listOpcion(o,summary);
+                    });
                 });
-                if(localStorage.getItem('tipo_entrega')==0){ //delivery
-                    cuerpo_totales.append("<tr><td class='border-top p-0' colspan='99999'></td></tr><tr><td class='px-0 text-muted border-0'>"+
-                    "Sub Total</td><td class='text-right px-0 border-0'>£"+precio_totales.toFixed(2)+"</td></tr>"+
-                    "<tr><td class='px-0 text-muted border-0'>Delivery</td><td class='text-right px-0 border-0'>£0.00</td></tr><tr>"+
-                    "<td class='px-0 border-top lead font-weight-bold'>Order Total</td>"+
-                    "<td class='text-right px-0 border-top lead font-weight-bold'>£"+precio_totales.toFixed(2)+"</td></tr>");
-                }else{
-                    cuerpo_totales.append("<tr><td class='border-top p-0' colspan='99999'></td></tr><tr><td class='px-0 text-muted border-0'>"+
-                    "Sub Total</td><td class='text-right px-0 border-0'>£"+precio_totales.toFixed(2)+"</td></tr>"+
-                    "<tr><td class='px-0 border-top lead font-weight-bold'>Order Total</td>"+
-                    "<td class='text-right px-0 border-top lead font-weight-bold'>£"+precio_totales.toFixed(2)+"</td></tr>");
+                
+                summary.append("</ul></div>");
+            }
+            
+            
+            function listarPlatillo(platillo,summary){
+                summary.append(
+                    "<li class='no_lista' id='titulo'><span class='price pull-right'>£"+platillo.precio+"</span><span class='name'>"+platillo.nombre+"</span>"  
+                );
+            }
+            
+            function listOpcion(opcion,summary){
+                if(opcion.descripcion!=null){
+                    summary.append("<ul class='list-unstyled small text-muted'>"+
+                    "<li>"+opcion.descripcion+" &nbsp; (£"+opcion.precio+")</li></ul>");
                 }
             }
             
+            function listarTotales(orden){
+                var totales = $("#totales");
+                if(orden.tipo_entrega==0){
+                    totales.append(
+                        "<div class='table-responsive'><table class='table table-sm mb-0'>"+
+                        "<tbody><tr><td class='border-top p-0' colspan='99999'></td></tr><tr>"+
+                        "<td class='px-0 text-muted border-0'>Sub Total</td>"+
+                        "<td class='text-right px-0 border-0'>£"+orden.total_pagar.toFixed(2)+"</td></tr>"+
+                        "<tr><td class='px-0 text-muted border-0'>Delivery</td>"+
+                        "<td class='text-right px-0 border-0'>£0.00</td></tr>"+
+                        "<tr><td class='px-0 border-top lead font-weight-bold'>Order Total</td>"+
+                        "<td class='text-right px-0 border-top lead font-weight-bold'>£"+orden.total_pagar.toFixed(2)+"</td></tr>"+
+                        "</tbody></table></div>"
+                    );
+                }else{
+                    totales.append(
+                        "<div class='table-responsive'><table class='table table-sm mb-0'>"+
+                        "<tbody><tr><td class='border-top p-0' colspan='99999'></td></tr><tr>"+
+                        "<td class='px-0 text-muted border-0'>Sub Total</td>"+
+                        "<td class='text-right px-0 border-0'>£"+orden.total_pagar.toFixed(2)+"</td></tr>"+
+                        "<tr><td class='px-0 border-top lead font-weight-bold'>Order Total</td>"+
+                        "<td class='text-right px-0 border-top lead font-weight-bold'>£"+orden.total_pagar.toFixed(2)+"</td></tr>"+
+                        "</tbody></table></div>"
+                    );
+                }
+            }
+            
+            function errorMessage(status) {
+                switch (status) {
+                    case 404:
+                        return "Registro no encontrado";
+                    case 403:
+                    case 405:
+                        return "Usuario no autorizado";
+                    case 406:
+                        return "Registro duplicado";
+                    default:
+                        return "Error: " + status;
+                }
+            }
         </script>
     </body>
 </html>

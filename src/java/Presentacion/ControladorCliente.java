@@ -37,7 +37,8 @@ import javax.servlet.http.HttpSession;
     "/api/platillo/getOpciones", "/api/categorias/getDescripcion", "/api/carrito/agregarPlatillo", "/api/carrito/sacarPlatillo",
     "/api/carrito/listarCarrito", "/api/direccion/listar", "/api/carrito/verificar", "/api/usuario/listar", "/api/carrito/total_pagar",
     "/api/orden/guardarOrdenPedido", "/api/orden/listarInfo", "/api/tipo_orden/agregarSesion", "/api/detalle/guardarDetalleOrden",
-    "/api/orden/listarOrdenesCliente", "/api/cliente/listarOrden", "/api/platillos/listarCodigoPlatillo", "/api/opcion/listarCodigoOpcion"})
+    "/api/orden/listarOrdenesCliente", "/api/cliente/listarOrden", "/api/platillos/listarCodigoPlatillo", "/api/opcion/listarCodigoOpcion",
+    "/api/cliente/listarOrdenCompletada"})
 public class ControladorCliente extends HttpServlet {
 
     List<Carrito> carrito_general = new ArrayList<>();
@@ -96,6 +97,9 @@ public class ControladorCliente extends HttpServlet {
                 return;
             case "/api/cliente/listarOrden":
                 this.listarCarritoCliente(request, response);
+                return;
+            case "/api/cliente/listarOrdenCompletada":
+                this.listarCarritoClienteCompletada(request, response);
                 return;
         }
     }
@@ -506,6 +510,65 @@ public class ControladorCliente extends HttpServlet {
             HttpSession session = request.getSession(true);
             OrdenClienteDetalle retorno = new OrdenClienteDetalle();
             int id_orden = Integer.parseInt((String) session.getAttribute("id_orden"));
+            OrdenDAO dao_orden = new OrdenDAO();
+            Orden orden = dao_orden.listForCodigoF(id_orden);
+            
+            DetalleOrdenDAO detalle_dao = new DetalleOrdenDAO();
+            List<DetalleOrden> detalles = new ArrayList<>();
+            detalles = detalle_dao.listarDetalleOrdenXCodigo(id_orden);
+
+            retorno.setOrden(orden);
+            
+            int seleccionado = 0;
+            List<CarritoOrden> detalles_lista = new ArrayList<>();
+            CarritoDetalleOrden retorno_orden = new CarritoDetalleOrden();
+            //solo me tengo que enfocar en detalles
+            for (DetalleOrden det : detalles) {
+                if (det.getCodigo_platillo() == seleccionado) {
+                    seleccionado = 0;
+                } else {
+                    seleccionado = det.getCodigo_platillo();
+                }
+                
+                if (seleccionado!=0) {
+                    CarritoOrden detalle = new CarritoOrden();
+                    detalle.setPlatillo(retornaPlatillo(det.getCodigo_platillo()));
+                    List<Opcion> opciones = new ArrayList<>();
+                    for (DetalleOrden d2 : detalles) {
+                        if (d2.getCodigo_platillo() == seleccionado) {
+                            opciones.add(retornaOrden(d2.getCodigo_opcion()));
+                        }
+                    }
+                    detalle.setOpciones(opciones);
+                    detalles_lista.add(detalle);
+                }
+                seleccionado = det.getCodigo_platillo();
+            }
+            
+            retorno.setDetalles(detalles_lista);
+            
+            retorno_orden.setOrden_cliente(retorno);
+            retorno_orden.setDireccion(detalles.get(0).getDireccion_cliente());
+            
+            response.setContentType("application/json; charet=UTF-8");
+            out.write(gson.toJson(retorno_orden));
+            response.setStatus(200);//Ok with content
+        } catch (Exception ex) {
+            response.setStatus(status(ex));
+        }
+    }
+    
+    private void listarCarritoClienteCompletada(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            Gson gson = new Gson();
+            BufferedReader reader = request.getReader();
+            PrintWriter out = response.getWriter();
+            
+            Orden parametro_orden = gson.fromJson(reader, Orden.class);
+            
+            OrdenClienteDetalle retorno = new OrdenClienteDetalle();
+            int id_orden = parametro_orden.getCodigo_orden();
+            System.out.println("El codigo que esta llegando es: "+parametro_orden.getCodigo_orden());
             OrdenDAO dao_orden = new OrdenDAO();
             Orden orden = dao_orden.listForCodigoF(id_orden);
             
